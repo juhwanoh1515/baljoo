@@ -6,93 +6,80 @@
 <title>발주 관리</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f0e0c;
-    --surface: #1a1815;
-    --surface2: #242118;
-    --border: #2e2b24;
-    --accent: #e8a020;
-    --accent2: #f0c060;
-    --text: #f0ead8;
-    --text2: #9a9282;
-    --text3: #5a5548;
-    --red: #e05040;
-    --green: #50c878;
-    --blue: #4a90d9;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
-  .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 20px 12px; position: sticky; top: 0; z-index: 100; }
-  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--accent); letter-spacing: 2px; }
-  .store-selector { background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 13px; padding: 6px 10px; border-radius: 8px; cursor: pointer; outline: none; }
-  .date-info { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text2); }
-  .alarm-badge { background: var(--accent); color: #000; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
-  .nav-tabs { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 85px; z-index: 99; }
-  .nav-tab { flex: 1; padding: 12px 4px; text-align: center; font-size: 12px; font-weight: 500; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
-  .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .page { display: none; padding: 16px; }
-  .page.active { display: block; }
-  .section-title { font-size: 11px; font-weight: 700; color: var(--text3); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; margin-top: 20px; }
-  .section-title:first-child { margin-top: 0; }
-  .vendor-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
-  .vendor-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; }
-  .vendor-left { display: flex; align-items: center; gap: 10px; }
-  .vendor-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-  .vendor-name { font-size: 14px; font-weight: 700; color: var(--text); }
-  .vendor-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
-  .vendor-arrow { font-size: 12px; color: var(--text3); transition: transform 0.2s; }
-  .vendor-card.open .vendor-arrow { transform: rotate(180deg); }
-  .vendor-body { display: none; padding: 0 16px 16px; border-top: 1px solid var(--border); }
-  .vendor-card.open .vendor-body { display: block; }
-  .item-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .item-row:last-child { border-bottom: none; }
-  .item-name { font-size: 13px; color: var(--text); flex: 1; }
-  .item-unit { font-size: 11px; color: var(--text3); margin-right: 10px; }
-  .qty-control { display: flex; align-items: center; gap: 8px; }
-  .qty-btn { width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 700; }
-  .qty-btn:active { background: var(--accent); color: #000; }
-  .qty-value { font-size: 15px; font-weight: 700; color: var(--text); min-width: 24px; text-align: center; }
-  .generate-btn { width: 100%; margin-top: 14px; padding: 12px; background: var(--accent); color: #000; font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; }
-  .msg-preview { display: none; margin-top: 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
-  .msg-preview.show { display: block; }
-  .msg-text { font-size: 13px; color: var(--text); line-height: 1.7; white-space: pre-line; word-break: break-all; }
-  .msg-actions { display: flex; gap: 8px; margin-top: 10px; }
-  .copy-btn { flex: 1; padding: 10px; background: var(--surface); border: 1px solid var(--accent); color: var(--accent); font-family: 'Noto Sans KR', sans-serif; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; }
-  .sms-btn { flex: 1; padding: 10px; background: var(--accent); border: none; color: #000; font-family: 'Noto Sans KR', sans-serif; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; }
-  .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--green); color: #000; font-size: 13px; font-weight: 700; padding: 10px 20px; border-radius: 20px; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999; }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  .delivery-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 6px; }
-  .badge-available { background: #1a3a1a; color: var(--green); }
-  .badge-unavailable { background: #3a1a1a; color: var(--red); }
-  .inv-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
-  .inv-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .inv-vendor { font-size: 12px; font-weight: 700; color: var(--text2); }
-  .inv-item-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
-  .inv-item-row:last-child { border-bottom: none; }
-  .inv-name { font-size: 13px; color: var(--text); }
-  .inv-qty-wrap { display: flex; align-items: center; gap: 6px; }
-  .inv-input { width: 60px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 700; text-align: center; padding: 5px 6px; border-radius: 7px; outline: none; }
-  .inv-unit { font-size: 11px; color: var(--text3); }
-  .save-inv-btn { width: 100%; margin-top: 16px; padding: 13px; background: var(--surface2); border: 1px solid var(--accent); color: var(--accent); font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 700; border-radius: 10px; cursor: pointer; }
-  .history-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
-  .history-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-  .history-vendor { font-size: 13px; font-weight: 700; color: var(--text); }
-  .history-date { font-size: 11px; color: var(--text3); }
-  .history-content { font-size: 12px; color: var(--text2); line-height: 1.6; white-space: pre-line; }
-  .alarm-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 10px; }
-  .alarm-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .alarm-row:last-child { border-bottom: none; }
-  .alarm-label { font-size: 13px; color: var(--text); }
-  .alarm-time { font-size: 12px; color: var(--accent); font-weight: 700; }
-  .toggle { width: 44px; height: 24px; background: var(--border); border-radius: 12px; position: relative; cursor: pointer; transition: background 0.2s; }
-  .toggle.on { background: var(--accent); }
-  .toggle::after { content: ''; position: absolute; width: 18px; height: 18px; background: #fff; border-radius: 50%; top: 3px; left: 3px; transition: transform 0.2s; }
-  .toggle.on::after { transform: translateX(20px); }
-  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: var(--surface); border-top: 1px solid var(--border); display: flex; z-index: 100; }
-  .notice-box { background: #1a1500; border: 1px solid #3a2e00; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; font-size: 12px; color: var(--accent2); line-height: 1.6; }
-  .notice-box strong { color: var(--accent); }
-  .empty-state { text-align: center; padding: 40px 20px; color: var(--text3); font-size: 13px; }
+  :root { --bg:#0f0e0c; --surface:#1a1815; --surface2:#242118; --border:#2e2b24; --accent:#e8a020; --accent2:#f0c060; --text:#f0ead8; --text2:#9a9282; --text3:#5a5548; --red:#e05040; --green:#50c878; --blue:#4a90d9; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; max-width:480px; margin:0 auto; padding-bottom:80px; }
+  .header { background:var(--surface); border-bottom:1px solid var(--border); padding:16px 20px 12px; position:sticky; top:0; z-index:100; }
+  .header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .logo { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--accent); letter-spacing:2px; }
+  .store-selector { background:var(--surface2); border:1px solid var(--border); color:var(--text); font-family:'Noto Sans KR',sans-serif; font-size:13px; padding:6px 10px; border-radius:8px; cursor:pointer; outline:none; }
+  .date-info { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text2); }
+  .alarm-badge { background:var(--accent); color:#000; font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; }
+  .nav-tabs { display:flex; background:var(--surface); border-bottom:1px solid var(--border); position:sticky; top:85px; z-index:99; }
+  .nav-tab { flex:1; padding:12px 4px; text-align:center; font-size:12px; font-weight:500; color:var(--text3); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; }
+  .nav-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+  .page { display:none; padding:16px; }
+  .page.active { display:block; }
+  .section-title { font-size:11px; font-weight:700; color:var(--text3); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:10px; margin-top:20px; }
+  .section-title:first-child { margin-top:0; }
+  .vendor-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; margin-bottom:10px; overflow:hidden; }
+  .vendor-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; cursor:pointer; }
+  .vendor-left { display:flex; align-items:center; gap:10px; }
+  .vendor-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+  .vendor-name { font-size:14px; font-weight:700; color:var(--text); }
+  .vendor-sub { font-size:11px; color:var(--text2); margin-top:2px; }
+  .vendor-arrow { font-size:12px; color:var(--text3); transition:transform 0.2s; }
+  .vendor-card.open .vendor-arrow { transform:rotate(180deg); }
+  .vendor-body { display:none; padding:0 16px 16px; border-top:1px solid var(--border); }
+  .vendor-card.open .vendor-body { display:block; }
+  .item-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); }
+  .item-row:last-child { border-bottom:none; }
+  .item-name { font-size:13px; color:var(--text); flex:1; }
+  .item-unit { font-size:11px; color:var(--text3); margin-right:10px; }
+  .qty-control { display:flex; align-items:center; gap:8px; }
+  .qty-btn { width:28px; height:28px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:700; }
+  .qty-btn:active { background:var(--accent); color:#000; }
+  .qty-value { font-size:15px; font-weight:700; color:var(--text); min-width:24px; text-align:center; }
+  .generate-btn { width:100%; margin-top:14px; padding:12px; background:var(--accent); color:#000; font-family:'Noto Sans KR',sans-serif; font-size:13px; font-weight:700; border:none; border-radius:10px; cursor:pointer; transition:opacity 0.2s; }
+  .generate-btn:active { opacity:0.8; }
+  .msg-preview { display:none; margin-top:10px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px; }
+  .msg-preview.show { display:block; }
+  .msg-text { font-size:13px; color:var(--text); line-height:1.7; white-space:pre-line; word-break:break-all; }
+  .msg-actions { display:flex; gap:8px; margin-top:10px; }
+  .copy-btn { flex:1; padding:10px; background:var(--surface); border:1px solid var(--accent); color:var(--accent); font-family:'Noto Sans KR',sans-serif; font-size:12px; font-weight:700; border-radius:8px; cursor:pointer; }
+  .sms-btn { flex:1; padding:10px; background:var(--accent); border:none; color:#000; font-family:'Noto Sans KR',sans-serif; font-size:12px; font-weight:700; border-radius:8px; cursor:pointer; }
+  .toast { position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--green); color:#000; font-size:13px; font-weight:700; padding:10px 20px; border-radius:20px; opacity:0; transition:all 0.3s; pointer-events:none; z-index:999; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .delivery-badge { font-size:10px; font-weight:700; padding:2px 7px; border-radius:6px; }
+  .badge-available { background:#1a3a1a; color:var(--green); }
+  .badge-unavailable { background:#3a1a1a; color:var(--red); }
+  .inv-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
+  .inv-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .inv-vendor { font-size:12px; font-weight:700; color:var(--text2); }
+  .inv-item-row { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); }
+  .inv-item-row:last-child { border-bottom:none; }
+  .inv-name { font-size:13px; color:var(--text); }
+  .inv-qty-wrap { display:flex; align-items:center; gap:6px; }
+  .inv-input { width:60px; background:var(--surface2); border:1px solid var(--border); color:var(--text); font-family:'Noto Sans KR',sans-serif; font-size:13px; font-weight:700; text-align:center; padding:5px 6px; border-radius:7px; outline:none; }
+  .inv-unit { font-size:11px; color:var(--text3); }
+  .save-inv-btn { width:100%; margin-top:16px; padding:13px; background:var(--surface2); border:1px solid var(--accent); color:var(--accent); font-family:'Noto Sans KR',sans-serif; font-size:13px; font-weight:700; border-radius:10px; cursor:pointer; }
+  .history-item { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
+  .history-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .history-vendor { font-size:13px; font-weight:700; color:var(--text); }
+  .history-date { font-size:11px; color:var(--text3); }
+  .history-content { font-size:12px; color:var(--text2); line-height:1.6; white-space:pre-line; }
+  .alarm-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:10px; }
+  .alarm-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
+  .alarm-row:last-child { border-bottom:none; }
+  .alarm-label { font-size:13px; color:var(--text); }
+  .alarm-time { font-size:12px; color:var(--accent); font-weight:700; }
+  .toggle { width:44px; height:24px; background:var(--border); border-radius:12px; position:relative; cursor:pointer; transition:background 0.2s; }
+  .toggle.on { background:var(--accent); }
+  .toggle::after { content:''; position:absolute; width:18px; height:18px; background:#fff; border-radius:50%; top:3px; left:3px; transition:transform 0.2s; }
+  .toggle.on::after { transform:translateX(20px); }
+  .notice-box { background:#1a1500; border:1px solid #3a2e00; border-radius:10px; padding:12px 14px; margin-bottom:16px; font-size:12px; color:var(--accent2); line-height:1.6; }
+  .notice-box strong { color:var(--accent); }
+  .empty-state { text-align:center; padding:40px 20px; color:var(--text3); font-size:13px; }
 </style>
 </head>
 <body>
@@ -104,10 +91,7 @@
       <option value="2호점">🏪 2호점 (준비중)</option>
     </select>
   </div>
-  <div class="date-info">
-    <span id="todayDate"></span>
-    <span id="alarmBadge" class="alarm-badge" style="display:none">⏰ 발주시간</span>
-  </div>
+  <div class="date-info"><span id="todayDate"></span><span id="alarmBadge" class="alarm-badge" style="display:none">⏰ 발주시간</span></div>
 </div>
 <div class="nav-tabs">
   <div class="nav-tab active" onclick="showPage('order')">📦 발주</div>
@@ -119,33 +103,27 @@
 <div class="page active" id="page-order">
   <div id="noticeBox" class="notice-box" style="display:none"></div>
   <div class="section-title">문자 발주 거래처</div>
+
   <div class="vendor-card" id="vendor-bean">
-    <div class="vendor-header" onclick="toggleVendor('bean')">
-      <div class="vendor-left"><div class="vendor-icon" style="background:#1a2a1a">🌱</div><div><div class="vendor-name">콩나물 공급업체</div><div class="vendor-sub">010-8304-1260 · 오후 4시 발주 <span class="delivery-badge badge-available" id="bean-status">배송가능</span></div></div></div>
-      <div class="vendor-arrow">▼</div>
-    </div>
+    <div class="vendor-header" onclick="toggleVendor('bean')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a2a1a">🌱</div><div><div class="vendor-name">콩나물 공급업체</div><div class="vendor-sub">010-8304-1260 · 오후 4시 발주 <span class="delivery-badge badge-available" id="bean-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
     <div class="vendor-body">
       <div class="item-row"><div class="item-name">콩나물</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('bean','beansprout',-1)">−</button><div class="qty-value" id="qty-bean-beansprout">4</div><button class="qty-btn" onclick="changeQty('bean','beansprout',1)">+</button></div></div>
       <button class="generate-btn" onclick="generateMsg('bean')">📝 문자 생성</button>
       <div class="msg-preview" id="preview-bean"><div class="msg-text" id="msgtext-bean"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('bean')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01083041260','bean')">📱 문자앱 열기</button></div></div>
     </div>
   </div>
+
   <div class="vendor-card" id="vendor-egg">
-    <div class="vendor-header" onclick="toggleVendor('egg')">
-      <div class="vendor-left"><div class="vendor-icon" style="background:#2a2010">🥚</div><div><div class="vendor-name">한결유통 (계란)</div><div class="vendor-sub">010-6265-7887 · 월~토 <span class="delivery-badge badge-available" id="egg-status">배송가능</span></div></div></div>
-      <div class="vendor-arrow">▼</div>
-    </div>
+    <div class="vendor-header" onclick="toggleVendor('egg')"><div class="vendor-left"><div class="vendor-icon" style="background:#2a2010">🥚</div><div><div class="vendor-name">한결유통 (계란)</div><div class="vendor-sub">010-6265-7887 · 월~토 <span class="delivery-badge badge-available" id="egg-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
     <div class="vendor-body">
       <div class="item-row"><div class="item-name">중란</div><div class="item-unit">판</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('egg','egg1',-1)">−</button><div class="qty-value" id="qty-egg-egg1">10</div><button class="qty-btn" onclick="changeQty('egg','egg1',1)">+</button></div></div>
       <button class="generate-btn" onclick="generateMsg('egg')">📝 문자 생성</button>
       <div class="msg-preview" id="preview-egg"><div class="msg-text" id="msgtext-egg"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('egg')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01062657887','egg')">📱 문자앱 열기</button></div></div>
     </div>
   </div>
+
   <div class="vendor-card" id="vendor-kayeon">
-    <div class="vendor-header" onclick="toggleVendor('kayeon')">
-      <div class="vendor-left"><div class="vendor-icon" style="background:#2a1a1a">🥬</div><div><div class="vendor-name">가연유통 (쌀·김치류)</div><div class="vendor-sub">010-4294-7302 · 월~토 <span class="delivery-badge badge-available" id="kayeon-status">배송가능</span></div></div></div>
-      <div class="vendor-arrow">▼</div>
-    </div>
+    <div class="vendor-header" onclick="toggleVendor('kayeon')"><div class="vendor-left"><div class="vendor-icon" style="background:#2a1a1a">🥬</div><div><div class="vendor-name">가연유통 (쌀·김치류)</div><div class="vendor-sub">010-4294-7302 · 월~토 <span class="delivery-badge badge-available" id="kayeon-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
     <div class="vendor-body">
       <div class="item-row"><div class="item-name">맛김치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k1',-1)">−</button><div class="qty-value" id="qty-kayeon-k1">0</div><button class="qty-btn" onclick="changeQty('kayeon','k1',1)">+</button></div></div>
       <div class="item-row"><div class="item-name">슬라이스 김치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k2',-1)">−</button><div class="qty-value" id="qty-kayeon-k2">0</div><button class="qty-btn" onclick="changeQty('kayeon','k2',1)">+</button></div></div>
@@ -161,11 +139,9 @@
       <div class="msg-preview" id="preview-kayeon"><div class="msg-text" id="msgtext-kayeon"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('kayeon')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01042947302','kayeon')">📱 문자앱 열기</button></div></div>
     </div>
   </div>
+
   <div class="vendor-card" id="vendor-liquor">
-    <div class="vendor-header" onclick="toggleVendor('liquor')">
-      <div class="vendor-left"><div class="vendor-icon" style="background:#1a1a2a">🍶</div><div><div class="vendor-name">대한유통 (주류)</div><div class="vendor-sub">010-7646-7206 · 월~금 <span class="delivery-badge badge-available" id="liquor-status">배송가능</span></div></div></div>
-      <div class="vendor-arrow">▼</div>
-    </div>
+    <div class="vendor-header" onclick="toggleVendor('liquor')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a1a2a">🍶</div><div><div class="vendor-name">대한유통 (주류)</div><div class="vendor-sub">010-7646-7206 · 월~금 <span class="delivery-badge badge-available" id="liquor-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
     <div class="vendor-body">
       <div class="item-row"><div class="item-name">참이슬 후레시</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l1',-1)">−</button><div class="qty-value" id="qty-liquor-l1">0</div><button class="qty-btn" onclick="changeQty('liquor','l1',1)">+</button></div></div>
       <div class="item-row"><div class="item-name">참이슬 오리지널</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l2',-1)">−</button><div class="qty-value" id="qty-liquor-l2">0</div><button class="qty-btn" onclick="changeQty('liquor','l2',1)">+</button></div></div>
@@ -178,11 +154,9 @@
       <div class="msg-preview" id="preview-liquor"><div class="msg-text" id="msgtext-liquor"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('liquor')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01076467206','liquor')">📱 문자앱 열기</button></div></div>
     </div>
   </div>
+
   <div class="vendor-card" id="vendor-seafood">
-    <div class="vendor-header" onclick="toggleVendor('seafood')">
-      <div class="vendor-left"><div class="vendor-icon" style="background:#0f1e2a">🦑</div><div><div class="vendor-name">성화유통 (수산물)</div><div class="vendor-sub">010-8305-0001 · 월~금 <span class="delivery-badge badge-available" id="seafood-status">배송가능</span></div></div></div>
-      <div class="vendor-arrow">▼</div>
-    </div>
+    <div class="vendor-header" onclick="toggleVendor('seafood')"><div class="vendor-left"><div class="vendor-icon" style="background:#0f1e2a">🦑</div><div><div class="vendor-name">성화유통 (수산물)</div><div class="vendor-sub">010-8305-0001 · 월~금 <span class="delivery-badge badge-available" id="seafood-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
     <div class="vendor-body">
       <div class="item-row"><div class="item-name">오징어다이스</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s1',-1)">−</button><div class="qty-value" id="qty-seafood-s1">0</div><button class="qty-btn" onclick="changeQty('seafood','s1',1)">+</button></div></div>
       <div class="item-row"><div class="item-name">선동오징어</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s2',-1)">−</button><div class="qty-value" id="qty-seafood-s2">0</div><button class="qty-btn" onclick="changeQty('seafood','s2',1)">+</button></div></div>
@@ -196,29 +170,65 @@
       <div class="msg-preview" id="preview-seafood"><div class="msg-text" id="msgtext-seafood"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('seafood')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01083050001','seafood')">📱 문자앱 열기</button></div></div>
     </div>
   </div>
+
+  <div class="vendor-card" id="vendor-meat">
+    <div class="vendor-header" onclick="toggleVendor('meat')"><div class="vendor-left"><div class="vendor-icon" style="background:#2a1515">🥩</div><div><div class="vendor-name">성원유통 (육류)</div><div class="vendor-sub">010-9109-3278 · 월~금 <span class="delivery-badge badge-available" id="meat-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
+    <div class="vendor-body">
+      <div class="item-row"><div class="item-name">제육용 전지</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m1',-1)">−</button><div class="qty-value" id="qty-meat-m1">0</div><button class="qty-btn" onclick="changeQty('meat','m1',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">김치찌개용 전지</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m2',-1)">−</button><div class="qty-value" id="qty-meat-m2">0</div><button class="qty-btn" onclick="changeQty('meat','m2',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">민찌</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m3',-1)">−</button><div class="qty-value" id="qty-meat-m3">0</div><button class="qty-btn" onclick="changeQty('meat','m3',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">우삼겹 (1kg씩 소분)</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m4',-1)">−</button><div class="qty-value" id="qty-meat-m4">0</div><button class="qty-btn" onclick="changeQty('meat','m4',1)">+</button></div></div>
+      <button class="generate-btn" onclick="generateMsg('meat')">📝 문자 생성</button>
+      <div class="msg-preview" id="preview-meat"><div class="msg-text" id="msgtext-meat"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('meat')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01091093278','meat')">📱 문자앱 열기</button></div></div>
+    </div>
+  </div>
+
+  <div class="vendor-card" id="vendor-anchovy">
+    <div class="vendor-header" onclick="toggleVendor('anchovy')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a1a10">🐟</div><div><div class="vendor-name">한려물산 (멸치)</div><div class="vendor-sub">010-7908-0046 · 택배배송 <span class="delivery-badge badge-available" id="anchovy-status">주문가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
+    <div class="vendor-body">
+      <div class="item-row"><div class="item-name">육수용 다시멸치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('anchovy','a1',-1)">−</button><div class="qty-value" id="qty-anchovy-a1">0</div><button class="qty-btn" onclick="changeQty('anchovy','a1',1)">+</button></div></div>
+      <button class="generate-btn" onclick="generateMsg('anchovy')">📝 문자 생성</button>
+      <div class="msg-preview" id="preview-anchovy"><div class="msg-text" id="msgtext-anchovy"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('anchovy')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01079080046','anchovy')">📱 문자앱 열기</button></div></div>
+    </div>
+  </div>
+
+  <div class="vendor-card" id="vendor-makgeolli">
+    <div class="vendor-header" onclick="toggleVendor('makgeolli')"><div class="vendor-left"><div class="vendor-icon" style="background:#1e1a10">🍚</div><div><div class="vendor-name">막걸리</div><div class="vendor-sub">010-3122-3507 · 월~토 <span class="delivery-badge badge-available" id="makgeolli-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
+    <div class="vendor-body">
+      <div class="item-row"><div class="item-name">막걸리</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('makgeolli','mg1',-1)">−</button><div class="qty-value" id="qty-makgeolli-mg1">0</div><button class="qty-btn" onclick="changeQty('makgeolli','mg1',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">모주 500mL</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('makgeolli','mg2',-1)">−</button><div class="qty-value" id="qty-makgeolli-mg2">0</div><button class="qty-btn" onclick="changeQty('makgeolli','mg2',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">모주 1.2L</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('makgeolli','mg3',-1)">−</button><div class="qty-value" id="qty-makgeolli-mg3">0</div><button class="qty-btn" onclick="changeQty('makgeolli','mg3',1)">+</button></div></div>
+      <button class="generate-btn" onclick="generateMsg('makgeolli')">📝 문자 생성</button>
+      <div class="msg-preview" id="preview-makgeolli"><div class="msg-text" id="msgtext-makgeolli"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('makgeolli')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01031223507','makgeolli')">📱 문자앱 열기</button></div></div>
+    </div>
+  </div>
+
+  <div class="vendor-card" id="vendor-pyunyuk">
+    <div class="vendor-header" onclick="toggleVendor('pyunyuk')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a1510">🍖</div><div><div class="vendor-name">가야식품 (편육)</div><div class="vendor-sub">010-3873-0808 · 택배배송 <span class="delivery-badge badge-available" id="pyunyuk-status">주문가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
+    <div class="vendor-body">
+      <div class="item-row"><div class="item-name">편육</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('pyunyuk','py1',-1)">−</button><div class="qty-value" id="qty-pyunyuk-py1">0</div><button class="qty-btn" onclick="changeQty('pyunyuk','py1',1)">+</button></div></div>
+      <button class="generate-btn" onclick="generateMsg('pyunyuk')">📝 문자 생성</button>
+      <div class="msg-preview" id="preview-pyunyuk"><div class="msg-text" id="msgtext-pyunyuk"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('pyunyuk')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01038730808','pyunyuk')">📱 문자앱 열기</button></div></div>
+    </div>
+  </div>
+
 </div>
 <div class="page" id="page-inventory">
   <div class="section-title">재고 현황 기록</div>
-  <div class="notice-box">재고를 입력해두면 발주 판단에 참고할 수 있어요. 매일 영업 전/후 체크를 추천해요.</div>
+  <div class="notice-box">재고를 입력해두면 발주 판단에 참고할 수 있어요.</div>
   <div class="inv-card"><div class="inv-header"><div class="inv-vendor">🌱 콩나물</div></div><div class="inv-item-row"><div class="inv-name">콩나물</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-bean" placeholder="0"><div class="inv-unit">박스</div></div></div></div>
   <div class="inv-card"><div class="inv-header"><div class="inv-vendor">🥚 한결유통</div></div><div class="inv-item-row"><div class="inv-name">중란</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-egg" placeholder="0"><div class="inv-unit">판</div></div></div></div>
   <div class="inv-card"><div class="inv-header"><div class="inv-vendor">🥬 가연유통</div></div>
     <div class="inv-item-row"><div class="inv-name">맛김치</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k1" placeholder="0"><div class="inv-unit">박스</div></div></div>
-    <div class="inv-item-row"><div class="inv-name">슬라이스김치</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k2" placeholder="0"><div class="inv-unit">박스</div></div></div>
-    <div class="inv-item-row"><div class="inv-name">포기김치</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k3" placeholder="0"><div class="inv-unit">박스</div></div></div>
     <div class="inv-item-row"><div class="inv-name">쌀</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k4" placeholder="0"><div class="inv-unit">포대</div></div></div>
-    <div class="inv-item-row"><div class="inv-name">맛기름</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k7" placeholder="0"><div class="inv-unit">병</div></div></div>
-    <div class="inv-item-row"><div class="inv-name">참기름</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k8" placeholder="0"><div class="inv-unit">병</div></div></div>
   </div>
   <div class="inv-card"><div class="inv-header"><div class="inv-vendor">🍶 대한유통</div></div>
     <div class="inv-item-row"><div class="inv-name">참이슬 후레시</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-l1" placeholder="0"><div class="inv-unit">박스</div></div></div>
-    <div class="inv-item-row"><div class="inv-name">진로</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-l3" placeholder="0"><div class="inv-unit">박스</div></div></div>
-    <div class="inv-item-row"><div class="inv-name">카스</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-l6" placeholder="0"><div class="inv-unit">박스</div></div></div>
     <div class="inv-item-row"><div class="inv-name">테라</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-l7" placeholder="0"><div class="inv-unit">박스</div></div></div>
   </div>
-  <div class="inv-card"><div class="inv-header"><div class="inv-vendor">🦑 성화유통</div></div>
-    <div class="inv-item-row"><div class="inv-name">오징어다이스</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-s1" placeholder="0"><div class="inv-unit">박스</div></div></div>
-    <div class="inv-item-row"><div class="inv-name">황태채</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-s8" placeholder="0"><div class="inv-unit">kg</div></div></div>
+  <div class="inv-card"><div class="inv-header"><div class="inv-vendor">🥩 성원유통</div></div>
+    <div class="inv-item-row"><div class="inv-name">제육용 전지</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-m1" placeholder="0"><div class="inv-unit">kg</div></div></div>
+    <div class="inv-item-row"><div class="inv-name">우삼겹</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-m4" placeholder="0"><div class="inv-unit">kg</div></div></div>
   </div>
   <button class="save-inv-btn" onclick="saveInventory()">💾 재고 저장</button>
 </div>
@@ -239,27 +249,35 @@
     <div class="alarm-row"><div class="alarm-label">가연유통 (쌀·김치)</div><div class="alarm-time">010-4294-7302</div></div>
     <div class="alarm-row"><div class="alarm-label">대한유통 (주류)</div><div class="alarm-time">010-7646-7206</div></div>
     <div class="alarm-row"><div class="alarm-label">성화유통 (수산물)</div><div class="alarm-time">010-8305-0001</div></div>
+    <div class="alarm-row"><div class="alarm-label">성원유통 (육류)</div><div class="alarm-time">010-9109-3278</div></div>
+    <div class="alarm-row"><div class="alarm-label">한려물산 (멸치)</div><div class="alarm-time">010-7908-0046</div></div>
+    <div class="alarm-row"><div class="alarm-label">막걸리</div><div class="alarm-time">010-3122-3507</div></div>
+    <div class="alarm-row"><div class="alarm-label">가야식품 (편육)</div><div class="alarm-time">010-3873-0808</div></div>
   </div>
   <div class="section-title">앱 정보</div>
   <div class="alarm-card">
-    <div class="alarm-row"><div class="alarm-label">버전</div><div class="alarm-time">v1.0</div></div>
+    <div class="alarm-row"><div class="alarm-label">버전</div><div class="alarm-time">v1.1</div></div>
     <div class="alarm-row"><div class="alarm-label">매장</div><div class="alarm-time" id="settingStore">남구로역점</div></div>
   </div>
 </div>
 <script>
 const vendors = {
-  bean: { name:'콩나물 공급업체', phone:'01083041260', days:[0,1,2,3,4,5,6], items:[{id:'beansprout',name:'콩나물',unit:'박스'}], buildMsg:(store,qtys,isSat)=>`콩나물 ${isSat?(qtys['beansprout']||0)*2:(qtys['beansprout']||0)}박스 부탁드립니다` },
-  egg: { name:'한결유통', phone:'01062657887', days:[1,2,3,4,5,6], items:[{id:'egg1',name:'중란',unit:'판'}], buildMsg:(store,qtys)=>`${store} 중란 ${qtys['egg1']||0}판 부탁드립니다.` },
-  kayeon: { name:'가연유통', phone:'01042947302', days:[1,2,3,4,5,6], items:[{id:'k1',name:'맛김치',unit:'박스'},{id:'k2',name:'슬라이스 김치',unit:'박스'},{id:'k3',name:'포기김치',unit:'박스'},{id:'k4',name:'쌀',unit:'포대'},{id:'k5',name:'거친고추가루',unit:'팩'},{id:'k6',name:'고운고추가루',unit:'팩'},{id:'k7',name:'맛기름',unit:'병'},{id:'k8',name:'참기름',unit:'병'},{id:'k9',name:'들향기름',unit:'병'},{id:'k10',name:'볶음참깨',unit:'팩'}], buildMsg:(store,qtys)=>{let l=[store];vendors.kayeon.items.forEach(i=>{if(qtys[i.id]>0)l.push(`${i.name} ${qtys[i.id]}${i.unit}`)});l.push('부탁드립니다.');return l.join('\n')} },
-  liquor: { name:'대한유통', phone:'01076467206', days:[1,2,3,4,5], items:[{id:'l1',name:'참이슬 후레시',unit:'박스'},{id:'l2',name:'참이슬 오리지널',unit:'박스'},{id:'l3',name:'진로',unit:'박스'},{id:'l4',name:'처음처럼',unit:'박스'},{id:'l5',name:'청하',unit:'박스'},{id:'l6',name:'카스',unit:'박스'},{id:'l7',name:'테라',unit:'박스'}], buildMsg:(store,qtys)=>{let l=[store];vendors.liquor.items.forEach(i=>{if(qtys[i.id]>0)l.push(`${i.name} ${qtys[i.id]}`)});l.push('부탁드립니다.');return l.join('\n')} },
-  seafood: { name:'성화유통', phone:'01083050001', days:[1,2,3,4,5], items:[{id:'s1',name:'오징어다이스',unit:'박스'},{id:'s2',name:'선동오징어',unit:'박스'},{id:'s3',name:'냉동굴',unit:'박스'},{id:'s4',name:'새우',unit:'박스'},{id:'s5',name:'절단꽃게L',unit:'박스'},{id:'s6',name:'피바지락',unit:'박스'},{id:'s7',name:'자숙꼬막살',unit:'봉지'},{id:'s8',name:'황태채',unit:'kg'}], buildMsg:(store,qtys)=>{let l=[store];vendors.seafood.items.forEach(i=>{if(qtys[i.id]>0)l.push(`${i.name} ${qtys[i.id]}${i.unit}`)});l.push('부탁드립니다.');return l.join('\n')} }
+  bean:{name:'콩나물 공급업체',phone:'01083041260',days:[0,1,2,3,4,5,6],items:[{id:'beansprout',name:'콩나물',unit:'박스'}],buildMsg:(store,qtys,isSat)=>`콩나물 ${isSat?(qtys['beansprout']||0)*2:(qtys['beansprout']||0)}박스 부탁드립니다`},
+  egg:{name:'한결유통',phone:'01062657887',days:[1,2,3,4,5,6],items:[{id:'egg1',name:'중란',unit:'판'}],buildMsg:(store,qtys)=>`${store} 중란 ${qtys['egg1']||0}판 부탁드립니다.`},
+  kayeon:{name:'가연유통',phone:'01042947302',days:[1,2,3,4,5,6],items:[{id:'k1',name:'맛김치',unit:'박스'},{id:'k2',name:'슬라이스 김치',unit:'박스'},{id:'k3',name:'포기김치',unit:'박스'},{id:'k4',name:'쌀',unit:'포대'},{id:'k5',name:'거친고추가루',unit:'팩'},{id:'k6',name:'고운고추가루',unit:'팩'},{id:'k7',name:'맛기름',unit:'병'},{id:'k8',name:'참기름',unit:'병'},{id:'k9',name:'들향기름',unit:'병'},{id:'k10',name:'볶음참깨',unit:'팩'}],buildMsg:(store,qtys)=>{let l=[store];vendors.kayeon.items.forEach(i=>{if((qtys[i.id]||0)>0)l.push(`${i.name} ${qtys[i.id]}${i.unit}`)});l.push('부탁드립니다.');return l.join('\n')}},
+  liquor:{name:'대한유통',phone:'01076467206',days:[1,2,3,4,5],items:[{id:'l1',name:'참이슬 후레시',unit:'박스'},{id:'l2',name:'참이슬 오리지널',unit:'박스'},{id:'l3',name:'진로',unit:'박스'},{id:'l4',name:'처음처럼',unit:'박스'},{id:'l5',name:'청하',unit:'박스'},{id:'l6',name:'카스',unit:'박스'},{id:'l7',name:'테라',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];vendors.liquor.items.forEach(i=>{if((qtys[i.id]||0)>0)l.push(`${i.name} ${qtys[i.id]}`)});l.push('부탁드립니다.');return l.join('\n')}},
+  seafood:{name:'성화유통',phone:'01083050001',days:[1,2,3,4,5],items:[{id:'s1',name:'오징어다이스',unit:'박스'},{id:'s2',name:'선동오징어',unit:'박스'},{id:'s3',name:'냉동굴',unit:'박스'},{id:'s4',name:'새우',unit:'박스'},{id:'s5',name:'절단꽃게L',unit:'박스'},{id:'s6',name:'피바지락',unit:'박스'},{id:'s7',name:'자숙꼬막살',unit:'봉지'},{id:'s8',name:'황태채',unit:'kg'}],buildMsg:(store,qtys)=>{let l=[store];vendors.seafood.items.forEach(i=>{if((qtys[i.id]||0)>0)l.push(`${i.name} ${qtys[i.id]}${i.unit}`)});l.push('부탁드립니다.');return l.join('\n')}},
+  meat:{name:'성원유통',phone:'01091093278',days:[1,2,3,4,5],items:[{id:'m1',name:'제육용 전지',unit:'kg'},{id:'m2',name:'김치찌개용 전지',unit:'kg'},{id:'m3',name:'민찌',unit:'kg'},{id:'m4',name:'우삼겹',unit:'kg'}],buildMsg:(store,qtys)=>{let l=[store];const q1=qtys['m1']||0,q2=qtys['m2']||0,q3=qtys['m3']||0,q4=qtys['m4']||0;if(q1>0)l.push(`제육용 전지 ${q1}키로 10키로씩 소분해주세요`);if(q2>0)l.push(`김치찌개용 전지 ${q2}키로 10키로씩 소분해주세요`);if(q3>0)l.push(`민찌 ${q3}키로`);if(q4>0)l.push(`우삼겹 ${q4}키로 1키로씩 소분해주세요`);l.push('부탁드립니다.');return l.join('\n')}},
+  anchovy:{name:'한려물산',phone:'01079080046',days:[1,2,3,4,5,6],items:[{id:'a1',name:'육수용 다시멸치',unit:'박스'}],buildMsg:(store,qtys)=>`${store} 육수용 다시멸치 ${qtys['a1']||0}박스 부탁드립니다`},
+  makgeolli:{name:'막걸리',phone:'01031223507',days:[1,2,3,4,5,6],items:[{id:'mg1',name:'막걸리',unit:'박스'},{id:'mg2',name:'모주 500mL',unit:'박스'},{id:'mg3',name:'모주 1.2L',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];const q1=qtys['mg1']||0,q2=qtys['mg2']||0,q3=qtys['mg3']||0;if(q1>0)l.push(`막걸리 ${q1}박스`);if(q2>0)l.push(`모주 500mL ${q2}박스`);if(q3>0)l.push(`모주 1.2L ${q3}박스`);l.push('부탁드립니다.');return l.join('\n')}},
+  pyunyuk:{name:'가야식품',phone:'01038730808',days:[1,2,3,4,5,6],items:[{id:'py1',name:'편육',unit:'kg'}],buildMsg:(store,qtys)=>`${store} 편육 ${qtys['py1']||0}키로 부탁드립니다`}
 };
 let history=JSON.parse(localStorage.getItem('orderHistory')||'[]');
 let alarms=JSON.parse(localStorage.getItem('alarms')||'{"bean":true,"general":true}');
 function getStore(){return document.getElementById('storeSelect').value;}
 function getDay(){return new Date().getDay();}
-function updateDeliveryStatuses(){const day=getDay();Object.keys(vendors).forEach(key=>{const el=document.getElementById(key+'-status');if(!el)return;let ok=key==='bean'?day!==0:vendors[key].days.includes((day+1)%7);el.textContent=ok?'배송가능':'오늘휴무';el.className='delivery-badge '+(ok?'badge-available':'badge-unavailable');});}
-function updateNotice(){const day=getDay();const box=document.getElementById('noticeBox');let msg='';if(day===6)msg='<strong>🗓 오늘은 토요일!</strong><br>콩나물은 2배로 발주하세요. 주류·수산물은 오늘 발주 불가예요.';else if(day===0)msg='<strong>🗓 오늘은 일요일!</strong><br>발주 없는 날이에요.';else msg='<strong>⏰ 오후 4시 전에 발주하세요!</strong><br>전날 저녁까지 발주하면 다음날 직배송이 와요.';box.innerHTML=msg;box.style.display='block';}
+function updateDeliveryStatuses(){const day=getDay();Object.keys(vendors).forEach(key=>{const el=document.getElementById(key+'-status');if(!el)return;let ok=key==='bean'?day!==0:vendors[key].days.includes((day+1)%7);if(vendors[key].delivery==='택배')ok=true;el.textContent=ok?(vendors[key].delivery==='택배'?'주문가능':'배송가능'):'오늘휴무';el.className='delivery-badge '+(ok?'badge-available':'badge-unavailable');});}
+function updateNotice(){const day=getDay();const box=document.getElementById('noticeBox');let msg='';if(day===6)msg='<strong>🗓 오늘은 토요일!</strong><br>콩나물은 2배로 발주하세요. 주류·수산물·육류는 오늘 발주 불가예요.';else if(day===0)msg='<strong>🗓 오늘은 일요일!</strong><br>발주 없는 날이에요.';else msg='<strong>⏰ 오후 4시 전에 발주하세요!</strong><br>전날 저녁까지 발주하면 다음날 직배송이 와요.';box.innerHTML=msg;box.style.display='block';}
 function changeQty(v,i,d){const el=document.getElementById(`qty-${v}-${i}`);let val=parseInt(el.textContent)+d;if(val<0)val=0;el.textContent=val;}
 function toggleVendor(key){document.getElementById('vendor-'+key).classList.toggle('open');}
 function generateMsg(vk){const v=vendors[vk];const store=getStore();const isSat=getDay()===6;const qtys={};v.items.forEach(item=>{const el=document.getElementById(`qty-${vk}-${item.id}`);qtys[item.id]=parseInt(el?el.textContent:'0')||0;});const msg=v.buildMsg(store,qtys,isSat);document.getElementById('msgtext-'+vk).textContent=msg;document.getElementById('preview-'+vk).classList.add('show');saveHistory(v.name,msg);}
