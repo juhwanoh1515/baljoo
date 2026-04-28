@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -6,83 +7,563 @@
 <title>발주 관리</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#0f0e0c; --surface:#1a1815; --surface2:#242118; --border:#2e2b24; --accent:#e8a020; --accent2:#f0c060; --text:#f0ead8; --text2:#9a9282; --text3:#5a5548; --red:#e05040; --green:#50c878; --blue:#4a90d9; }
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; max-width:480px; margin:0 auto; padding-bottom:80px; }
-  .header { background:var(--surface); border-bottom:1px solid var(--border); padding:16px 20px 12px; position:sticky; top:0; z-index:100; }
-  .header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-  .logo { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--accent); letter-spacing:2px; }
-  .store-selector { background:var(--surface2); border:1px solid var(--border); color:var(--text); font-family:'Noto Sans KR',sans-serif; font-size:13px; padding:6px 10px; border-radius:8px; cursor:pointer; outline:none; }
-  .date-info { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text2); }
-  .alarm-badge { background:var(--accent); color:#000; font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; }
-  .nav-tabs { display:flex; background:var(--surface); border-bottom:1px solid var(--border); position:sticky; top:85px; z-index:99; }
-  .nav-tab { flex:1; padding:12px 4px; text-align:center; font-size:12px; font-weight:500; color:var(--text3); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; }
-  .nav-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
-  .page { display:none; padding:16px; }
-  .page.active { display:block; }
-  .section-title { font-size:11px; font-weight:700; color:var(--text3); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:10px; margin-top:20px; }
-  .section-title:first-child { margin-top:0; }
-  .vendor-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; margin-bottom:10px; overflow:hidden; }
-  .vendor-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; cursor:pointer; }
-  .vendor-left { display:flex; align-items:center; gap:10px; }
-  .vendor-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
-  .vendor-name { font-size:14px; font-weight:700; color:var(--text); }
-  .vendor-sub { font-size:11px; color:var(--text2); margin-top:2px; }
-  .vendor-arrow { font-size:12px; color:var(--text3); transition:transform 0.2s; }
-  .vendor-card.open .vendor-arrow { transform:rotate(180deg); }
-  .vendor-body { display:none; padding:0 16px 16px; border-top:1px solid var(--border); }
-  .vendor-card.open .vendor-body { display:block; }
-  .item-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); }
-  .item-row:last-child { border-bottom:none; }
-  .item-name { font-size:13px; color:var(--text); flex:1; }
-  .item-unit { font-size:11px; color:var(--text3); margin-right:10px; }
-  .qty-control { display:flex; align-items:center; gap:8px; }
-  .qty-btn { width:28px; height:28px; border-radius:8px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:700; }
-  .qty-btn:active { background:var(--accent); color:#000; }
-  .qty-value { font-size:15px; font-weight:700; color:var(--text); min-width:24px; text-align:center; }
-  .generate-btn { width:100%; margin-top:14px; padding:12px; background:var(--accent); color:#000; font-family:'Noto Sans KR',sans-serif; font-size:13px; font-weight:700; border:none; border-radius:10px; cursor:pointer; transition:opacity 0.2s; }
-  .generate-btn:active { opacity:0.8; }
-  .msg-preview { display:none; margin-top:10px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px; }
-  .msg-preview.show { display:block; }
-  .msg-text { font-size:13px; color:var(--text); line-height:1.7; white-space:pre-line; word-break:break-all; }
-  .msg-actions { display:flex; gap:8px; margin-top:10px; }
-  .copy-btn { flex:1; padding:10px; background:var(--surface); border:1px solid var(--accent); color:var(--accent); font-family:'Noto Sans KR',sans-serif; font-size:12px; font-weight:700; border-radius:8px; cursor:pointer; }
-  .sms-btn { flex:1; padding:10px; background:var(--accent); border:none; color:#000; font-family:'Noto Sans KR',sans-serif; font-size:12px; font-weight:700; border-radius:8px; cursor:pointer; }
-  .toast { position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--green); color:#000; font-size:13px; font-weight:700; padding:10px 20px; border-radius:20px; opacity:0; transition:all 0.3s; pointer-events:none; z-index:999; }
-  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-  .delivery-badge { font-size:10px; font-weight:700; padding:2px 7px; border-radius:6px; }
-  .badge-available { background:#1a3a1a; color:var(--green); }
-  .badge-unavailable { background:#3a1a1a; color:var(--red); }
-  .inv-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
-  .inv-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-  .inv-vendor { font-size:12px; font-weight:700; color:var(--text2); }
-  .inv-item-row { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); }
-  .inv-item-row:last-child { border-bottom:none; }
-  .inv-name { font-size:13px; color:var(--text); }
-  .inv-qty-wrap { display:flex; align-items:center; gap:6px; }
-  .inv-input { width:60px; background:var(--surface2); border:1px solid var(--border); color:var(--text); font-family:'Noto Sans KR',sans-serif; font-size:13px; font-weight:700; text-align:center; padding:5px 6px; border-radius:7px; outline:none; }
-  .inv-unit { font-size:11px; color:var(--text3); }
-  .save-inv-btn { width:100%; margin-top:16px; padding:13px; background:var(--surface2); border:1px solid var(--accent); color:var(--accent); font-family:'Noto Sans KR',sans-serif; font-size:13px; font-weight:700; border-radius:10px; cursor:pointer; }
-  .history-item { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
-  .history-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-  .history-vendor { font-size:13px; font-weight:700; color:var(--text); }
-  .history-date { font-size:11px; color:var(--text3); }
-  .history-content { font-size:12px; color:var(--text2); line-height:1.6; white-space:pre-line; }
-  .alarm-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:10px; }
-  .alarm-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
-  .alarm-row:last-child { border-bottom:none; }
-  .alarm-label { font-size:13px; color:var(--text); }
-  .alarm-time { font-size:12px; color:var(--accent); font-weight:700; }
-  .toggle { width:44px; height:24px; background:var(--border); border-radius:12px; position:relative; cursor:pointer; transition:background 0.2s; }
-  .toggle.on { background:var(--accent); }
-  .toggle::after { content:''; position:absolute; width:18px; height:18px; background:#fff; border-radius:50%; top:3px; left:3px; transition:transform 0.2s; }
-  .toggle.on::after { transform:translateX(20px); }
-  .notice-box { background:#1a1500; border:1px solid #3a2e00; border-radius:10px; padding:12px 14px; margin-bottom:16px; font-size:12px; color:var(--accent2); line-height:1.6; }
-  .notice-box strong { color:var(--accent); }
-  .empty-state { text-align:center; padding:40px 20px; color:var(--text3); font-size:13px; }
+  :root {
+    --bg: #0f0e0c;
+    --surface: #1a1815;
+    --surface2: #242118;
+    --border: #2e2b24;
+    --accent: #e8a020;
+    --accent2: #f0c060;
+    --text: #f0ead8;
+    --text2: #9a9282;
+    --text3: #5a5548;
+    --red: #e05040;
+    --green: #50c878;
+    --blue: #4a90d9;
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+font-family: ‘Noto Sans KR’, sans-serif;
+background: var(–bg);
+color: var(–text);
+min-height: 100vh;
+max-width: 480px;
+margin: 0 auto;
+padding-bottom: 80px;
+}
+
+/* HEADER */
+.header {
+background: var(–surface);
+border-bottom: 1px solid var(–border);
+padding: 16px 20px 12px;
+position: sticky;
+top: 0;
+z-index: 100;
+}
+
+.header-top {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 10px;
+}
+
+.logo {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 22px;
+color: var(–accent);
+letter-spacing: 2px;
+}
+
+.store-selector {
+background: var(–surface2);
+border: 1px solid var(–border);
+color: var(–text);
+font-family: ‘Noto Sans KR’, sans-serif;
+font-size: 13px;
+padding: 6px 10px;
+border-radius: 8px;
+cursor: pointer;
+outline: none;
+}
+
+.date-info {
+display: flex;
+align-items: center;
+gap: 8px;
+font-size: 12px;
+color: var(–text2);
+}
+
+.alarm-badge {
+background: var(–accent);
+color: #000;
+font-size: 11px;
+font-weight: 700;
+padding: 2px 8px;
+border-radius: 20px;
+}
+
+/* NAV TABS */
+.nav-tabs {
+display: flex;
+background: var(–surface);
+border-bottom: 1px solid var(–border);
+position: sticky;
+top: 85px;
+z-index: 99;
+}
+
+.nav-tab {
+flex: 1;
+padding: 12px 4px;
+text-align: center;
+font-size: 12px;
+font-weight: 500;
+color: var(–text3);
+cursor: pointer;
+border-bottom: 2px solid transparent;
+transition: all 0.2s;
+}
+
+.nav-tab.active {
+color: var(–accent);
+border-bottom-color: var(–accent);
+}
+
+/* PAGES */
+.page { display: none; padding: 16px 16px; }
+.page.active { display: block; }
+
+/* SECTION TITLE */
+.section-title {
+font-size: 11px;
+font-weight: 700;
+color: var(–text3);
+letter-spacing: 1.5px;
+text-transform: uppercase;
+margin-bottom: 10px;
+margin-top: 20px;
+}
+.section-title:first-child { margin-top: 0; }
+
+/* VENDOR CARD */
+.vendor-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 12px;
+margin-bottom: 10px;
+overflow: hidden;
+}
+
+.vendor-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 14px 16px;
+cursor: pointer;
+}
+
+.vendor-left {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.vendor-icon {
+width: 36px;
+height: 36px;
+border-radius: 10px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 18px;
+flex-shrink: 0;
+}
+
+.vendor-name {
+font-size: 14px;
+font-weight: 700;
+color: var(–text);
+}
+
+.vendor-sub {
+font-size: 11px;
+color: var(–text2);
+margin-top: 2px;
+}
+
+.vendor-arrow {
+font-size: 12px;
+color: var(–text3);
+transition: transform 0.2s;
+}
+
+.vendor-card.open .vendor-arrow { transform: rotate(180deg); }
+
+.vendor-body {
+display: none;
+padding: 0 16px 16px;
+border-top: 1px solid var(–border);
+}
+
+.vendor-card.open .vendor-body { display: block; }
+
+/* ITEMS */
+.item-row {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 10px 0;
+border-bottom: 1px solid var(–border);
+}
+.item-row:last-child { border-bottom: none; }
+
+.item-name {
+font-size: 13px;
+color: var(–text);
+flex: 1;
+}
+
+.item-unit {
+font-size: 11px;
+color: var(–text3);
+margin-right: 10px;
+}
+
+.qty-control {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.qty-btn {
+width: 28px;
+height: 28px;
+border-radius: 8px;
+border: 1px solid var(–border);
+background: var(–surface2);
+color: var(–text);
+font-size: 16px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+}
+
+.qty-btn:active { background: var(–accent); color: #000; }
+
+.qty-value {
+font-size: 15px;
+font-weight: 700;
+color: var(–text);
+min-width: 24px;
+text-align: center;
+}
+
+/* GENERATE BTN */
+.generate-btn {
+width: 100%;
+margin-top: 14px;
+padding: 12px;
+background: var(–accent);
+color: #000;
+font-family: ‘Noto Sans KR’, sans-serif;
+font-size: 13px;
+font-weight: 700;
+border: none;
+border-radius: 10px;
+cursor: pointer;
+transition: opacity 0.2s;
+}
+
+.generate-btn:active { opacity: 0.8; }
+
+/* MESSAGE PREVIEW */
+.msg-preview {
+display: none;
+margin-top: 10px;
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 10px;
+padding: 12px;
+}
+
+.msg-preview.show { display: block; }
+
+.msg-text {
+font-size: 13px;
+color: var(–text);
+line-height: 1.7;
+white-space: pre-line;
+word-break: break-all;
+}
+
+.msg-actions {
+display: flex;
+gap: 8px;
+margin-top: 10px;
+}
+
+.copy-btn {
+flex: 1;
+padding: 10px;
+background: var(–surface);
+border: 1px solid var(–accent);
+color: var(–accent);
+font-family: ‘Noto Sans KR’, sans-serif;
+font-size: 12px;
+font-weight: 700;
+border-radius: 8px;
+cursor: pointer;
+}
+
+.sms-btn {
+flex: 1;
+padding: 10px;
+background: var(–accent);
+border: none;
+color: #000;
+font-family: ‘Noto Sans KR’, sans-serif;
+font-size: 12px;
+font-weight: 700;
+border-radius: 8px;
+cursor: pointer;
+}
+
+/* COPY TOAST */
+.toast {
+position: fixed;
+bottom: 100px;
+left: 50%;
+transform: translateX(-50%) translateY(20px);
+background: var(–green);
+color: #000;
+font-size: 13px;
+font-weight: 700;
+padding: 10px 20px;
+border-radius: 20px;
+opacity: 0;
+transition: all 0.3s;
+pointer-events: none;
+z-index: 999;
+}
+
+.toast.show {
+opacity: 1;
+transform: translateX(-50%) translateY(0);
+}
+
+/* DELIVERY STATUS */
+.delivery-badge {
+font-size: 10px;
+font-weight: 700;
+padding: 2px 7px;
+border-radius: 6px;
+}
+
+.badge-available { background: #1a3a1a; color: var(–green); }
+.badge-unavailable { background: #3a1a1a; color: var(–red); }
+
+/* INVENTORY PAGE */
+.inv-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 12px;
+padding: 14px 16px;
+margin-bottom: 10px;
+}
+
+.inv-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 12px;
+}
+
+.inv-vendor {
+font-size: 12px;
+font-weight: 700;
+color: var(–text2);
+letter-spacing: 0.5px;
+}
+
+.inv-item-row {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 8px 0;
+border-bottom: 1px solid var(–border);
+}
+
+.inv-item-row:last-child { border-bottom: none; }
+
+.inv-name { font-size: 13px; color: var(–text); }
+
+.inv-qty-wrap {
+display: flex;
+align-items: center;
+gap: 6px;
+}
+
+.inv-input {
+width: 60px;
+background: var(–surface2);
+border: 1px solid var(–border);
+color: var(–text);
+font-family: ‘Noto Sans KR’, sans-serif;
+font-size: 13px;
+font-weight: 700;
+text-align: center;
+padding: 5px 6px;
+border-radius: 7px;
+outline: none;
+}
+
+.inv-unit { font-size: 11px; color: var(–text3); }
+
+.save-inv-btn {
+width: 100%;
+margin-top: 16px;
+padding: 13px;
+background: var(–surface2);
+border: 1px solid var(–accent);
+color: var(–accent);
+font-family: ‘Noto Sans KR’, sans-serif;
+font-size: 13px;
+font-weight: 700;
+border-radius: 10px;
+cursor: pointer;
+}
+
+/* HISTORY PAGE */
+.history-item {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 12px;
+padding: 14px 16px;
+margin-bottom: 10px;
+}
+
+.history-top {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 8px;
+}
+
+.history-vendor {
+font-size: 13px;
+font-weight: 700;
+color: var(–text);
+}
+
+.history-date {
+font-size: 11px;
+color: var(–text3);
+}
+
+.history-content {
+font-size: 12px;
+color: var(–text2);
+line-height: 1.6;
+white-space: pre-line;
+}
+
+/* ALARM PAGE */
+.alarm-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 12px;
+padding: 16px;
+margin-bottom: 10px;
+}
+
+.alarm-row {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 10px 0;
+border-bottom: 1px solid var(–border);
+}
+
+.alarm-row:last-child { border-bottom: none; }
+
+.alarm-label { font-size: 13px; color: var(–text); }
+.alarm-time { font-size: 12px; color: var(–accent); font-weight: 700; }
+
+.toggle {
+width: 44px;
+height: 24px;
+background: var(–border);
+border-radius: 12px;
+position: relative;
+cursor: pointer;
+transition: background 0.2s;
+}
+
+.toggle.on { background: var(–accent); }
+
+.toggle::after {
+content: ‘’;
+position: absolute;
+width: 18px;
+height: 18px;
+background: #fff;
+border-radius: 50%;
+top: 3px;
+left: 3px;
+transition: transform 0.2s;
+}
+
+.toggle.on::after { transform: translateX(20px); }
+
+/* BOTTOM NAV */
+.bottom-nav {
+position: fixed;
+bottom: 0;
+left: 50%;
+transform: translateX(-50%);
+width: 100%;
+max-width: 480px;
+background: var(–surface);
+border-top: 1px solid var(–border);
+display: flex;
+z-index: 100;
+}
+
+.bottom-btn {
+flex: 1;
+padding: 12px 4px 10px;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 4px;
+cursor: pointer;
+color: var(–text3);
+font-size: 10px;
+font-weight: 500;
+transition: color 0.2s;
+border: none;
+background: none;
+font-family: ‘Noto Sans KR’, sans-serif;
+}
+
+.bottom-btn.active { color: var(–accent); }
+.bottom-btn span:first-child { font-size: 20px; }
+
+/* NOTICE BOX */
+.notice-box {
+background: #1a1500;
+border: 1px solid #3a2e00;
+border-radius: 10px;
+padding: 12px 14px;
+margin-bottom: 16px;
+font-size: 12px;
+color: var(–accent2);
+line-height: 1.6;
+}
+
+.notice-box strong { color: var(–accent); }
+
+/* EMPTY STATE */
+.empty-state {
+text-align: center;
+padding: 40px 20px;
+color: var(–text3);
+font-size: 13px;
+}
 </style>
+
 </head>
 <body>
+
+<!-- HEADER -->
+
 <div class="header">
   <div class="header-top">
     <div class="logo">발주관리</div>
@@ -91,39 +572,114 @@
       <option value="2호점">🏪 2호점 (준비중)</option>
     </select>
   </div>
-  <div class="date-info"><span id="todayDate"></span><span id="alarmBadge" class="alarm-badge" style="display:none">⏰ 발주시간</span></div>
+  <div class="date-info">
+    <span id="todayDate"></span>
+    <span id="alarmBadge" class="alarm-badge" style="display:none">⏰ 발주시간</span>
+  </div>
 </div>
+
+<!-- NAV TABS -->
+
 <div class="nav-tabs">
   <div class="nav-tab active" onclick="showPage('order')">📦 발주</div>
   <div class="nav-tab" onclick="showPage('inventory')">📊 재고</div>
   <div class="nav-tab" onclick="showPage('history')">📋 내역</div>
   <div class="nav-tab" onclick="showPage('settings')">⚙️ 설정</div>
 </div>
-<div class="toast" id="toast">✅ 복사됐어요!</div>
+
+<!-- TOAST -->
+
+<div class="toast" id="toast">✅ 클립보드에 복사됐어요!</div>
+
+<!-- ORDER PAGE -->
+
 <div class="page active" id="page-order">
+
   <div id="noticeBox" class="notice-box" style="display:none"></div>
+
   <div class="section-title">문자 발주 거래처</div>
 
+  <!-- 콩나물 -->
+
   <div class="vendor-card" id="vendor-bean">
-    <div class="vendor-header" onclick="toggleVendor('bean')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a2a1a">🌱</div><div><div class="vendor-name">콩나물 공급업체</div><div class="vendor-sub">010-8304-1260 · 오후 4시 발주 <span class="delivery-badge badge-available" id="bean-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
+    <div class="vendor-header" onclick="toggleVendor('bean')">
+      <div class="vendor-left">
+        <div class="vendor-icon" style="background:#1a2a1a">🌱</div>
+        <div>
+          <div class="vendor-name">콩나물 공급업체</div>
+          <div class="vendor-sub">010-8304-1260 · 오후 4시 발주 <span class="delivery-badge badge-available" id="bean-status">배송가능</span></div>
+        </div>
+      </div>
+      <div class="vendor-arrow">▼</div>
+    </div>
     <div class="vendor-body">
-      <div class="item-row"><div class="item-name">콩나물</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('bean','beansprout',-1)">−</button><div class="qty-value" id="qty-bean-beansprout">4</div><button class="qty-btn" onclick="changeQty('bean','beansprout',1)">+</button></div></div>
+      <div class="item-row">
+        <div class="item-name">콩나물</div>
+        <div class="item-unit">박스</div>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty('bean','beansprout',-1)">−</button>
+          <div class="qty-value" id="qty-bean-beansprout">4</div>
+          <button class="qty-btn" onclick="changeQty('bean','beansprout',1)">+</button>
+        </div>
+      </div>
       <button class="generate-btn" onclick="generateMsg('bean')">📝 문자 생성</button>
-      <div class="msg-preview" id="preview-bean"><div class="msg-text" id="msgtext-bean"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('bean')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01083041260','bean')">📱 문자앱 열기</button></div></div>
+      <div class="msg-preview" id="preview-bean">
+        <div class="msg-text" id="msgtext-bean"></div>
+        <div class="msg-actions">
+          <button class="copy-btn" onclick="copyMsg('bean')">📋 복사</button>
+          <button class="sms-btn" onclick="sendSMS('0108304126', 'bean')">📱 문자앱 열기</button>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- 계란 충남농장 -->
 
   <div class="vendor-card" id="vendor-egg">
-    <div class="vendor-header" onclick="toggleVendor('egg')"><div class="vendor-left"><div class="vendor-icon" style="background:#2a2010">🥚</div><div><div class="vendor-name">한결유통 (계란)</div><div class="vendor-sub">010-6265-7887 · 월~토 <span class="delivery-badge badge-available" id="egg-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
+    <div class="vendor-header" onclick="toggleVendor('egg')">
+      <div class="vendor-left">
+        <div class="vendor-icon" style="background:#2a2010">🥚</div>
+        <div>
+          <div class="vendor-name">충남농장 (계란)</div>
+          <div class="vendor-sub">010-9988-1001 · 월~토 <span class="delivery-badge badge-available" id="egg-status">배송가능</span></div>
+        </div>
+      </div>
+      <div class="vendor-arrow">▼</div>
+    </div>
     <div class="vendor-body">
-      <div class="item-row"><div class="item-name">중란</div><div class="item-unit">판</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('egg','egg1',-1)">−</button><div class="qty-value" id="qty-egg-egg1">10</div><button class="qty-btn" onclick="changeQty('egg','egg1',1)">+</button></div></div>
+      <div class="item-row">
+        <div class="item-name">중란</div>
+        <div class="item-unit">판</div>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty('egg','egg1',-1)">−</button>
+          <div class="qty-value" id="qty-egg-egg1">10</div>
+          <button class="qty-btn" onclick="changeQty('egg','egg1',1)">+</button>
+        </div>
+      </div>
       <button class="generate-btn" onclick="generateMsg('egg')">📝 문자 생성</button>
-      <div class="msg-preview" id="preview-egg"><div class="msg-text" id="msgtext-egg"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('egg')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01062657887','egg')">📱 문자앱 열기</button></div></div>
+      <div class="msg-preview" id="preview-egg">
+        <div class="msg-text" id="msgtext-egg"></div>
+        <div class="msg-actions">
+          <button class="copy-btn" onclick="copyMsg('egg')">📋 복사</button>
+          <button class="sms-btn" onclick="sendSMS('01099881001', 'egg')">📱 문자앱 열기</button>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- 가연유통 -->
+
   <div class="vendor-card" id="vendor-kayeon">
-    <div class="vendor-header" onclick="toggleVendor('kayeon')"><div class="vendor-left"><div class="vendor-icon" style="background:#2a1a1a">🥬</div><div><div class="vendor-name">가연유통 (쌀·김치류)</div><div class="vendor-sub">010-4294-7302 · 월~토 <span class="delivery-badge badge-available" id="kayeon-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
+    <div class="vendor-header" onclick="toggleVendor('kayeon')">
+      <div class="vendor-left">
+        <div class="vendor-icon" style="background:#2a1a1a">🥬</div>
+        <div>
+          <div class="vendor-name">가연유통 (쌀·김치류)</div>
+          <div class="vendor-sub">010-4294-7302 · 월~토 <span class="delivery-badge badge-available" id="kayeon-status">배송가능</span></div>
+        </div>
+      </div>
+      <div class="vendor-arrow">▼</div>
+    </div>
     <div class="vendor-body">
       <div class="item-row"><div class="item-name">맛김치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k1',-1)">−</button><div class="qty-value" id="qty-kayeon-k1">0</div><button class="qty-btn" onclick="changeQty('kayeon','k1',1)">+</button></div></div>
       <div class="item-row"><div class="item-name">슬라이스 김치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k2',-1)">−</button><div class="qty-value" id="qty-kayeon-k2">0</div><button class="qty-btn" onclick="changeQty('kayeon','k2',1)">+</button></div></div>
@@ -135,13 +691,32 @@
       <div class="item-row"><div class="item-name">참기름</div><div class="item-unit">병</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k8',-1)">−</button><div class="qty-value" id="qty-kayeon-k8">0</div><button class="qty-btn" onclick="changeQty('kayeon','k8',1)">+</button></div></div>
       <div class="item-row"><div class="item-name">들향기름</div><div class="item-unit">병</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k9',-1)">−</button><div class="qty-value" id="qty-kayeon-k9">0</div><button class="qty-btn" onclick="changeQty('kayeon','k9',1)">+</button></div></div>
       <div class="item-row"><div class="item-name">볶음참깨</div><div class="item-unit">팩</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k10',-1)">−</button><div class="qty-value" id="qty-kayeon-k10">0</div><button class="qty-btn" onclick="changeQty('kayeon','k10',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">통깨가루</div><div class="item-unit">팩</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k11',-1)">−</button><div class="qty-value" id="qty-kayeon-k11">0</div><button class="qty-btn" onclick="changeQty('kayeon','k11',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">깍두기</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k12',-1)">−</button><div class="qty-value" id="qty-kayeon-k12">0</div><button class="qty-btn" onclick="changeQty('kayeon','k12',1)">+</button></div></div>
       <button class="generate-btn" onclick="generateMsg('kayeon')">📝 문자 생성</button>
-      <div class="msg-preview" id="preview-kayeon"><div class="msg-text" id="msgtext-kayeon"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('kayeon')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01042947302','kayeon')">📱 문자앱 열기</button></div></div>
+      <div class="msg-preview" id="preview-kayeon">
+        <div class="msg-text" id="msgtext-kayeon"></div>
+        <div class="msg-actions">
+          <button class="copy-btn" onclick="copyMsg('kayeon')">📋 복사</button>
+          <button class="sms-btn" onclick="sendSMS('01042947302', 'kayeon')">📱 문자앱 열기</button>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- 주류 대한유통 -->
+
   <div class="vendor-card" id="vendor-liquor">
-    <div class="vendor-header" onclick="toggleVendor('liquor')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a1a2a">🍶</div><div><div class="vendor-name">대한유통 (주류)</div><div class="vendor-sub">010-7646-7206 · 월~금 <span class="delivery-badge badge-available" id="liquor-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
+    <div class="vendor-header" onclick="toggleVendor('liquor')">
+      <div class="vendor-left">
+        <div class="vendor-icon" style="background:#1a1a2a">🍶</div>
+        <div>
+          <div class="vendor-name">대한유통 (주류)</div>
+          <div class="vendor-sub">010-7646-7206 · 월~금 <span class="delivery-badge badge-available" id="liquor-status">배송가능</span></div>
+        </div>
+      </div>
+      <div class="vendor-arrow">▼</div>
+    </div>
     <div class="vendor-body">
       <div class="item-row"><div class="item-name">참이슬 후레시</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l1',-1)">−</button><div class="qty-value" id="qty-liquor-l1">0</div><button class="qty-btn" onclick="changeQty('liquor','l1',1)">+</button></div></div>
       <div class="item-row"><div class="item-name">참이슬 오리지널</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l2',-1)">−</button><div class="qty-value" id="qty-liquor-l2">0</div><button class="qty-btn" onclick="changeQty('liquor','l2',1)">+</button></div></div>
@@ -151,12 +726,29 @@
       <div class="item-row"><div class="item-name">카스</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l6',-1)">−</button><div class="qty-value" id="qty-liquor-l6">0</div><button class="qty-btn" onclick="changeQty('liquor','l6',1)">+</button></div></div>
       <div class="item-row"><div class="item-name">테라</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l7',-1)">−</button><div class="qty-value" id="qty-liquor-l7">0</div><button class="qty-btn" onclick="changeQty('liquor','l7',1)">+</button></div></div>
       <button class="generate-btn" onclick="generateMsg('liquor')">📝 문자 생성</button>
-      <div class="msg-preview" id="preview-liquor"><div class="msg-text" id="msgtext-liquor"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('liquor')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01076467206','liquor')">📱 문자앱 열기</button></div></div>
+      <div class="msg-preview" id="preview-liquor">
+        <div class="msg-text" id="msgtext-liquor"></div>
+        <div class="msg-actions">
+          <button class="copy-btn" onclick="copyMsg('liquor')">📋 복사</button>
+          <button class="sms-btn" onclick="sendSMS('01076467206', 'liquor')">📱 문자앱 열기</button>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- 성화유통 -->
+
   <div class="vendor-card" id="vendor-seafood">
-    <div class="vendor-header" onclick="toggleVendor('seafood')"><div class="vendor-left"><div class="vendor-icon" style="background:#0f1e2a">🦑</div><div><div class="vendor-name">성화유통 (수산물)</div><div class="vendor-sub">010-8305-0001 · 월~금 <span class="delivery-badge badge-available" id="seafood-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
+    <div class="vendor-header" onclick="toggleVendor('seafood')">
+      <div class="vendor-left">
+        <div class="vendor-icon" style="background:#0f1e2a">🦑</div>
+        <div>
+          <div class="vendor-name">성화유통 (수산물)</div>
+          <div class="vendor-sub">010-8305-0001 · 월~금 <span class="delivery-badge badge-available" id="seafood-status">배송가능</span></div>
+        </div>
+      </div>
+      <div class="vendor-arrow">▼</div>
+    </div>
     <div class="vendor-body">
       <div class="item-row"><div class="item-name">오징어다이스</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s1',-1)">−</button><div class="qty-value" id="qty-seafood-s1">0</div><button class="qty-btn" onclick="changeQty('seafood','s1',1)">+</button></div></div>
       <div class="item-row"><div class="item-name">선동오징어</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s2',-1)">−</button><div class="qty-value" id="qty-seafood-s2">0</div><button class="qty-btn" onclick="changeQty('seafood','s2',1)">+</button></div></div>
@@ -167,12 +759,29 @@
       <div class="item-row"><div class="item-name">자숙꼬막살</div><div class="item-unit">봉지</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s7',-1)">−</button><div class="qty-value" id="qty-seafood-s7">0</div><button class="qty-btn" onclick="changeQty('seafood','s7',1)">+</button></div></div>
       <div class="item-row"><div class="item-name">황태채</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s8',-1)">−</button><div class="qty-value" id="qty-seafood-s8">0</div><button class="qty-btn" onclick="changeQty('seafood','s8',1)">+</button></div></div>
       <button class="generate-btn" onclick="generateMsg('seafood')">📝 문자 생성</button>
-      <div class="msg-preview" id="preview-seafood"><div class="msg-text" id="msgtext-seafood"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('seafood')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01083050001','seafood')">📱 문자앱 열기</button></div></div>
+      <div class="msg-preview" id="preview-seafood">
+        <div class="msg-text" id="msgtext-seafood"></div>
+        <div class="msg-actions">
+          <button class="copy-btn" onclick="copyMsg('seafood')">📋 복사</button>
+          <button class="sms-btn" onclick="sendSMS('01083050001', 'seafood')">📱 문자앱 열기</button>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- 성원유통 육류 -->
+
   <div class="vendor-card" id="vendor-meat">
-    <div class="vendor-header" onclick="toggleVendor('meat')"><div class="vendor-left"><div class="vendor-icon" style="background:#2a1515">🥩</div><div><div class="vendor-name">성원유통 (육류)</div><div class="vendor-sub">010-9109-3278 · 월~금 <span class="delivery-badge badge-available" id="meat-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
+    <div class="vendor-header" onclick="toggleVendor('meat')">
+      <div class="vendor-left">
+        <div class="vendor-icon" style="background:#2a1515">🥩</div>
+        <div>
+          <div class="vendor-name">성원유통 (육류)</div>
+          <div class="vendor-sub">010-9109-3278 · 월~금 <span class="delivery-badge badge-available" id="meat-status">배송가능</span></div>
+        </div>
+      </div>
+      <div class="vendor-arrow">▼</div>
+    </div>
     <div class="vendor-body">
       <div class="item-row"><div class="item-name">제육용 전지</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m1',-1)">−</button><div class="qty-value" id="qty-meat-m1">0</div><button class="qty-btn" onclick="changeQty('meat','m1',1)">+</button></div></div>
       <div class="item-row"><div class="item-name">김치찌개용 전지</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m2',-1)">−</button><div class="qty-value" id="qty-meat-m2">0</div><button class="qty-btn" onclick="changeQty('meat','m2',1)">+</button></div></div>
@@ -183,8 +792,19 @@
     </div>
   </div>
 
+  <!-- 한려물산 멸치 -->
+
   <div class="vendor-card" id="vendor-anchovy">
-    <div class="vendor-header" onclick="toggleVendor('anchovy')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a1a10">🐟</div><div><div class="vendor-name">한려물산 (멸치)</div><div class="vendor-sub">010-7908-0046 · 택배배송 <span class="delivery-badge badge-available" id="anchovy-status">주문가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
+    <div class="vendor-header" onclick="toggleVendor('anchovy')">
+      <div class="vendor-left">
+        <div class="vendor-icon" style="background:#1a1a10">🐟</div>
+        <div>
+          <div class="vendor-name">한려물산 (멸치)</div>
+          <div class="vendor-sub">010-7908-0046 · 택배배송 <span class="delivery-badge badge-available" id="anchovy-status">주문가능</span></div>
+        </div>
+      </div>
+      <div class="vendor-arrow">▼</div>
+    </div>
     <div class="vendor-body">
       <div class="item-row"><div class="item-name">육수용 다시멸치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('anchovy','a1',-1)">−</button><div class="qty-value" id="qty-anchovy-a1">0</div><button class="qty-btn" onclick="changeQty('anchovy','a1',1)">+</button></div></div>
       <button class="generate-btn" onclick="generateMsg('anchovy')">📝 문자 생성</button>
@@ -192,8 +812,19 @@
     </div>
   </div>
 
+  <!-- 막걸리 -->
+
   <div class="vendor-card" id="vendor-makgeolli">
-    <div class="vendor-header" onclick="toggleVendor('makgeolli')"><div class="vendor-left"><div class="vendor-icon" style="background:#1e1a10">🍚</div><div><div class="vendor-name">막걸리</div><div class="vendor-sub">010-3122-3507 · 월~토 <span class="delivery-badge badge-available" id="makgeolli-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
+    <div class="vendor-header" onclick="toggleVendor('makgeolli')">
+      <div class="vendor-left">
+        <div class="vendor-icon" style="background:#1e1a10">🍚</div>
+        <div>
+          <div class="vendor-name">막걸리</div>
+          <div class="vendor-sub">010-3122-3507 · 월~토 <span class="delivery-badge badge-available" id="makgeolli-status">배송가능</span></div>
+        </div>
+      </div>
+      <div class="vendor-arrow">▼</div>
+    </div>
     <div class="vendor-body">
       <div class="item-row"><div class="item-name">막걸리</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('makgeolli','mg1',-1)">−</button><div class="qty-value" id="qty-makgeolli-mg1">0</div><button class="qty-btn" onclick="changeQty('makgeolli','mg1',1)">+</button></div></div>
       <div class="item-row"><div class="item-name">모주 500mL</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('makgeolli','mg2',-1)">−</button><div class="qty-value" id="qty-makgeolli-mg2">0</div><button class="qty-btn" onclick="changeQty('makgeolli','mg2',1)">+</button></div></div>
@@ -203,8 +834,19 @@
     </div>
   </div>
 
+  <!-- 가야식품 편육 -->
+
   <div class="vendor-card" id="vendor-pyunyuk">
-    <div class="vendor-header" onclick="toggleVendor('pyunyuk')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a1510">🍖</div><div><div class="vendor-name">가야식품 (편육)</div><div class="vendor-sub">010-3873-0808 · 택배배송 <span class="delivery-badge badge-available" id="pyunyuk-status">주문가능</span></div></div></div><div class="vendor-arrow">▼</div></div>
+    <div class="vendor-header" onclick="toggleVendor('pyunyuk')">
+      <div class="vendor-left">
+        <div class="vendor-icon" style="background:#1a1510">🍖</div>
+        <div>
+          <div class="vendor-name">가야식품 (편육)</div>
+          <div class="vendor-sub">010-3873-0808 · 택배배송 <span class="delivery-badge badge-available" id="pyunyuk-status">주문가능</span></div>
+        </div>
+      </div>
+      <div class="vendor-arrow">▼</div>
+    </div>
     <div class="vendor-body">
       <div class="item-row"><div class="item-name">편육</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('pyunyuk','py1',-1)">−</button><div class="qty-value" id="qty-pyunyuk-py1">0</div><button class="qty-btn" onclick="changeQty('pyunyuk','py1',1)">+</button></div></div>
       <button class="generate-btn" onclick="generateMsg('pyunyuk')">📝 문자 생성</button>
@@ -212,40 +854,116 @@
     </div>
   </div>
 
+  <!-- 야채 카톡 발주 -->
+
+  <div class="vendor-card" id="vendor-veggie">
+    <div class="vendor-header" onclick="toggleVendor('veggie')">
+      <div class="vendor-left">
+        <div class="vendor-icon" style="background:#0f2a1a">🥦</div>
+        <div>
+          <div class="vendor-name">야채 (카톡 발주)</div>
+          <div class="vendor-sub">카톡 단체채팅방 · 복사 후 붙여넣기 <span class="delivery-badge badge-available" id="veggie-status">주문가능</span></div>
+        </div>
+      </div>
+      <div class="vendor-arrow">▼</div>
+    </div>
+    <div class="vendor-body">
+      <div class="item-row"><div class="item-name">대파</div><div class="item-unit">단</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v1',-1)">−</button><div class="qty-value" id="qty-veggie-v1">0</div><button class="qty-btn" onclick="changeQty('veggie','v1',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">양파</div><div class="item-unit">망</div><div class="qty-control"><button class="qty-btn" onclick="changeQtyHalf('veggie','v2')">½망</button><div class="qty-value" id="qty-veggie-v2-display">0</div><button class="qty-btn" onclick="changeQtyFull('veggie','v2')">1망</button></div></div>
+      <div class="item-row"><div class="item-name">육수용 무</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v3',-1)">−</button><div class="qty-value" id="qty-veggie-v3">0</div><button class="qty-btn" onclick="changeQty('veggie','v3',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">주키니 호박 특</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v4',-1)">−</button><div class="qty-value" id="qty-veggie-v4">0</div><button class="qty-btn" onclick="changeQty('veggie','v4',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">당근</div><div class="item-unit">개</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v5',-1)">−</button><div class="qty-value" id="qty-veggie-v5">0</div><button class="qty-btn" onclick="changeQty('veggie','v5',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">부추</div><div class="item-unit">단</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v6',-1)">−</button><div class="qty-value" id="qty-veggie-v6">0</div><button class="qty-btn" onclick="changeQty('veggie','v6',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">양배추</div><div class="item-unit">통</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v7',-1)">−</button><div class="qty-value" id="qty-veggie-v7">0</div><button class="qty-btn" onclick="changeQty('veggie','v7',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">고사리</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v8',-1)">−</button><div class="qty-value" id="qty-veggie-v8">0</div><button class="qty-btn" onclick="changeQty('veggie','v8',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">청양고추</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v9',-1)">−</button><div class="qty-value" id="qty-veggie-v9">0</div><button class="qty-btn" onclick="changeQty('veggie','v9',1)">+</button></div></div>
+      <div class="item-row"><div class="item-name">치커리</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v10',-1)">−</button><div class="qty-value" id="qty-veggie-v10">0</div><button class="qty-btn" onclick="changeQty('veggie','v10',1)">+</button></div></div>
+      <button class="generate-btn" onclick="generateMsg('veggie')" style="background:#25d366;color:#fff">📋 카톡용 문자 생성</button>
+      <div class="msg-preview" id="preview-veggie"><div class="msg-text" id="msgtext-veggie"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('veggie')">📋 복사 (카톡 붙여넣기)</button></div></div>
+    </div>
+  </div>
+
 </div>
 <div class="page" id="page-inventory">
   <div class="section-title">재고 현황 기록</div>
-  <div class="notice-box">재고를 입력해두면 발주 판단에 참고할 수 있어요.</div>
-  <div class="inv-card"><div class="inv-header"><div class="inv-vendor">🌱 콩나물</div></div><div class="inv-item-row"><div class="inv-name">콩나물</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-bean" placeholder="0"><div class="inv-unit">박스</div></div></div></div>
-  <div class="inv-card"><div class="inv-header"><div class="inv-vendor">🥚 한결유통</div></div><div class="inv-item-row"><div class="inv-name">중란</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-egg" placeholder="0"><div class="inv-unit">판</div></div></div></div>
-  <div class="inv-card"><div class="inv-header"><div class="inv-vendor">🥬 가연유통</div></div>
-    <div class="inv-item-row"><div class="inv-name">맛김치</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k1" placeholder="0"><div class="inv-unit">박스</div></div></div>
-    <div class="inv-item-row"><div class="inv-name">쌀</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k4" placeholder="0"><div class="inv-unit">포대</div></div></div>
+  <div class="notice-box">재고를 입력해두면 발주 판단에 참고할 수 있어요. 매일 영업 전/후 체크하는 것을 추천해요.</div>
+
+  <div class="inv-card">
+    <div class="inv-header"><div class="inv-vendor">🌱 콩나물</div></div>
+    <div class="inv-item-row"><div class="inv-name">콩나물</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-bean" placeholder="0"><div class="inv-unit">박스</div></div></div>
   </div>
-  <div class="inv-card"><div class="inv-header"><div class="inv-vendor">🍶 대한유통</div></div>
+
+  <div class="inv-card">
+    <div class="inv-header"><div class="inv-vendor">🥚 충남농장</div></div>
+    <div class="inv-item-row"><div class="inv-name">중란</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-egg" placeholder="0"><div class="inv-unit">판</div></div></div>
+  </div>
+
+  <div class="inv-card">
+    <div class="inv-header"><div class="inv-vendor">🥬 가연유통</div></div>
+    <div class="inv-item-row"><div class="inv-name">맛김치</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k1" placeholder="0"><div class="inv-unit">박스</div></div></div>
+    <div class="inv-item-row"><div class="inv-name">슬라이스김치</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k2" placeholder="0"><div class="inv-unit">박스</div></div></div>
+    <div class="inv-item-row"><div class="inv-name">포기김치</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k3" placeholder="0"><div class="inv-unit">박스</div></div></div>
+    <div class="inv-item-row"><div class="inv-name">쌀</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k4" placeholder="0"><div class="inv-unit">포대</div></div></div>
+    <div class="inv-item-row"><div class="inv-name">맛기름</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k7" placeholder="0"><div class="inv-unit">병</div></div></div>
+    <div class="inv-item-row"><div class="inv-name">참기름</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k8" placeholder="0"><div class="inv-unit">병</div></div></div>
+  </div>
+
+  <div class="inv-card">
+    <div class="inv-header"><div class="inv-vendor">🍶 대한유통</div></div>
     <div class="inv-item-row"><div class="inv-name">참이슬 후레시</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-l1" placeholder="0"><div class="inv-unit">박스</div></div></div>
+    <div class="inv-item-row"><div class="inv-name">진로</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-l3" placeholder="0"><div class="inv-unit">박스</div></div></div>
+    <div class="inv-item-row"><div class="inv-name">카스</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-l6" placeholder="0"><div class="inv-unit">박스</div></div></div>
     <div class="inv-item-row"><div class="inv-name">테라</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-l7" placeholder="0"><div class="inv-unit">박스</div></div></div>
   </div>
-  <div class="inv-card"><div class="inv-header"><div class="inv-vendor">🥩 성원유통</div></div>
-    <div class="inv-item-row"><div class="inv-name">제육용 전지</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-m1" placeholder="0"><div class="inv-unit">kg</div></div></div>
-    <div class="inv-item-row"><div class="inv-name">우삼겹</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-m4" placeholder="0"><div class="inv-unit">kg</div></div></div>
+
+  <div class="inv-card">
+    <div class="inv-header"><div class="inv-vendor">🦑 성화유통</div></div>
+    <div class="inv-item-row"><div class="inv-name">오징어다이스</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-s1" placeholder="0"><div class="inv-unit">박스</div></div></div>
+    <div class="inv-item-row"><div class="inv-name">황태채</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-s8" placeholder="0"><div class="inv-unit">kg</div></div></div>
   </div>
-  <button class="save-inv-btn" onclick="saveInventory()">💾 재고 저장</button>
+
+<button class="save-inv-btn" onclick="saveInventory()">💾 재고 저장</button>
+
 </div>
+
+<!-- HISTORY PAGE -->
+
 <div class="page" id="page-history">
   <div class="section-title">발주 내역</div>
   <div id="historyList"></div>
 </div>
+
+<!-- SETTINGS PAGE -->
+
 <div class="page" id="page-settings">
   <div class="section-title">알림 설정</div>
   <div class="alarm-card">
-    <div class="alarm-row"><div><div class="alarm-label">콩나물 발주 알림</div><div style="font-size:11px;color:var(--text3);margin-top:2px">오후 4시 · 토요일 2배 발주</div></div><div style="display:flex;align-items:center;gap:10px"><div class="alarm-time">16:00</div><div class="toggle on" id="toggle-bean" onclick="toggleAlarm('bean')"></div></div></div>
-    <div class="alarm-row"><div><div class="alarm-label">일반 발주 알림</div><div style="font-size:11px;color:var(--text3);margin-top:2px">오후 4시 · 전날 저녁 발주</div></div><div style="display:flex;align-items:center;gap:10px"><div class="alarm-time">16:00</div><div class="toggle on" id="toggle-general" onclick="toggleAlarm('general')"></div></div></div>
+    <div class="alarm-row">
+      <div>
+        <div class="alarm-label">콩나물 발주 알림</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">오후 4시 · 토요일 2배 발주</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="alarm-time">16:00</div>
+        <div class="toggle on" id="toggle-bean" onclick="toggleAlarm('bean')"></div>
+      </div>
+    </div>
+    <div class="alarm-row">
+      <div>
+        <div class="alarm-label">일반 발주 알림</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">오후 4시 · 전날 저녁 발주</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="alarm-time">16:00</div>
+        <div class="toggle on" id="toggle-general" onclick="toggleAlarm('general')"></div>
+      </div>
+    </div>
   </div>
+
   <div class="section-title">거래처 정보</div>
   <div class="alarm-card">
     <div class="alarm-row"><div class="alarm-label">콩나물 공급업체</div><div class="alarm-time">010-8304-1260</div></div>
-    <div class="alarm-row"><div class="alarm-label">한결유통 (계란)</div><div class="alarm-time">010-6265-7887</div></div>
+    <div class="alarm-row"><div class="alarm-label">충남농장 (계란)</div><div class="alarm-time">010-9988-1001</div></div>
     <div class="alarm-row"><div class="alarm-label">가연유통 (쌀·김치)</div><div class="alarm-time">010-4294-7302</div></div>
     <div class="alarm-row"><div class="alarm-label">대한유통 (주류)</div><div class="alarm-time">010-7646-7206</div></div>
     <div class="alarm-row"><div class="alarm-label">성화유통 (수산물)</div><div class="alarm-time">010-8305-0001</div></div>
@@ -253,44 +971,440 @@
     <div class="alarm-row"><div class="alarm-label">한려물산 (멸치)</div><div class="alarm-time">010-7908-0046</div></div>
     <div class="alarm-row"><div class="alarm-label">막걸리</div><div class="alarm-time">010-3122-3507</div></div>
     <div class="alarm-row"><div class="alarm-label">가야식품 (편육)</div><div class="alarm-time">010-3873-0808</div></div>
+    <div class="alarm-row"><div class="alarm-label">야채 (카톡 발주)</div><div class="alarm-time">단체 카톡방</div></div>
   </div>
+
   <div class="section-title">앱 정보</div>
   <div class="alarm-card">
-    <div class="alarm-row"><div class="alarm-label">버전</div><div class="alarm-time">v1.1</div></div>
+    <div class="alarm-row"><div class="alarm-label">버전</div><div class="alarm-time">v1.0</div></div>
     <div class="alarm-row"><div class="alarm-label">매장</div><div class="alarm-time" id="settingStore">남구로역점</div></div>
   </div>
 </div>
+
 <script>
+// DATA
 const vendors = {
-  bean:{name:'콩나물 공급업체',phone:'01083041260',days:[0,1,2,3,4,5,6],items:[{id:'beansprout',name:'콩나물',unit:'박스'}],buildMsg:(store,qtys,isSat)=>`콩나물 ${isSat?(qtys['beansprout']||0)*2:(qtys['beansprout']||0)}박스 부탁드립니다`},
-  egg:{name:'한결유통',phone:'01062657887',days:[1,2,3,4,5,6],items:[{id:'egg1',name:'중란',unit:'판'}],buildMsg:(store,qtys)=>`${store} 중란 ${qtys['egg1']||0}판 부탁드립니다.`},
-  kayeon:{name:'가연유통',phone:'01042947302',days:[1,2,3,4,5,6],items:[{id:'k1',name:'맛김치',unit:'박스'},{id:'k2',name:'슬라이스 김치',unit:'박스'},{id:'k3',name:'포기김치',unit:'박스'},{id:'k4',name:'쌀',unit:'포대'},{id:'k5',name:'거친고추가루',unit:'팩'},{id:'k6',name:'고운고추가루',unit:'팩'},{id:'k7',name:'맛기름',unit:'병'},{id:'k8',name:'참기름',unit:'병'},{id:'k9',name:'들향기름',unit:'병'},{id:'k10',name:'볶음참깨',unit:'팩'}],buildMsg:(store,qtys)=>{let l=[store];vendors.kayeon.items.forEach(i=>{if((qtys[i.id]||0)>0)l.push(`${i.name} ${qtys[i.id]}${i.unit}`)});l.push('부탁드립니다.');return l.join('\n')}},
-  liquor:{name:'대한유통',phone:'01076467206',days:[1,2,3,4,5],items:[{id:'l1',name:'참이슬 후레시',unit:'박스'},{id:'l2',name:'참이슬 오리지널',unit:'박스'},{id:'l3',name:'진로',unit:'박스'},{id:'l4',name:'처음처럼',unit:'박스'},{id:'l5',name:'청하',unit:'박스'},{id:'l6',name:'카스',unit:'박스'},{id:'l7',name:'테라',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];vendors.liquor.items.forEach(i=>{if((qtys[i.id]||0)>0)l.push(`${i.name} ${qtys[i.id]}`)});l.push('부탁드립니다.');return l.join('\n')}},
-  seafood:{name:'성화유통',phone:'01083050001',days:[1,2,3,4,5],items:[{id:'s1',name:'오징어다이스',unit:'박스'},{id:'s2',name:'선동오징어',unit:'박스'},{id:'s3',name:'냉동굴',unit:'박스'},{id:'s4',name:'새우',unit:'박스'},{id:'s5',name:'절단꽃게L',unit:'박스'},{id:'s6',name:'피바지락',unit:'박스'},{id:'s7',name:'자숙꼬막살',unit:'봉지'},{id:'s8',name:'황태채',unit:'kg'}],buildMsg:(store,qtys)=>{let l=[store];vendors.seafood.items.forEach(i=>{if((qtys[i.id]||0)>0)l.push(`${i.name} ${qtys[i.id]}${i.unit}`)});l.push('부탁드립니다.');return l.join('\n')}},
-  meat:{name:'성원유통',phone:'01091093278',days:[1,2,3,4,5],items:[{id:'m1',name:'제육용 전지',unit:'kg'},{id:'m2',name:'김치찌개용 전지',unit:'kg'},{id:'m3',name:'민찌',unit:'kg'},{id:'m4',name:'우삼겹',unit:'kg'}],buildMsg:(store,qtys)=>{let l=[store];const q1=qtys['m1']||0,q2=qtys['m2']||0,q3=qtys['m3']||0,q4=qtys['m4']||0;if(q1>0)l.push(`제육용 전지 ${q1}키로 10키로씩 소분해주세요`);if(q2>0)l.push(`김치찌개용 전지 ${q2}키로 10키로씩 소분해주세요`);if(q3>0)l.push(`민찌 ${q3}키로`);if(q4>0)l.push(`우삼겹 ${q4}키로 1키로씩 소분해주세요`);l.push('부탁드립니다.');return l.join('\n')}},
-  anchovy:{name:'한려물산',phone:'01079080046',days:[1,2,3,4,5,6],items:[{id:'a1',name:'육수용 다시멸치',unit:'박스'}],buildMsg:(store,qtys)=>`${store} 육수용 다시멸치 ${qtys['a1']||0}박스 부탁드립니다`},
-  makgeolli:{name:'막걸리',phone:'01031223507',days:[1,2,3,4,5,6],items:[{id:'mg1',name:'막걸리',unit:'박스'},{id:'mg2',name:'모주 500mL',unit:'박스'},{id:'mg3',name:'모주 1.2L',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];const q1=qtys['mg1']||0,q2=qtys['mg2']||0,q3=qtys['mg3']||0;if(q1>0)l.push(`막걸리 ${q1}박스`);if(q2>0)l.push(`모주 500mL ${q2}박스`);if(q3>0)l.push(`모주 1.2L ${q3}박스`);l.push('부탁드립니다.');return l.join('\n')}},
-  pyunyuk:{name:'가야식품',phone:'01038730808',days:[1,2,3,4,5,6],items:[{id:'py1',name:'편육',unit:'kg'}],buildMsg:(store,qtys)=>`${store} 편육 ${qtys['py1']||0}키로 부탁드립니다`}
+  bean: {
+    name: '콩나물 공급업체',
+    phone: '01083041260',
+    days: [0,1,2,3,4,5,6], // all
+    noSunday: true,
+    items: [{ id: 'beansprout', name: '콩나물', unit: '박스' }],
+    buildMsg: (store, qtys, isSat) => {
+      const q = qtys['beansprout'] || 0;
+      const total = isSat ? q * 2 : q;
+      return `콩나물 ${total}박스 부탁드립니다`;
+    }
+  },
+  egg: {
+    name: '충남농장 (계란)',
+    phone: '01099881001',
+    days: [1,2,3,4,5,6],
+    items: [{ id: 'egg1', name: '중란', unit: '판' }],
+    buildMsg: (store, qtys) => {
+      return `${store} 중란 ${qtys['egg1'] || 0}판 부탁드립니다.`;
+    }
+  },
+  kayeon: {
+    name: '가연유통',
+    phone: '01042947302',
+    days: [1,2,3,4,5,6],
+    items: [
+      {id:'k1',name:'맛김치',unit:'박스'},
+      {id:'k2',name:'슬라이스 김치',unit:'박스'},
+      {id:'k3',name:'포기김치',unit:'박스'},
+      {id:'k4',name:'쌀',unit:'포대'},
+      {id:'k5',name:'거친고추가루',unit:'팩'},
+      {id:'k6',name:'고운고추가루',unit:'팩'},
+      {id:'k7',name:'맛기름',unit:'병'},
+      {id:'k8',name:'참기름',unit:'병'},
+      {id:'k9',name:'들향기름',unit:'병'},
+      {id:'k10',name:'볶음참깨',unit:'팩'},
+      {id:'k11',name:'통깨가루',unit:'팩'},
+      {id:'k12',name:'깍두기',unit:'박스'},
+    ],
+    buildMsg: (store, qtys) => {
+      let lines = [`${store}`];
+      const items = vendors.kayeon.items;
+      items.forEach(item => {
+        const q = qtys[item.id] || 0;
+        if (q > 0) lines.push(`${item.name} ${q}${item.unit}`);
+      });
+      lines.push('부탁드립니다.');
+      return lines.join('\n');
+    }
+  },
+  liquor: {
+    name: '대한유통',
+    phone: '01076467206',
+    days: [1,2,3,4,5],
+    items: [
+      {id:'l1',name:'참이슬 후레시',unit:'박스'},
+      {id:'l2',name:'참이슬 오리지널',unit:'박스'},
+      {id:'l3',name:'진로',unit:'박스'},
+      {id:'l4',name:'처음처럼',unit:'박스'},
+      {id:'l5',name:'청하',unit:'박스'},
+      {id:'l6',name:'카스',unit:'박스'},
+      {id:'l7',name:'테라',unit:'박스'},
+    ],
+    buildMsg: (store, qtys) => {
+      let lines = [`${store}`];
+      vendors.liquor.items.forEach(item => {
+        const q = qtys[item.id] || 0;
+        if (q > 0) lines.push(`${item.name} ${q}`);
+      });
+      lines.push('부탁드립니다.');
+      return lines.join('\n');
+    }
+  },
+  seafood: {
+    name: '성화유통',
+    phone: '01083050001',
+    days: [1,2,3,4,5],
+    items: [
+      {id:'s1',name:'오징어다이스',unit:'박스'},
+      {id:'s2',name:'선동오징어',unit:'박스'},
+      {id:'s3',name:'냉동굴',unit:'박스'},
+      {id:'s4',name:'새우',unit:'박스'},
+      {id:'s5',name:'절단꽃게L',unit:'박스'},
+      {id:'s6',name:'피바지락',unit:'박스'},
+      {id:'s7',name:'자숙꼬막살',unit:'봉지'},
+      {id:'s8',name:'황태채',unit:'kg'},
+    ],
+    buildMsg: (store, qtys) => {
+      let lines = [`${store}`];
+      vendors.seafood.items.forEach(item => {
+        const q = qtys[item.id] || 0;
+        if (q > 0) lines.push(`${item.name} ${q}${item.unit}`);
+      });
+      lines.push('부탁드립니다.');
+      return lines.join('\n');
+    }
+  },
+  meat: {
+    name: '성원유통',
+    phone: '01091093278',
+    days: [1,2,3,4,5],
+    items: [
+      {id:'m1',name:'제육용 전지',unit:'kg'},
+      {id:'m2',name:'김치찌개용 전지',unit:'kg'},
+      {id:'m3',name:'민찌',unit:'kg'},
+      {id:'m4',name:'우삼겹',unit:'kg'},
+    ],
+    buildMsg: (store, qtys) => {
+      let lines = [`${store}`];
+      const q1 = qtys['m1'] || 0;
+      const q2 = qtys['m2'] || 0;
+      const q3 = qtys['m3'] || 0;
+      const q4 = qtys['m4'] || 0;
+      if (q1 > 0) lines.push(`제육용 전지 ${q1}키로 10키로씩 소분해주세요`);
+      if (q2 > 0) lines.push(`김치찌개용 전지 ${q2}키로 10키로씩 소분해주세요`);
+      if (q3 > 0) lines.push(`민찌 ${q3}키로`);
+      if (q4 > 0) lines.push(`우삼겹 ${q4}키로 1키로씩 소분해주세요`);
+      lines.push('부탁드립니다.');
+      return lines.join('\n');
+    }
+  },
+  anchovy: {
+    name: '한려물산',
+    phone: '01079080046',
+    days: [1,2,3,4,5,6],
+    delivery: '택배',
+    items: [
+      {id:'a1',name:'육수용 다시멸치',unit:'박스'},
+    ],
+    buildMsg: (store, qtys) => {
+      const q = qtys['a1'] || 0;
+      return `${store} 육수용 다시멸치 ${q}박스 부탁드립니다`;
+    }
+  },
+  makgeolli: {
+    name: '막걸리',
+    phone: '01031223507',
+    days: [1,2,3,4,5,6],
+    items: [
+      {id:'mg1',name:'막걸리',unit:'박스'},
+      {id:'mg2',name:'모주 500mL',unit:'박스'},
+      {id:'mg3',name:'모주 1.2L',unit:'박스'},
+    ],
+    buildMsg: (store, qtys) => {
+      let lines = [`${store}`];
+      const q1 = qtys['mg1'] || 0;
+      const q2 = qtys['mg2'] || 0;
+      const q3 = qtys['mg3'] || 0;
+      if (q1 > 0) lines.push(`막걸리 ${q1}박스`);
+      if (q2 > 0) lines.push(`모주 500mL ${q2}박스`);
+      if (q3 > 0) lines.push(`모주 1.2L ${q3}박스`);
+      lines.push('부탁드립니다.');
+      return lines.join('\n');
+    }
+  },
+  pyunyuk: {
+    name: '가야식품',
+    phone: '01038730808',
+    days: [1,2,3,4,5,6],
+    delivery: '택배',
+    items: [
+      {id:'py1',name:'편육',unit:'kg'},
+    ],
+    buildMsg: (store, qtys) => {
+      const q = qtys['py1'] || 0;
+      return `${store} 편육 ${q}키로 부탁드립니다`;
+    }
+  },
+  veggie: {
+    name: '야채 카톡 발주',
+    phone: '',
+    days: [1,2,3,4,5,6],
+    items: [
+      {id:'v1',name:'대파',unit:'단'},
+      {id:'v2',name:'양파',unit:'망'},
+      {id:'v3',name:'육수용 무',unit:'박스'},
+      {id:'v4',name:'주키니 호박 특',unit:'박스'},
+      {id:'v5',name:'당근',unit:'개'},
+      {id:'v6',name:'부추',unit:'단'},
+      {id:'v7',name:'양배추',unit:'통'},
+      {id:'v8',name:'고사리',unit:'박스'},
+      {id:'v9',name:'청양고추',unit:'kg'},
+      {id:'v10',name:'치커리',unit:'박스'},
+    ],
+    buildMsg: (store, qtys) => {
+      let lines = [`${store}`];
+      const items = vendors.veggie.items;
+      items.forEach(item => {
+        const q = qtys[item.id] || 0;
+        if (item.id === 'v2') {
+          if (q === 0.5) lines.push(`양파 반망`);
+          else if (q >= 1) lines.push(`양파 ${q}망`);
+        } else if (q > 0) {
+          lines.push(`${item.name} ${q}${item.unit}`);
+        }
+      });
+      lines.push('부탁드립니다.');
+      return lines.join('\n');
+    }
+  }
 };
-let history=JSON.parse(localStorage.getItem('orderHistory')||'[]');
-let alarms=JSON.parse(localStorage.getItem('alarms')||'{"bean":true,"general":true}');
-function getStore(){return document.getElementById('storeSelect').value;}
-function getDay(){return new Date().getDay();}
-function updateDeliveryStatuses(){const day=getDay();Object.keys(vendors).forEach(key=>{const el=document.getElementById(key+'-status');if(!el)return;let ok=key==='bean'?day!==0:vendors[key].days.includes((day+1)%7);if(vendors[key].delivery==='택배')ok=true;el.textContent=ok?(vendors[key].delivery==='택배'?'주문가능':'배송가능'):'오늘휴무';el.className='delivery-badge '+(ok?'badge-available':'badge-unavailable');});}
-function updateNotice(){const day=getDay();const box=document.getElementById('noticeBox');let msg='';if(day===6)msg='<strong>🗓 오늘은 토요일!</strong><br>콩나물은 2배로 발주하세요. 주류·수산물·육류는 오늘 발주 불가예요.';else if(day===0)msg='<strong>🗓 오늘은 일요일!</strong><br>발주 없는 날이에요.';else msg='<strong>⏰ 오후 4시 전에 발주하세요!</strong><br>전날 저녁까지 발주하면 다음날 직배송이 와요.';box.innerHTML=msg;box.style.display='block';}
-function changeQty(v,i,d){const el=document.getElementById(`qty-${v}-${i}`);let val=parseInt(el.textContent)+d;if(val<0)val=0;el.textContent=val;}
-function toggleVendor(key){document.getElementById('vendor-'+key).classList.toggle('open');}
-function generateMsg(vk){const v=vendors[vk];const store=getStore();const isSat=getDay()===6;const qtys={};v.items.forEach(item=>{const el=document.getElementById(`qty-${vk}-${item.id}`);qtys[item.id]=parseInt(el?el.textContent:'0')||0;});const msg=v.buildMsg(store,qtys,isSat);document.getElementById('msgtext-'+vk).textContent=msg;document.getElementById('preview-'+vk).classList.add('show');saveHistory(v.name,msg);}
-function copyMsg(vk){const text=document.getElementById('msgtext-'+vk).textContent;navigator.clipboard.writeText(text).then(()=>showToast('✅ 복사됐어요!')).catch(()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('✅ 복사됐어요!');});}
-function sendSMS(phone,vk){const text=document.getElementById('msgtext-'+vk).textContent;window.location.href=`sms:${phone}?body=${encodeURIComponent(text)}`;}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
-function saveHistory(vn,msg){const now=new Date();const d=`${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;history.unshift({vendor:vn,msg,date:d});if(history.length>100)history=history.slice(0,100);localStorage.setItem('orderHistory',JSON.stringify(history));renderHistory();}
-function renderHistory(){const el=document.getElementById('historyList');if(history.length===0){el.innerHTML='<div class="empty-state">아직 발주 내역이 없어요</div>';return;}el.innerHTML=history.map(h=>`<div class="history-item"><div class="history-top"><div class="history-vendor">${h.vendor}</div><div class="history-date">${h.date}</div></div><div class="history-content">${h.msg}</div></div>`).join('');}
-function saveInventory(){showToast('💾 재고가 저장됐어요!');}
-function toggleAlarm(key){alarms[key]=!alarms[key];document.getElementById('toggle-'+key).classList.toggle('on',alarms[key]);localStorage.setItem('alarms',JSON.stringify(alarms));}
-function showPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('page-'+page).classList.add('active');['order','inventory','history','settings'].forEach((p,i)=>{if(p===page)document.querySelectorAll('.nav-tab')[i].classList.add('active');});if(page==='history')renderHistory();}
-function init(){const now=new Date();const days=['일','월','화','수','목','금','토'];document.getElementById('todayDate').textContent=`${now.getMonth()+1}/${now.getDate()} (${days[now.getDay()]}) · 오늘`;updateDeliveryStatuses();updateNotice();renderHistory();Object.keys(alarms).forEach(k=>{const el=document.getElementById('toggle-'+k);if(el)el.classList.toggle('on',alarms[k]);});setInterval(()=>{const n=new Date();if(n.getHours()===16&&n.getMinutes()===0)document.getElementById('alarmBadge').style.display='inline';},60000);document.getElementById('storeSelect').addEventListener('change',e=>{document.getElementById('settingStore').textContent=e.target.value;});}
+
+let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+let alarms = JSON.parse(localStorage.getItem('alarms') || '{"bean":true,"general":true}');
+
+function getStore() {
+  return document.getElementById('storeSelect').value;
+}
+
+function getDay() {
+  return new Date().getDay(); // 0=일, 6=토
+}
+
+function isAvailable(vendorKey) {
+  const v = vendors[vendorKey];
+  const tomorrow = (getDay() + 1) % 7;
+  // 콩나물: 일요일 배송없음, 토요일에 2배 주문
+  if (vendorKey === 'bean') return true; // 항상 발주 가능 (토요일에 2배)
+  return v.days.includes(tomorrow);
+}
+
+function updateDeliveryStatuses() {
+  const day = getDay();
+  Object.keys(vendors).forEach(key => {
+    const el = document.getElementById(key + '-status');
+    if (!el) return;
+    const v = vendors[key];
+    let available = true;
+    if (key === 'bean') {
+      available = day !== 0; // 일요일엔 콩나물 발주 없음
+    } else {
+      const tomorrow = (day + 1) % 7;
+      available = v.days.includes(tomorrow);
+    }
+    el.textContent = available ? '배송가능' : '오늘휴무';
+    el.className = 'delivery-badge ' + (available ? 'badge-available' : 'badge-unavailable');
+  });
+}
+
+function updateNotice() {
+  const day = getDay();
+  const box = document.getElementById('noticeBox');
+  const days = ['일','월','화','수','목','금','토'];
+  let msg = '';
+  if (day === 6) {
+    msg = `<strong>🗓 오늘은 토요일이에요!</strong><br>콩나물은 일요일치까지 포함해서 2배로 발주하세요.<br>주류(대한유통)·수산물(성화유통)은 오늘 발주 불가예요.`;
+  } else if (day === 0) {
+    msg = `<strong>🗓 오늘은 일요일이에요!</strong><br>콩나물 공급업체 휴무일이에요. 발주 없는 날이에요.`;
+  } else {
+    msg = `<strong>⏰ 오후 4시 전에 발주하세요!</strong><br>전날 저녁까지 발주하면 다음날 아침 직배송이 와요.`;
+  }
+  box.innerHTML = msg;
+  box.style.display = 'block';
+}
+
+// QTY CONTROL
+function changeQty(vendor, item, delta) {
+  const el = document.getElementById(`qty-${vendor}-${item}`);
+  let val = parseInt(el.textContent) + delta;
+  if (val < 0) val = 0;
+  el.textContent = val;
+}
+
+function changeQtyHalf(vendor, item) {
+  const disp = document.getElementById(`qty-${vendor}-${item}-display`);
+  const cur = parseFloat(disp.dataset.val || '0');
+  const next = cur === 0.5 ? 0 : 0.5;
+  disp.dataset.val = next;
+  disp.textContent = next === 0.5 ? '½망' : '0';
+}
+
+function changeQtyFull(vendor, item) {
+  const disp = document.getElementById(`qty-${vendor}-${item}-display`);
+  const cur = parseFloat(disp.dataset.val || '0');
+  const next = cur + 1;
+  disp.dataset.val = next;
+  disp.textContent = next + '망';
+}
+
+// VENDOR TOGGLE
+function toggleVendor(key) {
+  const card = document.getElementById('vendor-' + key);
+  card.classList.toggle('open');
+}
+
+// GENERATE MESSAGE
+function generateMsg(vendorKey) {
+  const v = vendors[vendorKey];
+  const store = getStore();
+  const isSat = getDay() === 6;
+  const qtys = {};
+  if (v.items) {
+    v.items.forEach(item => {
+      if (item.id === 'v2') {
+        const disp = document.getElementById(`qty-veggie-v2-display`);
+        qtys[item.id] = parseFloat(disp ? (disp.dataset.val || '0') : '0');
+      } else {
+        const el = document.getElementById(`qty-${vendorKey}-${item.id}`);
+        qtys[item.id] = parseInt(el ? el.textContent : '0') || 0;
+      }
+    });
+  }
+  const msg = v.buildMsg(store, qtys, isSat);
+  document.getElementById('msgtext-' + vendorKey).textContent = msg;
+  document.getElementById('preview-' + vendorKey).classList.add('show');
+  saveHistory(v.name, msg);
+}
+
+// COPY
+function copyMsg(vendorKey) {
+  const text = document.getElementById('msgtext-' + vendorKey).textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('✅ 복사됐어요!')).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✅ 복사됐어요!');
+  });
+}
+
+function sendSMS(phone, vendorKey) {
+  const text = document.getElementById('msgtext-' + vendorKey).textContent;
+  const encoded = encodeURIComponent(text);
+  window.location.href = `sms:${phone}?body=${encoded}`;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// HISTORY
+function saveHistory(vendorName, msg) {
+  const now = new Date();
+  const dateStr = `${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+  history.unshift({ vendor: vendorName, msg, date: dateStr });
+  if (history.length > 100) history = history.slice(0, 100);
+  localStorage.setItem('orderHistory', JSON.stringify(history));
+  renderHistory();
+}
+
+function renderHistory() {
+  const el = document.getElementById('historyList');
+  if (history.length === 0) {
+    el.innerHTML = '<div class="empty-state">아직 발주 내역이 없어요</div>';
+    return;
+  }
+  el.innerHTML = history.map(h => `
+    <div class="history-item">
+      <div class="history-top">
+        <div class="history-vendor">${h.vendor}</div>
+        <div class="history-date">${h.date}</div>
+      </div>
+      <div class="history-content">${h.msg}</div>
+    </div>
+  `).join('');
+}
+
+// INVENTORY SAVE
+function saveInventory() {
+  showToast('💾 재고가 저장됐어요!');
+}
+
+// ALARM TOGGLE
+function toggleAlarm(key) {
+  alarms[key] = !alarms[key];
+  const el = document.getElementById('toggle-' + key);
+  el.classList.toggle('on', alarms[key]);
+  localStorage.setItem('alarms', JSON.stringify(alarms));
+}
+
+// ALARM CHECK (simulated)
+function checkAlarmTime() {
+  const now = new Date();
+  const h = now.getHours();
+  const m = now.getMinutes();
+  if (h === 16 && m === 0) {
+    document.getElementById('alarmBadge').style.display = 'inline';
+  }
+}
+
+// PAGE NAV
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const tabs = ['order','inventory','history','settings'];
+  const idx = tabs.indexOf(page);
+  document.querySelectorAll('.nav-tab')[idx].classList.add('active');
+  if (page === 'history') renderHistory();
+}
+
+// INIT
+function init() {
+  const now = new Date();
+  const days = ['일','월','화','수','목','금','토'];
+  document.getElementById('todayDate').textContent =
+    `${now.getMonth()+1}/${now.getDate()} (${days[now.getDay()]}) · 오늘`;
+  updateDeliveryStatuses();
+  updateNotice();
+  renderHistory();
+  // restore alarm toggles
+  Object.keys(alarms).forEach(k => {
+    const el = document.getElementById('toggle-' + k);
+    if (el) el.classList.toggle('on', alarms[k]);
+  });
+  // alarm check every minute
+  setInterval(checkAlarmTime, 60000);
+  checkAlarmTime();
+  // store change
+  document.getElementById('storeSelect').addEventListener('change', e => {
+    document.getElementById('settingStore').textContent = e.target.value;
+  });
+}
+
 init();
 </script>
+
 </body>
 </html>
