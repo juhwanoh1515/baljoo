@@ -1,61 +1,850 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>발주 관리</title><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Bebas+Neue&display=swap" rel="stylesheet"><style>:root{--bg:#1a1a1a;--surface:#242424;--surface2:#2e2e2e;--border:#3a3a3a;--accent:#ff7700;--accent2:#ff9933;--text:#ffffff;--text2:#cccccc;--text3:#888888;--red:#ff4444;--green:#44cc66;--blue:#4499ff;}*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto;padding-bottom:80px;}.header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 20px 12px;position:sticky;top:0;z-index:100;}.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:2px;}.store-selector{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:13px;padding:6px 10px;border-radius:8px;cursor:pointer;outline:none;}.date-info{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);}.alarm-badge{background:var(--accent);color:#000;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;}.nav-tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:85px;z-index:99;}.nav-tab{flex:1;padding:12px 4px;text-align:center;font-size:12px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;}.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}.page{display:none;padding:16px;}.page.active{display:block;}.section-title{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;margin-top:20px;}.section-title:first-child{margin-top:0;}.vendor-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;}.vendor-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;}.vendor-left{display:flex;align-items:center;gap:10px;}.vendor-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}.vendor-name{font-size:14px;font-weight:700;color:var(--text);}.vendor-sub{font-size:11px;color:var(--text2);margin-top:2px;}.vendor-arrow{font-size:12px;color:var(--text3);transition:transform 0.2s;}.vendor-card.open .vendor-arrow{transform:rotate(180deg);}.vendor-body{display:none;padding:0 16px 16px;border-top:1px solid var(--border);}.vendor-card.open .vendor-body{display:block;}.item-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);}.item-row:last-child{border-bottom:none;}.item-name{font-size:13px;color:var(--text);flex:1;}.item-unit{font-size:11px;color:var(--text3);margin-right:10px;}.qty-control{display:flex;align-items:center;gap:8px;}.qty-btn{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;}.qty-btn:active{background:var(--accent);color:#000;}.qty-value{font-size:15px;font-weight:700;color:var(--text);min-width:24px;text-align:center;}.generate-btn{width:100%;margin-top:14px;padding:12px;background:var(--accent);color:#000;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;border:none;border-radius:10px;cursor:pointer;transition:opacity 0.2s;}.generate-btn:active{opacity:0.8;}.msg-preview{display:none;margin-top:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;}.msg-preview.show{display:block;}.msg-text{font-size:13px;color:var(--text);line-height:1.7;white-space:pre-line;word-break:break-all;}.msg-actions{display:flex;gap:8px;margin-top:10px;}.copy-btn{flex:1;padding:10px;background:var(--surface);border:1px solid var(--accent);color:var(--accent);font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;border-radius:8px;cursor:pointer;}.sms-btn{flex:1;padding:10px;background:var(--accent);border:none;color:#000;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;border-radius:8px;cursor:pointer;}.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--green);color:#000;font-size:13px;font-weight:700;padding:10px 20px;border-radius:20px;opacity:0;transition:all 0.3s;pointer-events:none;z-index:999;}.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}.delivery-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;}.badge-available{background:#1a3a1a;color:var(--green);}.badge-unavailable{background:#3a1a1a;color:var(--red);}.inv-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;}.inv-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}.inv-vendor{font-size:12px;font-weight:700;color:var(--text2);}.inv-item-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);}.inv-item-row:last-child{border-bottom:none;}.inv-name{font-size:13px;color:var(--text);}.inv-qty-wrap{display:flex;align-items:center;gap:6px;}.inv-input{width:60px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;text-align:center;padding:5px 6px;border-radius:7px;outline:none;}.inv-unit{font-size:11px;color:var(--text3);}.save-inv-btn{width:100%;margin-top:16px;padding:13px;background:var(--surface2);border:1px solid var(--accent);color:var(--accent);font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;}.history-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;}.history-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}.history-vendor{font-size:13px;font-weight:700;color:var(--text);}.history-date{font-size:11px;color:var(--text3);}.history-content{font-size:12px;color:var(--text2);line-height:1.6;white-space:pre-line;}.alarm-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;}.alarm-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}.alarm-row:last-child{border-bottom:none;}.alarm-label{font-size:13px;color:var(--text);}.alarm-time{font-size:12px;color:var(--accent);font-weight:700;}.toggle{width:44px;height:24px;background:var(--border);border-radius:12px;position:relative;cursor:pointer;transition:background 0.2s;}.toggle.on{background:var(--accent);}.toggle::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform 0.2s;}.toggle.on::after{transform:translateX(20px);}.notice-box{background:#2a1a00;border:1px solid #ff7700;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#ffaa44;line-height:1.6;}.notice-box strong{color:#ff7700;}.empty-state{text-align:center;padding:40px 20px;color:var(--text3);font-size:13px;}</style></head><body>
-<div class="header"><div class="header-top"><div class="logo">발주관리</div><select class="store-selector" id="storeSelect"><option value="남구로역점">🏪 남구로역점</option><option value="시흥사거리점">🏪 시흥사거리점</option><option value="독산점">🏪 독산점</option></select></div><div class="date-info"><span id="todayDate"></span><span id="alarmBadge" class="alarm-badge" style="display:none">⏰ 발주시간</span></div></div>
-<div class="nav-tabs"><div class="nav-tab active" onclick="showPage('order')">📦 발주</div><div class="nav-tab" onclick="showPage('inventory')">📊 재고</div><div class="nav-tab" onclick="showPage('history')">📋 내역</div><div class="nav-tab" onclick="showPage('settings')">⚙️ 설정</div></div>
-<div class="toast" id="toast">✅ 복사됐어요!</div>
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>본가전주옥 관리</title><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Bebas+Neue&display=swap" rel="stylesheet"><style>
+:root{--bg:#1a1a1a;--surface:#242424;--surface2:#2e2e2e;--border:#3a3a3a;--accent:#ff7700;--text:#ffffff;--text2:#cccccc;--text3:#888888;--red:#ff4444;--green:#44cc66;--blue:#4499ff;--yellow:#ffcc00;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto;padding-bottom:80px;}
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 20px 12px;position:sticky;top:0;z-index:100;}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:2px;}
+.store-selector{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:13px;padding:6px 10px;border-radius:8px;cursor:pointer;outline:none;}
+.date-info{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);}
+.badge-pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;}
+.nav-tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:85px;z-index:99;overflow-x:auto;}
+.nav-tab{flex:1;min-width:56px;padding:12px 2px;text-align:center;font-size:11px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.page{display:none;padding:16px;}.page.active{display:block;}
+.section-title{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;margin-top:20px;}
+.section-title:first-child{margin-top:0;}
+/* vendor cards */
+.vendor-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+.vendor-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;}
+.vendor-left{display:flex;align-items:center;gap:10px;}
+.vendor-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.vendor-name{font-size:14px;font-weight:700;}
+.vendor-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+.vendor-arrow{font-size:12px;color:var(--text3);transition:transform 0.2s;}
+.vendor-card.open .vendor-arrow{transform:rotate(180deg);}
+.vendor-body{display:none;padding:0 16px 16px;border-top:1px solid var(--border);}
+.vendor-card.open .vendor-body{display:block;}
+.item-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);}
+.item-row:last-child{border-bottom:none;}
+.item-name{font-size:13px;flex:1;}
+.item-unit{font-size:11px;color:var(--text3);margin-right:10px;}
+.qty-control{display:flex;align-items:center;gap:8px;}
+.qty-btn{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;}
+.qty-btn:active{background:var(--accent);color:#000;}
+.qty-value{font-size:15px;font-weight:700;min-width:24px;text-align:center;}
+.generate-btn{width:100%;margin-top:14px;padding:12px;background:var(--accent);color:#000;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;border:none;border-radius:10px;cursor:pointer;}
+.generate-btn:active{opacity:0.8;}
+.msg-preview{display:none;margin-top:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;}
+.msg-preview.show{display:block;}
+.msg-text{font-size:13px;line-height:1.7;white-space:pre-line;word-break:break-all;}
+.msg-actions{display:flex;gap:8px;margin-top:10px;}
+.copy-btn{flex:1;padding:10px;background:var(--surface);border:1px solid var(--accent);color:var(--accent);font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;border-radius:8px;cursor:pointer;}
+.sms-btn{flex:1;padding:10px;background:var(--accent);border:none;color:#000;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;border-radius:8px;cursor:pointer;}
+.delivery-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;}
+.badge-available{background:#1a3a1a;color:var(--green);}
+.badge-unavailable{background:#3a1a1a;color:var(--red);}
+/* low stock badge on vendor header */
+.stock-alert-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;background:#3a1a00;color:var(--accent);margin-left:6px;}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--green);color:#000;font-size:13px;font-weight:700;padding:10px 20px;border-radius:20px;opacity:0;transition:all 0.3s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.notice-box{background:#2a1a00;border:1px solid #ff7700;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#ffaa44;line-height:1.6;}
+.notice-box strong{color:#ff7700;}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text3);font-size:13px;}
+.alarm-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;}
+.alarm-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
+.alarm-row:last-child{border-bottom:none;}
+.alarm-label{font-size:13px;}
+.alarm-time{font-size:12px;color:var(--accent);font-weight:700;}
+.toggle{width:44px;height:24px;background:var(--border);border-radius:12px;position:relative;cursor:pointer;transition:background 0.2s;}
+.toggle.on{background:var(--accent);}
+.toggle::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform 0.2s;}
+.toggle.on::after{transform:translateX(20px);}
+.history-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+.history-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.history-vendor{font-size:13px;font-weight:700;}
+.history-date{font-size:11px;color:var(--text3);}
+.history-content{font-size:12px;color:var(--text2);line-height:1.6;white-space:pre-line;}
+
+/* ===== 재고 탭 ===== */
+.inv-sub-tabs{display:flex;gap:0;margin-bottom:14px;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+.inv-sub-tab{flex:1;padding:10px 4px;text-align:center;font-size:12px;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text3);border:none;font-family:'Noto Sans KR',sans-serif;}
+.inv-sub-tab.active{background:var(--accent);color:#000;}
+.inv-pane{display:none;}.inv-pane.active{display:block;}
+/* 재고 현황 */
+.inv-alert-box{background:#2a1500;border:1px solid var(--accent);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:12px;color:#ffaa44;}
+.inv-alert-box strong{color:var(--accent);font-size:13px;}
+.inv-group{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+.inv-group-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;}
+.inv-group-name{font-size:13px;font-weight:700;}
+.inv-group-body{border-top:1px solid var(--border);padding:8px 16px;}
+.inv-item-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);}
+.inv-item-row:last-child{border-bottom:none;}
+.inv-item-name{font-size:13px;flex:1;}
+.inv-qty-block{display:flex;align-items:center;gap:6px;}
+.inv-qty-num{font-size:18px;font-weight:700;min-width:28px;text-align:right;}
+.inv-qty-num.safe{color:var(--green);}
+.inv-qty-num.low{color:var(--yellow);}
+.inv-qty-num.critical{color:var(--red);}
+.inv-qty-unit{font-size:11px;color:var(--text3);}
+.inv-status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-left:4px;}
+.dot-safe{background:var(--green);}
+.dot-low{background:var(--yellow);}
+.dot-critical{background:var(--red);}
+.dot-none{background:var(--border);}
+.inv-adjust-btn{padding:4px 9px;background:var(--surface2);border:1px solid var(--border);color:var(--text3);font-family:'Noto Sans KR',sans-serif;font-size:11px;border-radius:6px;cursor:pointer;margin-left:8px;}
+/* adjust inline */
+.inv-adjust-wrap{display:none;padding:8px 0;border-top:1px solid var(--border);}
+.inv-adjust-wrap.show{display:block;}
+.adj-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;}
+.adj-label{font-size:12px;color:var(--text3);width:60px;flex-shrink:0;}
+.adj-input{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:13px;padding:7px 10px;border-radius:8px;outline:none;text-align:right;}
+.adj-btn-row{display:flex;gap:6px;margin-top:4px;}
+.adj-save-btn{flex:1;padding:8px;background:var(--accent);color:#000;font-family:'Noto Sans KR',sans-serif;font-size:12px;font-weight:700;border:none;border-radius:8px;cursor:pointer;}
+.adj-cancel-btn{padding:8px 14px;background:none;border:1px solid var(--border);color:var(--text3);font-family:'Noto Sans KR',sans-serif;font-size:12px;border-radius:8px;cursor:pointer;}
+/* 사용 입력 */
+.usage-group{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+.usage-group-title{font-size:12px;font-weight:700;color:var(--text3);padding:10px 16px;border-bottom:1px solid var(--border);letter-spacing:0.05em;}
+.usage-item-row{display:flex;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid var(--border);}
+.usage-item-row:last-child{border-bottom:none;}
+.usage-item-name{font-size:13px;flex:1;}
+.usage-col{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:56px;}
+.usage-col-label{font-size:10px;color:var(--text3);}
+.usage-input{width:56px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;text-align:center;padding:5px 6px;border-radius:7px;outline:none;}
+.usage-save-btn{width:100%;margin-top:6px;padding:13px;background:var(--surface2);border:1px solid var(--accent);color:var(--accent);font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;}
+/* 설정 */
+.cfg-group{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+.cfg-group-title{font-size:12px;font-weight:700;color:var(--text3);padding:10px 16px;border-bottom:1px solid var(--border);}
+.cfg-item-row{display:flex;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid var(--border);}
+.cfg-item-row:last-child{border-bottom:none;}
+.cfg-item-name{font-size:13px;flex:1;}
+.cfg-input-wrap{display:flex;align-items:center;gap:5px;}
+.cfg-input{width:56px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:13px;text-align:center;padding:5px 6px;border-radius:7px;outline:none;}
+.cfg-unit{font-size:11px;color:var(--text3);}
+.cfg-save-btn{width:100%;margin-top:6px;padding:13px;background:var(--surface2);border:1px solid var(--accent);color:var(--accent);font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;}
+/* 추천 발주 */
+.rec-banner{background:#1a2a1a;border:1px solid #2a4a2a;border-radius:8px;padding:8px 12px;margin-top:10px;font-size:12px;color:#88cc88;}
+.rec-banner strong{color:var(--green);}
+/* 이력 미니 */
+.inv-log-btn{font-size:11px;color:var(--blue);cursor:pointer;text-decoration:underline;margin-left:6px;}
+.inv-log-wrap{display:none;background:var(--surface2);border-radius:8px;padding:8px;margin-top:6px;}
+.inv-log-wrap.show{display:block;}
+.inv-log-row{font-size:11px;color:var(--text3);padding:3px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;}
+.inv-log-row:last-child{border-bottom:none;}
+.inv-log-type-in{color:var(--green);}
+.inv-log-type-use{color:var(--text2);}
+.inv-log-type-loss{color:var(--red);}
+.inv-log-type-adj{color:var(--yellow);}
+
+/* ===== 업무일지 ===== */
+.log-mode-tabs{display:flex;gap:0;margin-bottom:16px;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+.log-mode-tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text3);border:none;font-family:'Noto Sans KR',sans-serif;}
+.log-mode-tab.active{background:var(--accent);color:#000;}
+.log-pane{display:none;}.log-pane.active{display:block;}
+.log-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.log-field{margin-bottom:12px;}
+.log-label{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:0.05em;display:block;margin-bottom:6px;}
+.log-input,.log-select,.log-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:13px;padding:9px 11px;border-radius:8px;outline:none;}
+.log-textarea{resize:none;line-height:1.6;}
+.log-section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:12px;}
+.log-section-title{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:0.05em;margin-bottom:12px;}
+.cash-grid{display:grid;gap:8px;}
+.cash-row-form{display:flex;align-items:center;gap:10px;}
+.cash-row-label{font-size:12px;color:var(--text3);width:80px;flex-shrink:0;}
+.cash-balance-box{display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border-radius:8px;padding:10px 12px;margin-top:6px;border:1px solid var(--border);}
+.radio-group{display:flex;gap:14px;align-items:center;}
+.radio-label{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text2);cursor:pointer;}
+.staff-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);}
+.staff-row:last-child{border-bottom:none;}
+.toggle-small{width:38px;height:22px;background:var(--border);border-radius:11px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0;}
+.toggle-small.on{background:var(--green);}
+.toggle-small::after{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform 0.2s;}
+.toggle-small.on::after{transform:translateX(16px);}
+.issue-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.issue-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;}
+.issue-card-label{font-size:11px;font-weight:700;color:var(--text3);margin-bottom:6px;}
+.log-submit-btn{width:100%;padding:14px;background:var(--accent);color:#000;font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:10px;cursor:pointer;margin-top:8px;}
+.log-success{text-align:center;padding:50px 20px;}
+.log-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+.log-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.log-card-title{font-size:14px;font-weight:700;}
+.log-card-meta{font-size:11px;color:var(--text3);margin-top:3px;}
+.unread-dot{width:8px;height:8px;background:var(--red);border-radius:50%;flex-shrink:0;}
+.confirm-btn{padding:5px 12px;border:1px solid var(--border);border-radius:7px;background:none;color:var(--text3);font-family:'Noto Sans KR',sans-serif;font-size:12px;cursor:pointer;}
+.confirm-btn.done{color:var(--green);border-color:#1a3a1a;}
+.log-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;}
+.log-stat{background:var(--surface2);border-radius:8px;padding:8px;text-align:center;}
+.log-stat-label{font-size:10px;color:var(--text3);margin-bottom:2px;}
+.log-stat-val{font-size:13px;font-weight:700;}
+.log-stat-val.warn{color:var(--red);}
+.tag-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
+.tag{font-size:11px;padding:2px 9px;border-radius:20px;font-weight:500;}
+.tag-warn{background:#2a1a00;color:#ffaa44;}
+.tag-err{background:#2a1010;color:var(--red);}
+.tag-ok{background:#0f2010;color:var(--green);}
+.tag-info{background:#0f1a2a;color:var(--blue);}
+.log-detail{border-top:1px solid var(--border);padding-top:10px;margin-top:2px;}
+.log-detail-row{display:flex;gap:10px;padding:5px 0;font-size:12px;}
+.log-detail-label{color:var(--text3);min-width:70px;flex-shrink:0;}
+.log-detail-val{color:var(--text2);line-height:1.6;}
+.expand-btn{width:100%;padding:6px;background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;margin-top:4px;}
+.owner-filter-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+.filter-chip{padding:5px 12px;border:1px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;background:none;color:var(--text3);font-family:'Noto Sans KR',sans-serif;}
+.filter-chip.active{background:var(--accent);color:#000;border-color:var(--accent);}
+.sb-info{background:#0f1a2a;border:1px solid #1a3a5a;border-radius:10px;padding:14px;margin-bottom:16px;font-size:12px;color:#88aacc;line-height:1.8;}
+.sb-info strong{color:var(--blue);}
+.sb-info code{background:#1a2a3a;padding:2px 6px;border-radius:4px;font-size:11px;color:#aaddff;}
+</style></head><body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">본가전주옥</div>
+    <select class="store-selector" id="storeSelect">
+      <option value="남구로역점">🏪 남구로역점</option>
+      <option value="대림사거리점">🏪 대림사거리점</option>
+      <option value="시흥사거리점">🏪 시흥사거리점</option>
+      <option value="독산점">🏪 독산점</option>
+    </select>
+  </div>
+  <div class="date-info">
+    <span id="todayDate"></span>
+    <span id="alarmBadge" class="badge-pill" style="display:none;background:var(--accent);color:#000">⏰ 발주시간</span>
+    <span id="stockAlertBadge" class="badge-pill" style="display:none;background:#3a1a00;color:var(--accent)"></span>
+    <span id="unreadBadge" class="badge-pill" style="display:none;background:var(--red);color:#fff"></span>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <div class="nav-tab active" onclick="showPage('order')">📦 발주</div>
+  <div class="nav-tab" onclick="showPage('inventory')">📊 재고</div>
+  <div class="nav-tab" onclick="showPage('history')">📋 내역</div>
+  <div class="nav-tab" onclick="showPage('log')">📝 일지</div>
+  <div class="nav-tab" onclick="showPage('settings')">⚙️ 설정</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- ===== 발주 탭 ===== -->
 <div class="page active" id="page-order">
 <div id="noticeBox" class="notice-box" style="display:none"></div>
 <div class="section-title">문자 발주 거래처</div>
-<div class="vendor-card" id="vendor-bean"><div class="vendor-header" onclick="toggleVendor('bean')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a2a1a">🌱</div><div><div class="vendor-name">콩나물 공급업체</div><div class="vendor-sub">010-8304-1260 · 오후 4시 발주 <span class="delivery-badge badge-available" id="bean-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">콩나물</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('bean','beansprout',-1)">−</button><div class="qty-value" id="qty-bean-beansprout">4</div><button class="qty-btn" onclick="changeQty('bean','beansprout',1)">+</button></div></div><button class="generate-btn" onclick="generateMsg('bean')">📝 문자 생성</button><div class="msg-preview" id="preview-bean"><div class="msg-text" id="msgtext-bean"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('bean')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01083041260','bean')">📱 문자앱 열기</button></div></div></div></div>
-
-<div class="vendor-card" id="vendor-egg"><div class="vendor-header" onclick="toggleVendor('egg')"><div class="vendor-left"><div class="vendor-icon" style="background:#2a2010">🥚</div><div><div class="vendor-name">한결유통 (계란)</div><div class="vendor-sub">010-6265-7887 · 월~토 <span class="delivery-badge badge-available" id="egg-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">중란</div><div class="item-unit">판</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('egg','egg1',-1)">−</button><div class="qty-value" id="qty-egg-egg1">10</div><button class="qty-btn" onclick="changeQty('egg','egg1',1)">+</button></div></div><button class="generate-btn" onclick="generateMsg('egg')">📝 문자 생성</button><div class="msg-preview" id="preview-egg"><div class="msg-text" id="msgtext-egg"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('egg')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01062657887','egg')">📱 문자앱 열기</button></div></div></div></div>
-
-<div class="vendor-card" id="vendor-kayeon"><div class="vendor-header" onclick="toggleVendor('kayeon')"><div class="vendor-left"><div class="vendor-icon" style="background:#2a1a1a">🥬</div><div><div class="vendor-name">가연유통 (쌀·김치류)</div><div class="vendor-sub">010-4294-7302 · 월~토 <span class="delivery-badge badge-available" id="kayeon-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">맛김치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k1',-1)">−</button><div class="qty-value" id="qty-kayeon-k1">0</div><button class="qty-btn" onclick="changeQty('kayeon','k1',1)">+</button></div></div><div class="item-row"><div class="item-name">슬라이스 김치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k2',-1)">−</button><div class="qty-value" id="qty-kayeon-k2">0</div><button class="qty-btn" onclick="changeQty('kayeon','k2',1)">+</button></div></div><div class="item-row"><div class="item-name">포기김치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k3',-1)">−</button><div class="qty-value" id="qty-kayeon-k3">0</div><button class="qty-btn" onclick="changeQty('kayeon','k3',1)">+</button></div></div><div class="item-row"><div class="item-name">깍두기</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k12',-1)">−</button><div class="qty-value" id="qty-kayeon-k12">0</div><button class="qty-btn" onclick="changeQty('kayeon','k12',1)">+</button></div></div><div class="item-row"><div class="item-name">쌀</div><div class="item-unit">포대</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k4',-1)">−</button><div class="qty-value" id="qty-kayeon-k4">0</div><button class="qty-btn" onclick="changeQty('kayeon','k4',1)">+</button></div></div><div class="item-row"><div class="item-name">거친고추가루</div><div class="item-unit">팩</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k5',-1)">−</button><div class="qty-value" id="qty-kayeon-k5">0</div><button class="qty-btn" onclick="changeQty('kayeon','k5',1)">+</button></div></div><div class="item-row"><div class="item-name">고운고추가루</div><div class="item-unit">팩</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k6',-1)">−</button><div class="qty-value" id="qty-kayeon-k6">0</div><button class="qty-btn" onclick="changeQty('kayeon','k6',1)">+</button></div></div><div class="item-row"><div class="item-name">맛기름</div><div class="item-unit">병</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k7',-1)">−</button><div class="qty-value" id="qty-kayeon-k7">0</div><button class="qty-btn" onclick="changeQty('kayeon','k7',1)">+</button></div></div><div class="item-row"><div class="item-name">참기름</div><div class="item-unit">병</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k8',-1)">−</button><div class="qty-value" id="qty-kayeon-k8">0</div><button class="qty-btn" onclick="changeQty('kayeon','k8',1)">+</button></div></div><div class="item-row"><div class="item-name">들향기름</div><div class="item-unit">병</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k9',-1)">−</button><div class="qty-value" id="qty-kayeon-k9">0</div><button class="qty-btn" onclick="changeQty('kayeon','k9',1)">+</button></div></div><div class="item-row"><div class="item-name">볶음참깨</div><div class="item-unit">팩</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k10',-1)">−</button><div class="qty-value" id="qty-kayeon-k10">0</div><button class="qty-btn" onclick="changeQty('kayeon','k10',1)">+</button></div></div><div class="item-row"><div class="item-name">통깨가루</div><div class="item-unit">팩</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k11',-1)">−</button><div class="qty-value" id="qty-kayeon-k11">0</div><button class="qty-btn" onclick="changeQty('kayeon','k11',1)">+</button></div></div><button class="generate-btn" onclick="generateMsg('kayeon')">📝 문자 생성</button><div class="msg-preview" id="preview-kayeon"><div class="msg-text" id="msgtext-kayeon"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('kayeon')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01042947302','kayeon')">📱 문자앱 열기</button></div></div></div></div>
-
-<div class="vendor-card" id="vendor-liquor"><div class="vendor-header" onclick="toggleVendor('liquor')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a1a2a">🍶</div><div><div class="vendor-name">대한유통 (주류)</div><div class="vendor-sub">010-7646-7206 · 월~금 <span class="delivery-badge badge-available" id="liquor-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">참이슬 후레시</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l1',-1)">−</button><div class="qty-value" id="qty-liquor-l1">0</div><button class="qty-btn" onclick="changeQty('liquor','l1',1)">+</button></div></div><div class="item-row"><div class="item-name">참이슬 오리지널</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l2',-1)">−</button><div class="qty-value" id="qty-liquor-l2">0</div><button class="qty-btn" onclick="changeQty('liquor','l2',1)">+</button></div></div><div class="item-row"><div class="item-name">진로</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l3',-1)">−</button><div class="qty-value" id="qty-liquor-l3">0</div><button class="qty-btn" onclick="changeQty('liquor','l3',1)">+</button></div></div><div class="item-row"><div class="item-name">처음처럼</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l4',-1)">−</button><div class="qty-value" id="qty-liquor-l4">0</div><button class="qty-btn" onclick="changeQty('liquor','l4',1)">+</button></div></div><div class="item-row"><div class="item-name">청하</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l5',-1)">−</button><div class="qty-value" id="qty-liquor-l5">0</div><button class="qty-btn" onclick="changeQty('liquor','l5',1)">+</button></div></div><div class="item-row"><div class="item-name">카스</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l6',-1)">−</button><div class="qty-value" id="qty-liquor-l6">0</div><button class="qty-btn" onclick="changeQty('liquor','l6',1)">+</button></div></div><div class="item-row"><div class="item-name">테라</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l7',-1)">−</button><div class="qty-value" id="qty-liquor-l7">0</div><button class="qty-btn" onclick="changeQty('liquor','l7',1)">+</button></div></div><button class="generate-btn" onclick="generateMsg('liquor')">📝 문자 생성</button><div class="msg-preview" id="preview-liquor"><div class="msg-text" id="msgtext-liquor"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('liquor')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01076467206','liquor')">📱 문자앱 열기</button></div></div></div></div>
-
-<div class="vendor-card" id="vendor-seafood"><div class="vendor-header" onclick="toggleVendor('seafood')"><div class="vendor-left"><div class="vendor-icon" style="background:#0f1e2a">🦑</div><div><div class="vendor-name">성화유통 (수산물)</div><div class="vendor-sub">010-8305-0001 · 월~금 <span class="delivery-badge badge-available" id="seafood-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">오징어다이스</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s1',-1)">−</button><div class="qty-value" id="qty-seafood-s1">0</div><button class="qty-btn" onclick="changeQty('seafood','s1',1)">+</button></div></div><div class="item-row"><div class="item-name">선동오징어</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s2',-1)">−</button><div class="qty-value" id="qty-seafood-s2">0</div><button class="qty-btn" onclick="changeQty('seafood','s2',1)">+</button></div></div><div class="item-row"><div class="item-name">냉동굴</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s3',-1)">−</button><div class="qty-value" id="qty-seafood-s3">0</div><button class="qty-btn" onclick="changeQty('seafood','s3',1)">+</button></div></div><div class="item-row"><div class="item-name">새우</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s4',-1)">−</button><div class="qty-value" id="qty-seafood-s4">0</div><button class="qty-btn" onclick="changeQty('seafood','s4',1)">+</button></div></div><div class="item-row"><div class="item-name">절단꽃게L</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s5',-1)">−</button><div class="qty-value" id="qty-seafood-s5">0</div><button class="qty-btn" onclick="changeQty('seafood','s5',1)">+</button></div></div><div class="item-row"><div class="item-name">피바지락</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s6',-1)">−</button><div class="qty-value" id="qty-seafood-s6">0</div><button class="qty-btn" onclick="changeQty('seafood','s6',1)">+</button></div></div><div class="item-row"><div class="item-name">자숙꼬막살</div><div class="item-unit">봉지</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s7',-1)">−</button><div class="qty-value" id="qty-seafood-s7">0</div><button class="qty-btn" onclick="changeQty('seafood','s7',1)">+</button></div></div><div class="item-row"><div class="item-name">황태채</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s8',-1)">−</button><div class="qty-value" id="qty-seafood-s8">0</div><button class="qty-btn" onclick="changeQty('seafood','s8',1)">+</button></div></div><div class="item-row"><div class="item-name">절단쭈꾸미</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s9',-1)">−</button><div class="qty-value" id="qty-seafood-s9">0</div><button class="qty-btn" onclick="changeQty('seafood','s9',1)">+</button></div></div><button class="generate-btn" onclick="generateMsg('seafood')">📝 문자 생성</button><div class="msg-preview" id="preview-seafood"><div class="msg-text" id="msgtext-seafood"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('seafood')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01083050001','seafood')">📱 문자앱 열기</button></div></div></div></div>
-
-<div class="vendor-card" id="vendor-meat"><div class="vendor-header" onclick="toggleVendor('meat')"><div class="vendor-left"><div class="vendor-icon" style="background:#2a1515">🥩</div><div><div class="vendor-name">성원유통 (육류)</div><div class="vendor-sub">010-9109-3278 · 월~금 <span class="delivery-badge badge-available" id="meat-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">제육용 전지</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m1',-1)">−</button><div class="qty-value" id="qty-meat-m1">0</div><button class="qty-btn" onclick="changeQty('meat','m1',1)">+</button></div></div><div class="item-row"><div class="item-name">김치찌개용 전지</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m2',-1)">−</button><div class="qty-value" id="qty-meat-m2">0</div><button class="qty-btn" onclick="changeQty('meat','m2',1)">+</button></div></div><div class="item-row"><div class="item-name">민찌</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m3',-1)">−</button><div class="qty-value" id="qty-meat-m3">0</div><button class="qty-btn" onclick="changeQty('meat','m3',1)">+</button></div></div><div class="item-row"><div class="item-name">우삼겹 (1kg씩 소분)</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m4',-1)">−</button><div class="qty-value" id="qty-meat-m4">0</div><button class="qty-btn" onclick="changeQty('meat','m4',1)">+</button></div></div><button class="generate-btn" onclick="generateMsg('meat')">📝 문자 생성</button><div class="msg-preview" id="preview-meat"><div class="msg-text" id="msgtext-meat"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('meat')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01091093278','meat')">📱 문자앱 열기</button></div></div></div></div>
-
-<div class="vendor-card" id="vendor-anchovy"><div class="vendor-header" onclick="toggleVendor('anchovy')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a1a10">🐟</div><div><div class="vendor-name">한려물산 (멸치)</div><div class="vendor-sub">010-7908-0046 · 택배배송 <span class="delivery-badge badge-available" id="anchovy-status">주문가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">육수용 다시멸치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('anchovy','a1',-1)">−</button><div class="qty-value" id="qty-anchovy-a1">0</div><button class="qty-btn" onclick="changeQty('anchovy','a1',1)">+</button></div></div><button class="generate-btn" onclick="generateMsg('anchovy')">📝 문자 생성</button><div class="msg-preview" id="preview-anchovy"><div class="msg-text" id="msgtext-anchovy"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('anchovy')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01079080046','anchovy')">📱 문자앱 열기</button></div></div></div></div>
-
-<div class="vendor-card" id="vendor-makgeolli"><div class="vendor-header" onclick="toggleVendor('makgeolli')"><div class="vendor-left"><div class="vendor-icon" style="background:#1e1a10">🍚</div><div><div class="vendor-name">막걸리</div><div class="vendor-sub">010-3122-3507 · 월~토 <span class="delivery-badge badge-available" id="makgeolli-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">막걸리</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('makgeolli','mg1',-1)">−</button><div class="qty-value" id="qty-makgeolli-mg1">0</div><button class="qty-btn" onclick="changeQty('makgeolli','mg1',1)">+</button></div></div><div class="item-row"><div class="item-name">모주 500mL</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('makgeolli','mg2',-1)">−</button><div class="qty-value" id="qty-makgeolli-mg2">0</div><button class="qty-btn" onclick="changeQty('makgeolli','mg2',1)">+</button></div></div><div class="item-row"><div class="item-name">모주 1.2L</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('makgeolli','mg3',-1)">−</button><div class="qty-value" id="qty-makgeolli-mg3">0</div><button class="qty-btn" onclick="changeQty('makgeolli','mg3',1)">+</button></div></div><button class="generate-btn" onclick="generateMsg('makgeolli')">📝 문자 생성</button><div class="msg-preview" id="preview-makgeolli"><div class="msg-text" id="msgtext-makgeolli"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('makgeolli')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01031223507','makgeolli')">📱 문자앱 열기</button></div></div></div></div>
-
-<div class="vendor-card" id="vendor-pyunyuk"><div class="vendor-header" onclick="toggleVendor('pyunyuk')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a1510">🍖</div><div><div class="vendor-name">가야식품 (편육)</div><div class="vendor-sub">010-3873-0808 · 택배배송 <span class="delivery-badge badge-available" id="pyunyuk-status">주문가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">편육 (5kg 단위)</div><div class="item-unit">x5kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('pyunyuk','py1',-1)">−</button><div class="qty-value" id="qty-pyunyuk-py1">0</div><button class="qty-btn" onclick="changeQty('pyunyuk','py1',1)">+</button></div></div><div style="font-size:11px;color:var(--text3);padding:4px 0 8px;">※ 버튼 1회 = 5kg</div><button class="generate-btn" onclick="generateMsg('pyunyuk')">📝 문자 생성</button><div class="msg-preview" id="preview-pyunyuk"><div class="msg-text" id="msgtext-pyunyuk"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('pyunyuk')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01038730808','pyunyuk')">📱 문자앱 열기</button></div></div></div></div>
-
-<div class="vendor-card" id="vendor-jokong"><div class="vendor-header" onclick="toggleVendor('jokong')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a2a2a">🫘</div><div><div class="vendor-name">좋은콩</div><div class="vendor-sub">010-9069-6528 · 월~토 <span class="delivery-badge badge-available" id="jokong-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">콩국물</div><div class="item-unit" id="unit-jokong-jk1">팩</div><div class="qty-control"><button class="qty-btn" onclick="changeQtyJokong(-1)">−</button><div class="qty-value" id="qty-jokong-jk1">0</div><button class="qty-btn" onclick="changeQtyJokong(1)">+</button></div></div><div style="font-size:11px;color:var(--text3);padding:2px 0 8px;">※ 40팩 = 1박스</div><div class="item-row"><div class="item-name">냉면육수</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('jokong','jk2',-1)">−</button><div class="qty-value" id="qty-jokong-jk2">0</div><button class="qty-btn" onclick="changeQty('jokong','jk2',1)">+</button></div></div><button class="generate-btn" onclick="generateMsg('jokong')">📝 문자 생성</button><div class="msg-preview" id="preview-jokong"><div class="msg-text" id="msgtext-jokong"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('jokong')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01090696528','jokong')">📱 문자앱 열기</button></div></div></div></div>
-
-<div class="vendor-card" id="vendor-veggie"><div class="vendor-header" onclick="toggleVendor('veggie')"><div class="vendor-left"><div class="vendor-icon" style="background:#0f2a1a">🥦</div><div><div class="vendor-name">야채 (카톡 발주)</div><div class="vendor-sub">카톡 단체채팅방 · 복사 후 붙여넣기 <span class="delivery-badge badge-available" id="veggie-status">주문가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">대파</div><div class="item-unit">단</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v1',-1)">−</button><div class="qty-value" id="qty-veggie-v1">0</div><button class="qty-btn" onclick="changeQty('veggie','v1',1)">+</button></div></div><div class="item-row"><div class="item-name">양파</div><div class="item-unit">망</div><div class="qty-control"><button class="qty-btn" style="font-size:11px;width:36px" onclick="changeQtyHalf('veggie','v2')">½망</button><div class="qty-value" id="qty-veggie-v2-display" data-val="0">0</div><button class="qty-btn" style="font-size:11px;width:36px" onclick="changeQtyFull('veggie','v2')">+1망</button></div></div><div class="item-row"><div class="item-name">육수용 무</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v3',-1)">−</button><div class="qty-value" id="qty-veggie-v3">0</div><button class="qty-btn" onclick="changeQty('veggie','v3',1)">+</button></div></div><div class="item-row"><div class="item-name">주키니 호박 특</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v4',-1)">−</button><div class="qty-value" id="qty-veggie-v4">0</div><button class="qty-btn" onclick="changeQty('veggie','v4',1)">+</button></div></div><div class="item-row"><div class="item-name">당근</div><div class="item-unit">개</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v5',-1)">−</button><div class="qty-value" id="qty-veggie-v5">0</div><button class="qty-btn" onclick="changeQty('veggie','v5',1)">+</button></div></div><div class="item-row"><div class="item-name">오이</div><div class="item-unit">개</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v11',-1)">−</button><div class="qty-value" id="qty-veggie-v11">0</div><button class="qty-btn" onclick="changeQty('veggie','v11',1)">+</button></div></div><div class="item-row"><div class="item-name">부추</div><div class="item-unit">단</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v6',-1)">−</button><div class="qty-value" id="qty-veggie-v6">0</div><button class="qty-btn" onclick="changeQty('veggie','v6',1)">+</button></div></div><div class="item-row"><div class="item-name">양배추</div><div class="item-unit">통</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v7',-1)">−</button><div class="qty-value" id="qty-veggie-v7">0</div><button class="qty-btn" onclick="changeQty('veggie','v7',1)">+</button></div></div><div class="item-row"><div class="item-name">고사리</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v8',-1)">−</button><div class="qty-value" id="qty-veggie-v8">0</div><button class="qty-btn" onclick="changeQty('veggie','v8',1)">+</button></div></div><div class="item-row"><div class="item-name">청양고추</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v9',-1)">−</button><div class="qty-value" id="qty-veggie-v9">0</div><button class="qty-btn" onclick="changeQty('veggie','v9',1)">+</button></div></div><div class="item-row"><div class="item-name">치커리</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v10',-1)">−</button><div class="qty-value" id="qty-veggie-v10">0</div><button class="qty-btn" onclick="changeQty('veggie','v10',1)">+</button></div></div><button class="generate-btn" onclick="generateMsg('veggie')" style="background:#25d366;color:#fff">📋 카톡용 문자 생성</button><div class="msg-preview" id="preview-veggie"><div class="msg-text" id="msgtext-veggie"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('veggie')">📋 복사 (카톡 붙여넣기)</button></div></div></div></div>
+<div class="vendor-card" id="vendor-bean"><div class="vendor-header" onclick="toggleVendor('bean')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a2a1a">🌱</div><div><div class="vendor-name">콩나물 공급업체 <span id="vbadge-bean"></span></div><div class="vendor-sub">010-8304-1260 · 오후 4시 발주 <span class="delivery-badge badge-available" id="bean-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">콩나물</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('bean','beansprout',-1)">−</button><div class="qty-value" id="qty-bean-beansprout">4</div><button class="qty-btn" onclick="changeQty('bean','beansprout',1)">+</button></div></div><div id="rec-bean" class="rec-banner" style="display:none"></div><button class="generate-btn" onclick="generateMsg('bean')">📝 문자 생성 + 재고 적립</button><div class="msg-preview" id="preview-bean"><div class="msg-text" id="msgtext-bean"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('bean')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01083041260','bean')">📱 문자앱 열기</button></div></div></div></div>
+<div class="vendor-card" id="vendor-egg"><div class="vendor-header" onclick="toggleVendor('egg')"><div class="vendor-left"><div class="vendor-icon" style="background:#2a2010">🥚</div><div><div class="vendor-name">한결유통 (계란) <span id="vbadge-egg"></span></div><div class="vendor-sub">010-6265-7887 · 월~토 <span class="delivery-badge badge-available" id="egg-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">중란</div><div class="item-unit">판</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('egg','egg1',-1)">−</button><div class="qty-value" id="qty-egg-egg1">10</div><button class="qty-btn" onclick="changeQty('egg','egg1',1)">+</button></div></div><div id="rec-egg" class="rec-banner" style="display:none"></div><button class="generate-btn" onclick="generateMsg('egg')">📝 문자 생성 + 재고 적립</button><div class="msg-preview" id="preview-egg"><div class="msg-text" id="msgtext-egg"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('egg')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01062657887','egg')">📱 문자앱 열기</button></div></div></div></div>
+<div class="vendor-card" id="vendor-kayeon"><div class="vendor-header" onclick="toggleVendor('kayeon')"><div class="vendor-left"><div class="vendor-icon" style="background:#2a1a1a">🥬</div><div><div class="vendor-name">가연유통 (쌀·김치류) <span id="vbadge-kayeon"></span></div><div class="vendor-sub">010-4294-7302 · 월~토 <span class="delivery-badge badge-available" id="kayeon-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">맛김치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k1',-1)">−</button><div class="qty-value" id="qty-kayeon-k1">0</div><button class="qty-btn" onclick="changeQty('kayeon','k1',1)">+</button></div></div><div class="item-row"><div class="item-name">슬라이스 김치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k2',-1)">−</button><div class="qty-value" id="qty-kayeon-k2">0</div><button class="qty-btn" onclick="changeQty('kayeon','k2',1)">+</button></div></div><div class="item-row"><div class="item-name">포기김치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k3',-1)">−</button><div class="qty-value" id="qty-kayeon-k3">0</div><button class="qty-btn" onclick="changeQty('kayeon','k3',1)">+</button></div></div><div class="item-row"><div class="item-name">깍두기</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k12',-1)">−</button><div class="qty-value" id="qty-kayeon-k12">0</div><button class="qty-btn" onclick="changeQty('kayeon','k12',1)">+</button></div></div><div class="item-row"><div class="item-name">쌀</div><div class="item-unit">포대</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k4',-1)">−</button><div class="qty-value" id="qty-kayeon-k4">0</div><button class="qty-btn" onclick="changeQty('kayeon','k4',1)">+</button></div></div><div class="item-row"><div class="item-name">거친고추가루</div><div class="item-unit">팩</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k5',-1)">−</button><div class="qty-value" id="qty-kayeon-k5">0</div><button class="qty-btn" onclick="changeQty('kayeon','k5',1)">+</button></div></div><div class="item-row"><div class="item-name">고운고추가루</div><div class="item-unit">팩</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k6',-1)">−</button><div class="qty-value" id="qty-kayeon-k6">0</div><button class="qty-btn" onclick="changeQty('kayeon','k6',1)">+</button></div></div><div class="item-row"><div class="item-name">맛기름</div><div class="item-unit">병</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k7',-1)">−</button><div class="qty-value" id="qty-kayeon-k7">0</div><button class="qty-btn" onclick="changeQty('kayeon','k7',1)">+</button></div></div><div class="item-row"><div class="item-name">참기름</div><div class="item-unit">병</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k8',-1)">−</button><div class="qty-value" id="qty-kayeon-k8">0</div><button class="qty-btn" onclick="changeQty('kayeon','k8',1)">+</button></div></div><div class="item-row"><div class="item-name">들향기름</div><div class="item-unit">병</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k9',-1)">−</button><div class="qty-value" id="qty-kayeon-k9">0</div><button class="qty-btn" onclick="changeQty('kayeon','k9',1)">+</button></div></div><div class="item-row"><div class="item-name">볶음참깨</div><div class="item-unit">팩</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k10',-1)">−</button><div class="qty-value" id="qty-kayeon-k10">0</div><button class="qty-btn" onclick="changeQty('kayeon','k10',1)">+</button></div></div><div class="item-row"><div class="item-name">통깨가루</div><div class="item-unit">팩</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('kayeon','k11',-1)">−</button><div class="qty-value" id="qty-kayeon-k11">0</div><button class="qty-btn" onclick="changeQty('kayeon','k11',1)">+</button></div></div><div id="rec-kayeon" class="rec-banner" style="display:none"></div><button class="generate-btn" onclick="generateMsg('kayeon')">📝 문자 생성 + 재고 적립</button><div class="msg-preview" id="preview-kayeon"><div class="msg-text" id="msgtext-kayeon"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('kayeon')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01042947302','kayeon')">📱 문자앱 열기</button></div></div></div></div>
+<div class="vendor-card" id="vendor-liquor"><div class="vendor-header" onclick="toggleVendor('liquor')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a1a2a">🍶</div><div><div class="vendor-name">대한유통 (주류) <span id="vbadge-liquor"></span></div><div class="vendor-sub">010-7646-7206 · 월~금 <span class="delivery-badge badge-available" id="liquor-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">참이슬 후레시</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l1',-1)">−</button><div class="qty-value" id="qty-liquor-l1">0</div><button class="qty-btn" onclick="changeQty('liquor','l1',1)">+</button></div></div><div class="item-row"><div class="item-name">참이슬 오리지널</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l2',-1)">−</button><div class="qty-value" id="qty-liquor-l2">0</div><button class="qty-btn" onclick="changeQty('liquor','l2',1)">+</button></div></div><div class="item-row"><div class="item-name">진로</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l3',-1)">−</button><div class="qty-value" id="qty-liquor-l3">0</div><button class="qty-btn" onclick="changeQty('liquor','l3',1)">+</button></div></div><div class="item-row"><div class="item-name">처음처럼</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l4',-1)">−</button><div class="qty-value" id="qty-liquor-l4">0</div><button class="qty-btn" onclick="changeQty('liquor','l4',1)">+</button></div></div><div class="item-row"><div class="item-name">청하</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l5',-1)">−</button><div class="qty-value" id="qty-liquor-l5">0</div><button class="qty-btn" onclick="changeQty('liquor','l5',1)">+</button></div></div><div class="item-row"><div class="item-name">카스</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l6',-1)">−</button><div class="qty-value" id="qty-liquor-l6">0</div><button class="qty-btn" onclick="changeQty('liquor','l6',1)">+</button></div></div><div class="item-row"><div class="item-name">테라</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('liquor','l7',-1)">−</button><div class="qty-value" id="qty-liquor-l7">0</div><button class="qty-btn" onclick="changeQty('liquor','l7',1)">+</button></div></div><div id="rec-liquor" class="rec-banner" style="display:none"></div><button class="generate-btn" onclick="generateMsg('liquor')">📝 문자 생성 + 재고 적립</button><div class="msg-preview" id="preview-liquor"><div class="msg-text" id="msgtext-liquor"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('liquor')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01076467206','liquor')">📱 문자앱 열기</button></div></div></div></div>
+<div class="vendor-card" id="vendor-seafood"><div class="vendor-header" onclick="toggleVendor('seafood')"><div class="vendor-left"><div class="vendor-icon" style="background:#0f1e2a">🦑</div><div><div class="vendor-name">성화유통 (수산물) <span id="vbadge-seafood"></span></div><div class="vendor-sub">010-8305-0001 · 월~금 <span class="delivery-badge badge-available" id="seafood-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">오징어다이스</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s1',-1)">−</button><div class="qty-value" id="qty-seafood-s1">0</div><button class="qty-btn" onclick="changeQty('seafood','s1',1)">+</button></div></div><div class="item-row"><div class="item-name">선동오징어</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s2',-1)">−</button><div class="qty-value" id="qty-seafood-s2">0</div><button class="qty-btn" onclick="changeQty('seafood','s2',1)">+</button></div></div><div class="item-row"><div class="item-name">냉동굴</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s3',-1)">−</button><div class="qty-value" id="qty-seafood-s3">0</div><button class="qty-btn" onclick="changeQty('seafood','s3',1)">+</button></div></div><div class="item-row"><div class="item-name">새우</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s4',-1)">−</button><div class="qty-value" id="qty-seafood-s4">0</div><button class="qty-btn" onclick="changeQty('seafood','s4',1)">+</button></div></div><div class="item-row"><div class="item-name">절단꽃게L</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s5',-1)">−</button><div class="qty-value" id="qty-seafood-s5">0</div><button class="qty-btn" onclick="changeQty('seafood','s5',1)">+</button></div></div><div class="item-row"><div class="item-name">피바지락</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s6',-1)">−</button><div class="qty-value" id="qty-seafood-s6">0</div><button class="qty-btn" onclick="changeQty('seafood','s6',1)">+</button></div></div><div class="item-row"><div class="item-name">자숙꼬막살</div><div class="item-unit">봉지</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s7',-1)">−</button><div class="qty-value" id="qty-seafood-s7">0</div><button class="qty-btn" onclick="changeQty('seafood','s7',1)">+</button></div></div><div class="item-row"><div class="item-name">황태채</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s8',-1)">−</button><div class="qty-value" id="qty-seafood-s8">0</div><button class="qty-btn" onclick="changeQty('seafood','s8',1)">+</button></div></div><div class="item-row"><div class="item-name">절단쭈꾸미</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('seafood','s9',-1)">−</button><div class="qty-value" id="qty-seafood-s9">0</div><button class="qty-btn" onclick="changeQty('seafood','s9',1)">+</button></div></div><div id="rec-seafood" class="rec-banner" style="display:none"></div><button class="generate-btn" onclick="generateMsg('seafood')">📝 문자 생성 + 재고 적립</button><div class="msg-preview" id="preview-seafood"><div class="msg-text" id="msgtext-seafood"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('seafood')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01083050001','seafood')">📱 문자앱 열기</button></div></div></div></div>
+<div class="vendor-card" id="vendor-meat"><div class="vendor-header" onclick="toggleVendor('meat')"><div class="vendor-left"><div class="vendor-icon" style="background:#2a1515">🥩</div><div><div class="vendor-name">성원유통 (육류) <span id="vbadge-meat"></span></div><div class="vendor-sub">010-9109-3278 · 월~금 <span class="delivery-badge badge-available" id="meat-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">제육용 전지</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m1',-1)">−</button><div class="qty-value" id="qty-meat-m1">0</div><button class="qty-btn" onclick="changeQty('meat','m1',1)">+</button></div></div><div class="item-row"><div class="item-name">김치찌개용 전지</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m2',-1)">−</button><div class="qty-value" id="qty-meat-m2">0</div><button class="qty-btn" onclick="changeQty('meat','m2',1)">+</button></div></div><div class="item-row"><div class="item-name">민찌</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m3',-1)">−</button><div class="qty-value" id="qty-meat-m3">0</div><button class="qty-btn" onclick="changeQty('meat','m3',1)">+</button></div></div><div class="item-row"><div class="item-name">우삼겹 (1kg씩 소분)</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('meat','m4',-1)">−</button><div class="qty-value" id="qty-meat-m4">0</div><button class="qty-btn" onclick="changeQty('meat','m4',1)">+</button></div></div><div id="rec-meat" class="rec-banner" style="display:none"></div><button class="generate-btn" onclick="generateMsg('meat')">📝 문자 생성 + 재고 적립</button><div class="msg-preview" id="preview-meat"><div class="msg-text" id="msgtext-meat"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('meat')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01091093278','meat')">📱 문자앱 열기</button></div></div></div></div>
+<div class="vendor-card" id="vendor-anchovy"><div class="vendor-header" onclick="toggleVendor('anchovy')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a1a10">🐟</div><div><div class="vendor-name">한려물산 (멸치) <span id="vbadge-anchovy"></span></div><div class="vendor-sub">010-7908-0046 · 택배배송 <span class="delivery-badge badge-available" id="anchovy-status">주문가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">육수용 다시멸치</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('anchovy','a1',-1)">−</button><div class="qty-value" id="qty-anchovy-a1">0</div><button class="qty-btn" onclick="changeQty('anchovy','a1',1)">+</button></div></div><div id="rec-anchovy" class="rec-banner" style="display:none"></div><button class="generate-btn" onclick="generateMsg('anchovy')">📝 문자 생성 + 재고 적립</button><div class="msg-preview" id="preview-anchovy"><div class="msg-text" id="msgtext-anchovy"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('anchovy')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01079080046','anchovy')">📱 문자앱 열기</button></div></div></div></div>
+<div class="vendor-card" id="vendor-makgeolli"><div class="vendor-header" onclick="toggleVendor('makgeolli')"><div class="vendor-left"><div class="vendor-icon" style="background:#1e1a10">🍚</div><div><div class="vendor-name">막걸리 <span id="vbadge-makgeolli"></span></div><div class="vendor-sub">010-3122-3507 · 월~토 <span class="delivery-badge badge-available" id="makgeolli-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">막걸리</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('makgeolli','mg1',-1)">−</button><div class="qty-value" id="qty-makgeolli-mg1">0</div><button class="qty-btn" onclick="changeQty('makgeolli','mg1',1)">+</button></div></div><div class="item-row"><div class="item-name">모주 500mL</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('makgeolli','mg2',-1)">−</button><div class="qty-value" id="qty-makgeolli-mg2">0</div><button class="qty-btn" onclick="changeQty('makgeolli','mg2',1)">+</button></div></div><div class="item-row"><div class="item-name">모주 1.2L</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('makgeolli','mg3',-1)">−</button><div class="qty-value" id="qty-makgeolli-mg3">0</div><button class="qty-btn" onclick="changeQty('makgeolli','mg3',1)">+</button></div></div><div id="rec-makgeolli" class="rec-banner" style="display:none"></div><button class="generate-btn" onclick="generateMsg('makgeolli')">📝 문자 생성 + 재고 적립</button><div class="msg-preview" id="preview-makgeolli"><div class="msg-text" id="msgtext-makgeolli"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('makgeolli')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01031223507','makgeolli')">📱 문자앱 열기</button></div></div></div></div>
+<div class="vendor-card" id="vendor-pyunyuk"><div class="vendor-header" onclick="toggleVendor('pyunyuk')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a1510">🍖</div><div><div class="vendor-name">가야식품 (편육) <span id="vbadge-pyunyuk"></span></div><div class="vendor-sub">010-3873-0808 · 택배배송 <span class="delivery-badge badge-available" id="pyunyuk-status">주문가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">편육 (5kg 단위)</div><div class="item-unit">x5kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('pyunyuk','py1',-1)">−</button><div class="qty-value" id="qty-pyunyuk-py1">0</div><button class="qty-btn" onclick="changeQty('pyunyuk','py1',1)">+</button></div></div><div style="font-size:11px;color:var(--text3);padding:4px 0 8px;">※ 버튼 1회 = 5kg</div><div id="rec-pyunyuk" class="rec-banner" style="display:none"></div><button class="generate-btn" onclick="generateMsg('pyunyuk')">📝 문자 생성 + 재고 적립</button><div class="msg-preview" id="preview-pyunyuk"><div class="msg-text" id="msgtext-pyunyuk"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('pyunyuk')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01038730808','pyunyuk')">📱 문자앱 열기</button></div></div></div></div>
+<div class="vendor-card" id="vendor-jokong"><div class="vendor-header" onclick="toggleVendor('jokong')"><div class="vendor-left"><div class="vendor-icon" style="background:#1a2a2a">🫘</div><div><div class="vendor-name">좋은콩 <span id="vbadge-jokong"></span></div><div class="vendor-sub">010-9069-6528 · 월~토 <span class="delivery-badge badge-available" id="jokong-status">배송가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">콩국물</div><div class="item-unit" id="unit-jokong-jk1">팩</div><div class="qty-control"><button class="qty-btn" onclick="changeQtyJokong(-1)">−</button><div class="qty-value" id="qty-jokong-jk1">0</div><button class="qty-btn" onclick="changeQtyJokong(1)">+</button></div></div><div style="font-size:11px;color:var(--text3);padding:2px 0 8px;">※ 40팩 = 1박스</div><div class="item-row"><div class="item-name">냉면육수</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('jokong','jk2',-1)">−</button><div class="qty-value" id="qty-jokong-jk2">0</div><button class="qty-btn" onclick="changeQty('jokong','jk2',1)">+</button></div></div><div id="rec-jokong" class="rec-banner" style="display:none"></div><button class="generate-btn" onclick="generateMsg('jokong')">📝 문자 생성 + 재고 적립</button><div class="msg-preview" id="preview-jokong"><div class="msg-text" id="msgtext-jokong"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('jokong')">📋 복사</button><button class="sms-btn" onclick="sendSMS('01090696528','jokong')">📱 문자앱 열기</button></div></div></div></div>
+<div class="vendor-card" id="vendor-veggie"><div class="vendor-header" onclick="toggleVendor('veggie')"><div class="vendor-left"><div class="vendor-icon" style="background:#0f2a1a">🥦</div><div><div class="vendor-name">야채 (카톡 발주) <span id="vbadge-veggie"></span></div><div class="vendor-sub">카톡 단체채팅방 <span class="delivery-badge badge-available" id="veggie-status">주문가능</span></div></div></div><div class="vendor-arrow">▼</div></div><div class="vendor-body"><div class="item-row"><div class="item-name">대파</div><div class="item-unit">단</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v1',-1)">−</button><div class="qty-value" id="qty-veggie-v1">0</div><button class="qty-btn" onclick="changeQty('veggie','v1',1)">+</button></div></div><div class="item-row"><div class="item-name">양파</div><div class="item-unit">망</div><div class="qty-control"><button class="qty-btn" style="font-size:11px;width:36px" onclick="changeQtyHalf('veggie','v2')">½망</button><div class="qty-value" id="qty-veggie-v2-display" data-val="0">0</div><button class="qty-btn" style="font-size:11px;width:36px" onclick="changeQtyFull('veggie','v2')">+1망</button></div></div><div class="item-row"><div class="item-name">육수용 무</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v3',-1)">−</button><div class="qty-value" id="qty-veggie-v3">0</div><button class="qty-btn" onclick="changeQty('veggie','v3',1)">+</button></div></div><div class="item-row"><div class="item-name">주키니 호박 특</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v4',-1)">−</button><div class="qty-value" id="qty-veggie-v4">0</div><button class="qty-btn" onclick="changeQty('veggie','v4',1)">+</button></div></div><div class="item-row"><div class="item-name">당근</div><div class="item-unit">개</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v5',-1)">−</button><div class="qty-value" id="qty-veggie-v5">0</div><button class="qty-btn" onclick="changeQty('veggie','v5',1)">+</button></div></div><div class="item-row"><div class="item-name">오이</div><div class="item-unit">개</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v11',-1)">−</button><div class="qty-value" id="qty-veggie-v11">0</div><button class="qty-btn" onclick="changeQty('veggie','v11',1)">+</button></div></div><div class="item-row"><div class="item-name">부추</div><div class="item-unit">단</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v6',-1)">−</button><div class="qty-value" id="qty-veggie-v6">0</div><button class="qty-btn" onclick="changeQty('veggie','v6',1)">+</button></div></div><div class="item-row"><div class="item-name">양배추</div><div class="item-unit">통</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v7',-1)">−</button><div class="qty-value" id="qty-veggie-v7">0</div><button class="qty-btn" onclick="changeQty('veggie','v7',1)">+</button></div></div><div class="item-row"><div class="item-name">고사리</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v8',-1)">−</button><div class="qty-value" id="qty-veggie-v8">0</div><button class="qty-btn" onclick="changeQty('veggie','v8',1)">+</button></div></div><div class="item-row"><div class="item-name">청양고추</div><div class="item-unit">kg</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v9',-1)">−</button><div class="qty-value" id="qty-veggie-v9">0</div><button class="qty-btn" onclick="changeQty('veggie','v9',1)">+</button></div></div><div class="item-row"><div class="item-name">치커리</div><div class="item-unit">박스</div><div class="qty-control"><button class="qty-btn" onclick="changeQty('veggie','v10',-1)">−</button><div class="qty-value" id="qty-veggie-v10">0</div><button class="qty-btn" onclick="changeQty('veggie','v10',1)">+</button></div></div><div id="rec-veggie" class="rec-banner" style="display:none"></div><button class="generate-btn" onclick="generateMsg('veggie')" style="background:#25d366;color:#fff">📋 카톡용 문자 생성 + 재고 적립</button><div class="msg-preview" id="preview-veggie"><div class="msg-text" id="msgtext-veggie"></div><div class="msg-actions"><button class="copy-btn" onclick="copyMsg('veggie')">📋 복사 (카톡 붙여넣기)</button></div></div></div></div>
 </div>
 
-<div class="page" id="page-inventory"><div class="section-title">재고 현황 기록</div><div class="notice-box">재고를 입력해두면 발주 판단에 참고할 수 있어요.</div><div class="inv-card"><div class="inv-header"><div class="inv-vendor">🌱 콩나물</div></div><div class="inv-item-row"><div class="inv-name">콩나물</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-bean" placeholder="0"><div class="inv-unit">박스</div></div></div></div><div class="inv-card"><div class="inv-header"><div class="inv-vendor">🥚 한결유통</div></div><div class="inv-item-row"><div class="inv-name">중란</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-egg" placeholder="0"><div class="inv-unit">판</div></div></div></div><div class="inv-card"><div class="inv-header"><div class="inv-vendor">🥬 가연유통</div></div><div class="inv-item-row"><div class="inv-name">맛김치</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k1" placeholder="0"><div class="inv-unit">박스</div></div></div><div class="inv-item-row"><div class="inv-name">쌀</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-k4" placeholder="0"><div class="inv-unit">포대</div></div></div></div><div class="inv-card"><div class="inv-header"><div class="inv-vendor">🍶 대한유통</div></div><div class="inv-item-row"><div class="inv-name">참이슬 후레시</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-l1" placeholder="0"><div class="inv-unit">박스</div></div></div><div class="inv-item-row"><div class="inv-name">테라</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-l7" placeholder="0"><div class="inv-unit">박스</div></div></div></div><div class="inv-card"><div class="inv-header"><div class="inv-vendor">🥩 성원유통</div></div><div class="inv-item-row"><div class="inv-name">제육용 전지</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-m1" placeholder="0"><div class="inv-unit">kg</div></div></div><div class="inv-item-row"><div class="inv-name">우삼겹</div><div class="inv-qty-wrap"><input class="inv-input" type="number" id="inv-m4" placeholder="0"><div class="inv-unit">kg</div></div></div></div><button class="save-inv-btn" onclick="saveInventory()">💾 재고 저장</button></div>
+<!-- ===== 재고 탭 ===== -->
+<div class="page" id="page-inventory">
+  <div class="inv-sub-tabs">
+    <button class="inv-sub-tab active" onclick="showInvPane('status')">📊 현황</button>
+    <button class="inv-sub-tab" onclick="showInvPane('usage')">✏️ 사용·로스 입력</button>
+    <button class="inv-sub-tab" onclick="showInvPane('config')">⚙️ 안전재고 설정</button>
+  </div>
+  <div class="inv-pane active" id="invpane-status"><div id="inv-status-content"></div></div>
+  <div class="inv-pane" id="invpane-usage">
+    <div class="notice-box">매일 마감 때 사용량과 로스(폐기·불량)를 입력해주세요. <strong>0이면 비워두면</strong> 돼요.</div>
+    <div id="inv-usage-content"></div>
+    <button class="usage-save-btn" onclick="saveUsage()">💾 사용량 저장 및 차감</button>
+  </div>
+  <div class="inv-pane" id="invpane-config">
+    <div class="notice-box">안전재고 이하로 떨어지면 <strong>빨간 경고</strong>가 떠요. 노란색은 안전재고 2배 이하예요.</div>
+    <div id="inv-config-content"></div>
+    <button class="cfg-save-btn" onclick="saveConfig()">💾 설정 저장</button>
+  </div>
+</div>
 
+<!-- 발주 내역 -->
 <div class="page" id="page-history"><div class="section-title">발주 내역</div><div id="historyList"></div></div>
 
-<div class="page" id="page-settings"><div class="section-title">알림 설정</div><div class="alarm-card"><div class="alarm-row"><div><div class="alarm-label">콩나물 발주 알림</div><div style="font-size:11px;color:var(--text3);margin-top:2px">오후 4시 · 토요일 2배 발주</div></div><div style="display:flex;align-items:center;gap:10px"><div class="alarm-time">16:00</div><div class="toggle on" id="toggle-bean" onclick="toggleAlarm('bean')"></div></div></div><div class="alarm-row"><div><div class="alarm-label">일반 발주 알림</div><div style="font-size:11px;color:var(--text3);margin-top:2px">오후 4시 · 전날 저녁 발주</div></div><div style="display:flex;align-items:center;gap:10px"><div class="alarm-time">16:00</div><div class="toggle on" id="toggle-general" onclick="toggleAlarm('general')"></div></div></div></div><div class="section-title">거래처 정보</div><div class="alarm-card"><div class="alarm-row"><div class="alarm-label">콩나물 공급업체</div><div class="alarm-time">010-8304-1260</div></div><div class="alarm-row"><div class="alarm-label">한결유통 (계란)</div><div class="alarm-time">010-6265-7887</div></div><div class="alarm-row"><div class="alarm-label">가연유통 (쌀·김치)</div><div class="alarm-time">010-4294-7302</div></div><div class="alarm-row"><div class="alarm-label">대한유통 (주류)</div><div class="alarm-time">010-7646-7206</div></div><div class="alarm-row"><div class="alarm-label">성화유통 (수산물)</div><div class="alarm-time">010-8305-0001</div></div><div class="alarm-row"><div class="alarm-label">성원유통 (육류)</div><div class="alarm-time">010-9109-3278</div></div><div class="alarm-row"><div class="alarm-label">한려물산 (멸치)</div><div class="alarm-time">010-7908-0046</div></div><div class="alarm-row"><div class="alarm-label">막걸리</div><div class="alarm-time">010-3122-3507</div></div><div class="alarm-row"><div class="alarm-label">가야식품 (편육)</div><div class="alarm-time">010-3873-0808</div></div><div class="alarm-row"><div class="alarm-label">좋은콩</div><div class="alarm-time">010-9069-6528</div></div><div class="alarm-row"><div class="alarm-label">야채 (카톡 발주)</div><div class="alarm-time">단체 카톡방</div></div></div><div class="section-title">앱 정보</div><div class="alarm-card"><div class="alarm-row"><div class="alarm-label">버전</div><div class="alarm-time">v1.3</div></div><div class="alarm-row"><div class="alarm-label">매장</div><div class="alarm-time" id="settingStore">남구로역점</div></div></div></div>
+<!-- 업무일지 -->
+<div class="page" id="page-log">
+  <div class="log-mode-tabs">
+    <button class="log-mode-tab active" id="tab-write" onclick="switchLogMode('write')">✏️ 일지 작성</button>
+    <button class="log-mode-tab" id="tab-view" onclick="switchLogMode('view')">👁 확인 뷰</button>
+  </div>
+  <div class="log-pane active" id="logpane-write">
+    <div id="log-form-wrap">
+      <div class="log-form-row">
+        <div class="log-field"><label class="log-label">날짜</label><input type="date" class="log-input" id="lf-date"></div>
+        <div class="log-field"><label class="log-label">조</label><select class="log-select" id="lf-shift"><option>주간</option><option>야간</option><option>오전</option><option>오후</option></select></div>
+      </div>
+      <div class="log-field"><label class="log-label">매니저 이름</label><input type="text" class="log-input" id="lf-manager" placeholder="이름 입력"></div>
+      <div class="log-section">
+        <div class="log-section-title">💰 현금 시재 정산</div>
+        <div class="cash-grid">
+          <div class="cash-row-form"><span class="cash-row-label">전일 이월</span><input type="number" class="log-input" id="lf-prev" placeholder="0" oninput="calcBalance()"></div>
+          <div class="cash-row-form"><span class="cash-row-label">당일 입금</span><input type="number" class="log-input" id="lf-in" placeholder="0" oninput="calcBalance()"></div>
+          <div class="cash-row-form"><span class="cash-row-label">당일 지출</span><input type="number" class="log-input" id="lf-out" placeholder="0" oninput="calcBalance()"></div>
+        </div>
+        <div class="cash-balance-box"><span style="font-size:12px;color:var(--text3)">마감 잔액</span><span style="font-size:16px;font-weight:700;" id="lf-balance">0 원</span></div>
+        <div style="margin-top:12px"><label class="log-label">파출기 사용</label>
+          <div class="radio-group"><label class="radio-label"><input type="radio" name="chulgi" value="N" checked onchange="document.getElementById('chulgi-rw').style.display='none'"> 미사용</label><label class="radio-label"><input type="radio" name="chulgi" value="Y" onchange="document.getElementById('chulgi-rw').style.display='block'"> 사용</label></div>
+          <div id="chulgi-rw" style="display:none;margin-top:8px"><input type="text" class="log-input" id="lf-chulgi-reason" placeholder="사용 사유"></div>
+        </div>
+      </div>
+      <div class="log-section">
+        <div class="log-section-title">👥 직원 출근</div>
+        <div id="staff-list"></div>
+        <div class="log-field" style="margin-top:10px;margin-bottom:0"><label class="log-label">특이사항</label><textarea class="log-textarea" id="lf-staff-memo" rows="2" placeholder="지각, 조기퇴근, 태도 이슈 등"></textarea></div>
+      </div>
+      <div class="log-section">
+        <div class="log-section-title">⚠️ 이슈 보고</div>
+        <div class="issue-grid">
+          <div class="issue-card"><div class="issue-card-label">🙋 손님 클레임</div><textarea class="log-textarea" id="lf-claim" rows="3" placeholder="없으면 비워두세요"></textarea></div>
+          <div class="issue-card"><div class="issue-card-label">📦 물류 이상</div><textarea class="log-textarea" id="lf-logistics" rows="3" placeholder="미입고, 불량 등"></textarea></div>
+          <div class="issue-card"><div class="issue-card-label">🔧 기물·외관</div><textarea class="log-textarea" id="lf-equipment" rows="3" placeholder="파손, 고장 등"></textarea></div>
+          <div class="issue-card"><div class="issue-card-label">🧹 위생·청결</div><textarea class="log-textarea" id="lf-hygiene" rows="3" placeholder="청소 점검 결과"></textarea></div>
+        </div>
+      </div>
+      <div class="log-section"><div class="log-section-title">📝 기타 메모</div><textarea class="log-textarea" id="lf-memo" rows="3" placeholder="오너 전달사항, 내일 주의사항 등"></textarea></div>
+      <div id="log-error" style="display:none;background:#2a1010;border:1px solid var(--red);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--red);margin-bottom:10px;"></div>
+      <button class="log-submit-btn" onclick="submitLog()">📤 일지 제출</button>
+      <div class="sb-info" style="margin-top:16px"><strong>⚡ Supabase 연결 필요</strong><br>JS 상단 <code>SUPABASE_URL</code> · <code>SUPABASE_KEY</code> 교체 시 클라우드 저장. 연결 전엔 기기 내 임시저장.</div>
+    </div>
+    <div id="log-success" style="display:none;text-align:center;padding:50px 20px;">
+      <div style="font-size:48px;margin-bottom:12px">✅</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:6px">일지 제출 완료!</div>
+      <div style="font-size:13px;color:var(--text3)" id="log-success-sub"></div>
+      <button onclick="resetLogForm()" style="margin-top:20px;padding:10px 24px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);font-family:'Noto Sans KR',sans-serif;font-size:13px;border-radius:8px;cursor:pointer;">새 일지 작성</button>
+    </div>
+  </div>
+  <div class="log-pane" id="logpane-view">
+    <div class="owner-filter-row">
+      <button class="filter-chip active" onclick="filterLogs('all',this)">전체</button>
+      <button class="filter-chip" onclick="filterLogs('unread',this)">미확인</button>
+      <button class="filter-chip" onclick="filterLogs('issue',this)">이슈있음</button>
+      <span style="font-size:12px;color:var(--red);font-weight:700;margin-left:auto" id="view-unread-count"></span>
+    </div>
+    <div id="log-list"></div>
+  </div>
+</div>
+
+<!-- 설정 -->
+<div class="page" id="page-settings">
+<div class="section-title">알림 설정</div><div class="alarm-card"><div class="alarm-row"><div><div class="alarm-label">콩나물 발주 알림</div><div style="font-size:11px;color:var(--text3);margin-top:2px">오후 4시 · 토요일 2배</div></div><div style="display:flex;align-items:center;gap:10px"><div class="alarm-time">16:00</div><div class="toggle on" id="toggle-bean" onclick="toggleAlarm('bean')"></div></div></div><div class="alarm-row"><div><div class="alarm-label">일반 발주 알림</div><div style="font-size:11px;color:var(--text3);margin-top:2px">오후 4시</div></div><div style="display:flex;align-items:center;gap:10px"><div class="alarm-time">16:00</div><div class="toggle on" id="toggle-general" onclick="toggleAlarm('general')"></div></div></div></div>
+<div class="section-title">직원 이름 설정</div><div class="alarm-card"><div style="font-size:12px;color:var(--text3);margin-bottom:10px">출근 토글에 표시될 이름</div><div id="staff-name-settings"></div><button class="save-inv-btn" onclick="saveStaffNames()" style="width:100%;margin-top:10px;padding:13px;background:var(--surface2);border:1px solid var(--accent);color:var(--accent);font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;">💾 저장</button></div>
+<div class="section-title">거래처 정보</div><div class="alarm-card"><div class="alarm-row"><div class="alarm-label">콩나물</div><div class="alarm-time">010-8304-1260</div></div><div class="alarm-row"><div class="alarm-label">한결유통</div><div class="alarm-time">010-6265-7887</div></div><div class="alarm-row"><div class="alarm-label">가연유통</div><div class="alarm-time">010-4294-7302</div></div><div class="alarm-row"><div class="alarm-label">대한유통</div><div class="alarm-time">010-7646-7206</div></div><div class="alarm-row"><div class="alarm-label">성화유통</div><div class="alarm-time">010-8305-0001</div></div><div class="alarm-row"><div class="alarm-label">성원유통</div><div class="alarm-time">010-9109-3278</div></div><div class="alarm-row"><div class="alarm-label">한려물산</div><div class="alarm-time">010-7908-0046</div></div><div class="alarm-row"><div class="alarm-label">막걸리</div><div class="alarm-time">010-3122-3507</div></div><div class="alarm-row"><div class="alarm-label">가야식품</div><div class="alarm-time">010-3873-0808</div></div><div class="alarm-row"><div class="alarm-label">좋은콩</div><div class="alarm-time">010-9069-6528</div></div></div>
+<div class="section-title">앱 정보</div><div class="alarm-card"><div class="alarm-row"><div class="alarm-label">버전</div><div class="alarm-time">v3.0</div></div><div class="alarm-row"><div class="alarm-label">매장</div><div class="alarm-time" id="settingStore">남구로역점</div></div></div>
+</div>
 
 <script>
-const vendors={bean:{name:'콩나물 공급업체',phone:'01083041260',days:[0,1,2,3,4,5,6],items:[{id:'beansprout',name:'콩나물',unit:'박스'}],buildMsg:(store,qtys,isSat)=>`콩나물 ${isSat?(qtys['beansprout']||0)*2:(qtys['beansprout']||0)}박스 부탁드립니다`},egg:{name:'한결유통 (계란)',phone:'01062657887',days:[1,2,3,4,5,6],items:[{id:'egg1',name:'중란',unit:'판'}],buildMsg:(store,qtys)=>`${store} 중란 ${qtys['egg1']||0}판 부탁드립니다.`},kayeon:{name:'가연유통',phone:'01042947302',days:[1,2,3,4,5,6],items:[{id:'k1',name:'맛김치',unit:'박스'},{id:'k2',name:'슬라이스 김치',unit:'박스'},{id:'k3',name:'포기김치',unit:'박스'},{id:'k12',name:'깍두기',unit:'박스'},{id:'k4',name:'쌀',unit:'포대'},{id:'k5',name:'거친고추가루',unit:'팩'},{id:'k6',name:'고운고추가루',unit:'팩'},{id:'k7',name:'맛기름',unit:'병'},{id:'k8',name:'참기름',unit:'병'},{id:'k9',name:'들향기름',unit:'병'},{id:'k10',name:'볶음참깨',unit:'팩'},{id:'k11',name:'통깨가루',unit:'팩'}],buildMsg:(store,qtys)=>{let l=[store];vendors.kayeon.items.forEach(i=>{if((qtys[i.id]||0)>0)l.push(`${i.name} ${qtys[i.id]}${i.unit}`)});l.push('부탁드립니다.');return l.join('\n')}},liquor:{name:'대한유통',phone:'01076467206',days:[1,2,3,4,5],items:[{id:'l1',name:'참이슬 후레시',unit:'박스'},{id:'l2',name:'참이슬 오리지널',unit:'박스'},{id:'l3',name:'진로',unit:'박스'},{id:'l4',name:'처음처럼',unit:'박스'},{id:'l5',name:'청하',unit:'박스'},{id:'l6',name:'카스',unit:'박스'},{id:'l7',name:'테라',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];vendors.liquor.items.forEach(i=>{if((qtys[i.id]||0)>0)l.push(`${i.name} ${qtys[i.id]}`)});l.push('부탁드립니다.');return l.join('\n')}},seafood:{name:'성화유통',phone:'01083050001',days:[1,2,3,4,5],items:[{id:'s1',name:'오징어다이스',unit:'박스'},{id:'s2',name:'선동오징어',unit:'박스'},{id:'s3',name:'냉동굴',unit:'박스'},{id:'s4',name:'새우',unit:'박스'},{id:'s5',name:'절단꽃게L',unit:'박스'},{id:'s6',name:'피바지락',unit:'박스'},{id:'s7',name:'자숙꼬막살',unit:'봉지'},{id:'s8',name:'황태채',unit:'kg'},{id:'s9',name:'절단쭈꾸미',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];vendors.seafood.items.forEach(i=>{if((qtys[i.id]||0)>0)l.push(`${i.name} ${qtys[i.id]}${i.unit}`)});l.push('부탁드립니다.');return l.join('\n')}},meat:{name:'성원유통',phone:'01091093278',days:[1,2,3,4,5],items:[{id:'m1',name:'제육용 전지',unit:'kg'},{id:'m2',name:'김치찌개용 전지',unit:'kg'},{id:'m3',name:'민찌',unit:'kg'},{id:'m4',name:'우삼겹',unit:'kg'}],buildMsg:(store,qtys)=>{let l=[store];const q1=qtys['m1']||0,q2=qtys['m2']||0,q3=qtys['m3']||0,q4=qtys['m4']||0;if(q1>0)l.push(`제육용 전지 ${q1}키로 10키로씩 소분해주세요`);if(q2>0)l.push(`김치찌개용 전지 ${q2}키로 10키로씩 소분해주세요`);if(q3>0)l.push(`민찌 ${q3}키로`);if(q4>0)l.push(`우삼겹 ${q4}키로 1키로씩 소분해주세요`);l.push('부탁드립니다.');return l.join('\n')}},anchovy:{name:'한려물산',phone:'01079080046',days:[1,2,3,4,5,6],delivery:'택배',items:[{id:'a1',name:'육수용 다시멸치',unit:'박스'}],buildMsg:(store,qtys)=>`${store} 육수용 다시멸치 ${qtys['a1']||0}박스 부탁드립니다`},makgeolli:{name:'막걸리',phone:'01031223507',days:[1,2,3,4,5,6],items:[{id:'mg1',name:'막걸리',unit:'박스'},{id:'mg2',name:'모주 500mL',unit:'박스'},{id:'mg3',name:'모주 1.2L',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];const q1=qtys['mg1']||0,q2=qtys['mg2']||0,q3=qtys['mg3']||0;if(q1>0)l.push(`막걸리 ${q1}박스`);if(q2>0)l.push(`모주 500mL ${q2}박스`);if(q3>0)l.push(`모주 1.2L ${q3}박스`);l.push('부탁드립니다.');return l.join('\n')}},pyunyuk:{name:'가야식품',phone:'01038730808',days:[1,2,3,4,5,6],delivery:'택배',items:[{id:'py1',name:'편육',unit:'x5kg'}],buildMsg:(store,qtys)=>{const cnt=qtys['py1']||0;const kg=cnt*5;return `${store} 편육 ${kg}키로 부탁드립니다`}},jokong:{name:'좋은콩',phone:'01090696528',days:[1,2,3,4,5,6],items:[{id:'jk1',name:'콩국물',unit:'팩'},{id:'jk2',name:'냉면육수',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];const q1=qtys['jk1']||0;const q2=qtys['jk2']||0;if(q1>0){const box=Math.floor(q1/40);const rem=q1%40;if(box>0&&rem>0)l.push(`콩국물 ${box}박스 ${rem}팩`);else if(box>0)l.push(`콩국물 ${box}박스(${q1}팩)`);else l.push(`콩국물 ${q1}팩`);}if(q2>0)l.push(`냉면육수 ${q2}박스`);l.push('부탁드립니다.');return l.join('\n')}},veggie:{name:'야채 카톡 발주',phone:'',days:[1,2,3,4,5,6],items:[{id:'v1',name:'대파',unit:'단'},{id:'v2',name:'양파',unit:'망'},{id:'v3',name:'육수용 무',unit:'박스'},{id:'v4',name:'주키니 호박 특',unit:'박스'},{id:'v5',name:'당근',unit:'개'},{id:'v11',name:'오이',unit:'개'},{id:'v6',name:'부추',unit:'단'},{id:'v7',name:'양배추',unit:'통'},{id:'v8',name:'고사리',unit:'박스'},{id:'v9',name:'청양고추',unit:'kg'},{id:'v10',name:'치커리',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];vendors.veggie.items.forEach(item=>{const q=qtys[item.id]||0;if(item.id==='v2'){if(q===0.5)l.push('양파 반망');else if(q>=1)l.push(`양파 ${q}망`);}else if(q>0){l.push(`${item.name} ${q}${item.unit}`);}});l.push('부탁드립니다.');return l.join('\n')}}};
-let history=JSON.parse(localStorage.getItem('orderHistory')||'[]');
+// ===== Supabase (연결 시 수정) =====
+const SUPABASE_URL='YOUR_SUPABASE_URL';
+const SUPABASE_KEY='YOUR_SUPABASE_ANON_KEY';
+let supabase=null;
+async function initSupabase(){try{const {createClient}=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');if(SUPABASE_URL!=='YOUR_SUPABASE_URL'){supabase=createClient(SUPABASE_URL,SUPABASE_KEY);}}catch(e){}}
+
+// ===== 재고 마스터 아이템 목록 =====
+const INV_ALL=[
+  {id:'bean_beansprout',name:'콩나물',unit:'박스',vname:'콩나물',vkey:'bean',ikey:'beansprout'},
+  {id:'egg_egg1',name:'중란',unit:'판',vname:'한결유통',vkey:'egg',ikey:'egg1'},
+  {id:'kayeon_k1',name:'맛김치',unit:'박스',vname:'가연유통',vkey:'kayeon',ikey:'k1'},
+  {id:'kayeon_k2',name:'슬라이스 김치',unit:'박스',vname:'가연유통',vkey:'kayeon',ikey:'k2'},
+  {id:'kayeon_k3',name:'포기김치',unit:'박스',vname:'가연유통',vkey:'kayeon',ikey:'k3'},
+  {id:'kayeon_k12',name:'깍두기',unit:'박스',vname:'가연유통',vkey:'kayeon',ikey:'k12'},
+  {id:'kayeon_k4',name:'쌀',unit:'포대',vname:'가연유통',vkey:'kayeon',ikey:'k4'},
+  {id:'kayeon_k5',name:'거친고추가루',unit:'팩',vname:'가연유통',vkey:'kayeon',ikey:'k5'},
+  {id:'kayeon_k6',name:'고운고추가루',unit:'팩',vname:'가연유통',vkey:'kayeon',ikey:'k6'},
+  {id:'kayeon_k7',name:'맛기름',unit:'병',vname:'가연유통',vkey:'kayeon',ikey:'k7'},
+  {id:'kayeon_k8',name:'참기름',unit:'병',vname:'가연유통',vkey:'kayeon',ikey:'k8'},
+  {id:'kayeon_k9',name:'들향기름',unit:'병',vname:'가연유통',vkey:'kayeon',ikey:'k9'},
+  {id:'kayeon_k10',name:'볶음참깨',unit:'팩',vname:'가연유통',vkey:'kayeon',ikey:'k10'},
+  {id:'kayeon_k11',name:'통깨가루',unit:'팩',vname:'가연유통',vkey:'kayeon',ikey:'k11'},
+  {id:'liquor_l1',name:'참이슬 후레시',unit:'박스',vname:'대한유통',vkey:'liquor',ikey:'l1'},
+  {id:'liquor_l2',name:'참이슬 오리지널',unit:'박스',vname:'대한유통',vkey:'liquor',ikey:'l2'},
+  {id:'liquor_l3',name:'진로',unit:'박스',vname:'대한유통',vkey:'liquor',ikey:'l3'},
+  {id:'liquor_l4',name:'처음처럼',unit:'박스',vname:'대한유통',vkey:'liquor',ikey:'l4'},
+  {id:'liquor_l5',name:'청하',unit:'박스',vname:'대한유통',vkey:'liquor',ikey:'l5'},
+  {id:'liquor_l6',name:'카스',unit:'박스',vname:'대한유통',vkey:'liquor',ikey:'l6'},
+  {id:'liquor_l7',name:'테라',unit:'박스',vname:'대한유통',vkey:'liquor',ikey:'l7'},
+  {id:'seafood_s1',name:'오징어다이스',unit:'박스',vname:'성화유통',vkey:'seafood',ikey:'s1'},
+  {id:'seafood_s2',name:'선동오징어',unit:'박스',vname:'성화유통',vkey:'seafood',ikey:'s2'},
+  {id:'seafood_s3',name:'냉동굴',unit:'박스',vname:'성화유통',vkey:'seafood',ikey:'s3'},
+  {id:'seafood_s4',name:'새우',unit:'박스',vname:'성화유통',vkey:'seafood',ikey:'s4'},
+  {id:'seafood_s5',name:'절단꽃게L',unit:'박스',vname:'성화유통',vkey:'seafood',ikey:'s5'},
+  {id:'seafood_s6',name:'피바지락',unit:'박스',vname:'성화유통',vkey:'seafood',ikey:'s6'},
+  {id:'seafood_s7',name:'자숙꼬막살',unit:'봉지',vname:'성화유통',vkey:'seafood',ikey:'s7'},
+  {id:'seafood_s8',name:'황태채',unit:'kg',vname:'성화유통',vkey:'seafood',ikey:'s8'},
+  {id:'seafood_s9',name:'절단쭈꾸미',unit:'박스',vname:'성화유통',vkey:'seafood',ikey:'s9'},
+  {id:'meat_m1',name:'제육용 전지',unit:'kg',vname:'성원유통',vkey:'meat',ikey:'m1'},
+  {id:'meat_m2',name:'김치찌개용 전지',unit:'kg',vname:'성원유통',vkey:'meat',ikey:'m2'},
+  {id:'meat_m3',name:'민찌',unit:'kg',vname:'성원유통',vkey:'meat',ikey:'m3'},
+  {id:'meat_m4',name:'우삼겹',unit:'kg',vname:'성원유통',vkey:'meat',ikey:'m4'},
+  {id:'anchovy_a1',name:'육수용 다시멸치',unit:'박스',vname:'한려물산',vkey:'anchovy',ikey:'a1'},
+  {id:'makgeolli_mg1',name:'막걸리',unit:'박스',vname:'막걸리',vkey:'makgeolli',ikey:'mg1'},
+  {id:'makgeolli_mg2',name:'모주 500mL',unit:'박스',vname:'막걸리',vkey:'makgeolli',ikey:'mg2'},
+  {id:'makgeolli_mg3',name:'모주 1.2L',unit:'박스',vname:'막걸리',vkey:'makgeolli',ikey:'mg3'},
+  {id:'pyunyuk_py1',name:'편육',unit:'x5kg',vname:'가야식품',vkey:'pyunyuk',ikey:'py1'},
+  {id:'jokong_jk1',name:'콩국물',unit:'팩',vname:'좋은콩',vkey:'jokong',ikey:'jk1'},
+  {id:'jokong_jk2',name:'냉면육수',unit:'박스',vname:'좋은콩',vkey:'jokong',ikey:'jk2'},
+  {id:'veggie_v1',name:'대파',unit:'단',vname:'야채',vkey:'veggie',ikey:'v1'},
+  {id:'veggie_v2',name:'양파',unit:'망',vname:'야채',vkey:'veggie',ikey:'v2'},
+  {id:'veggie_v3',name:'육수용 무',unit:'박스',vname:'야채',vkey:'veggie',ikey:'v3'},
+  {id:'veggie_v4',name:'주키니 호박',unit:'박스',vname:'야채',vkey:'veggie',ikey:'v4'},
+  {id:'veggie_v5',name:'당근',unit:'개',vname:'야채',vkey:'veggie',ikey:'v5'},
+  {id:'veggie_v11',name:'오이',unit:'개',vname:'야채',vkey:'veggie',ikey:'v11'},
+  {id:'veggie_v6',name:'부추',unit:'단',vname:'야채',vkey:'veggie',ikey:'v6'},
+  {id:'veggie_v7',name:'양배추',unit:'통',vname:'야채',vkey:'veggie',ikey:'v7'},
+  {id:'veggie_v8',name:'고사리',unit:'박스',vname:'야채',vkey:'veggie',ikey:'v8'},
+  {id:'veggie_v9',name:'청양고추',unit:'kg',vname:'야채',vkey:'veggie',ikey:'v9'},
+  {id:'veggie_v10',name:'치커리',unit:'박스',vname:'야채',vkey:'veggie',ikey:'v10'},
+];
+
+// vendor 그룹 목록 (표시 순서)
+const VGROUPS=[
+  {key:'bean',label:'🌱 콩나물'},
+  {key:'egg',label:'🥚 한결유통'},
+  {key:'kayeon',label:'🥬 가연유통'},
+  {key:'liquor',label:'🍶 대한유통'},
+  {key:'seafood',label:'🦑 성화유통'},
+  {key:'meat',label:'🥩 성원유통'},
+  {key:'anchovy',label:'🐟 한려물산'},
+  {key:'makgeolli',label:'🍚 막걸리'},
+  {key:'pyunyuk',label:'🍖 가야식품'},
+  {key:'jokong',label:'🫘 좋은콩'},
+  {key:'veggie',label:'🥦 야채'},
+];
+
+// ===== 재고 데이터 로드/저장 =====
+function loadInv(){return JSON.parse(localStorage.getItem('invData')||'{}');}
+function saveInvData(d){localStorage.setItem('invData',JSON.stringify(d));}
+
+function getItemState(id){
+  const inv=loadInv();
+  return inv[id]||{qty:0,safety:0,log:[]};
+}
+
+function getDateStr(){
+  const n=new Date();
+  return `${n.getMonth()+1}/${n.getDate()}`;
+}
+
+// 재고 추가 (발주 시)
+function addStockFromOrder(vkey,qtys){
+  const inv=loadInv();
+  let changed=[];
+  INV_ALL.filter(i=>i.vkey===vkey).forEach(item=>{
+    const q=parseFloat(qtys[item.ikey]||0);
+    if(q<=0)return;
+    if(!inv[item.id])inv[item.id]={qty:0,safety:0,log:[]};
+    inv[item.id].qty=Math.round((inv[item.id].qty+q)*10)/10;
+    inv[item.id].log.unshift({t:'in',q,d:getDateStr(),n:'발주 입고'});
+    if(inv[item.id].log.length>60)inv[item.id].log=inv[item.id].log.slice(0,60);
+    changed.push(item.name);
+  });
+  saveInvData(inv);
+  if(changed.length>0)showToast(`📦 재고 적립: ${changed.join(', ')}`);
+  updateStockBadges();
+}
+
+// 재고 차감 (사용·로스)
+function deductStock(id,useQty,lossQty){
+  const inv=loadInv();
+  if(!inv[id])inv[id]={qty:0,safety:0,log:[]};
+  const total=useQty+lossQty;
+  inv[id].qty=Math.max(0,Math.round((inv[id].qty-total)*10)/10);
+  if(useQty>0)inv[id].log.unshift({t:'use',q:useQty,d:getDateStr(),n:'일일 사용'});
+  if(lossQty>0)inv[id].log.unshift({t:'loss',q:lossQty,d:getDateStr(),n:'로스/폐기'});
+  if(inv[id].log.length>60)inv[id].log=inv[id].log.slice(0,60);
+  saveInvData(inv);
+}
+
+// 수동 수정
+function adjustStock(id,qty,note){
+  const inv=loadInv();
+  if(!inv[id])inv[id]={qty:0,safety:0,log:[]};
+  const prev=inv[id].qty;
+  inv[id].qty=Math.max(0,Math.round(qty*10)/10);
+  const diff=inv[id].qty-prev;
+  inv[id].log.unshift({t:'adj',q:Math.abs(diff),d:getDateStr(),n:note||'수동 수정'});
+  if(inv[id].log.length>60)inv[id].log=inv[id].log.slice(0,60);
+  saveInvData(inv);
+  renderInvStatus();
+  updateStockBadges();
+  showToast('✅ 수정됐어요!');
+}
+
+// 재고 상태 분류
+function getStockStatus(id){
+  const s=getItemState(id);
+  if(s.safety===0)return 'none';
+  if(s.qty<=s.safety)return 'critical';
+  if(s.qty<=s.safety*2)return 'low';
+  return 'safe';
+}
+
+// 7일 평균 사용량
+function getAvgUsage(id){
+  const s=getItemState(id);
+  const uses=s.log.filter(e=>e.t==='use');
+  if(uses.length===0)return 0;
+  const total=uses.slice(0,14).reduce((a,e)=>a+e.q,0);
+  return Math.round((total/7)*10)/10;
+}
+
+// 추천 발주량
+function getRecommended(id){
+  const s=getItemState(id);
+  const avg=getAvgUsage(id);
+  if(avg===0&&s.safety===0)return 0;
+  const target=Math.max(s.safety*3, avg*3);
+  return Math.max(0,Math.ceil(target-s.qty));
+}
+
+// ===== 재고 현황 렌더링 =====
+function renderInvStatus(){
+  const inv=loadInv();
+  const criticalItems=INV_ALL.filter(i=>getStockStatus(i.id)==='critical');
+  let html='';
+  if(criticalItems.length>0){
+    html+=`<div class="inv-alert-box"><strong>🔴 안전재고 이하 ${criticalItems.length}개 품목</strong><br>${criticalItems.map(i=>`${i.name} (현재: ${(inv[i.id]||{qty:0}).qty}${i.unit})`).join(' · ')}</div>`;
+  }
+  VGROUPS.forEach(g=>{
+    const items=INV_ALL.filter(i=>i.vkey===g.key);
+    const alertCount=items.filter(i=>getStockStatus(i.id)==='critical').length;
+    html+=`<div class="inv-group"><div class="inv-group-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+      <span class="inv-group-name">${g.label}${alertCount>0?` <span style="font-size:11px;color:var(--red)">⚠ ${alertCount}</span>`:''}</span>
+      <span style="font-size:12px;color:var(--text3)">▾</span></div>
+      <div class="inv-group-body" style="display:none">`;
+    items.forEach(item=>{
+      const state=getItemState(item.id);
+      const status=getStockStatus(item.id);
+      const dotClass={none:'dot-none',safe:'dot-safe',low:'dot-low',critical:'dot-critical'}[status];
+      const numClass={none:'',safe:'safe',low:'low',critical:'critical'}[status];
+      const avg=getAvgUsage(item.id);
+      const rec=getRecommended(item.id);
+      const recentLog=state.log.slice(0,5);
+      html+=`<div>
+        <div class="inv-item-row">
+          <span class="inv-item-name">${item.name}</span>
+          <div class="inv-qty-block">
+            <span class="inv-qty-num ${numClass}">${state.qty}</span>
+            <span class="inv-qty-unit">${item.unit}</span>
+            <div class="inv-status-dot ${dotClass}"></div>
+            <button class="inv-adjust-btn" onclick="toggleAdjust('adj-${item.id}')">수정</button>
+          </div>
+        </div>
+        ${state.safety>0?`<div style="font-size:11px;color:var(--text3);padding:0 0 4px">안전재고 ${state.safety}${item.unit}${avg>0?` · 7일평균 ${avg}${item.unit}/일`:''}${rec>0?` · <span style="color:var(--accent)">발주추천 ${rec}${item.unit}</span>`:''}</div>`:''}
+        <div class="inv-adjust-wrap" id="adj-${item.id}">
+          <div class="adj-row"><span class="adj-label">현재 수량</span><input type="number" class="adj-input" id="adjval-${item.id}" value="${state.qty}" step="0.5"><span style="font-size:12px;color:var(--text3)">${item.unit}</span></div>
+          <div class="adj-row"><span class="adj-label">메모</span><input type="text" class="adj-input" id="adjnote-${item.id}" placeholder="수정 사유 (선택)"></div>
+          <div class="adj-btn-row">
+            <button class="adj-save-btn" onclick="doAdjust('${item.id}')">저장</button>
+            <button class="adj-cancel-btn" onclick="toggleAdjust('adj-${item.id}')">취소</button>
+          </div>
+        </div>
+        ${recentLog.length>0?`<div style="font-size:11px;color:var(--blue);cursor:pointer;padding-bottom:6px" onclick="toggleLog('log-${item.id}')">▸ 최근 이력 보기</div>
+        <div class="inv-log-wrap" id="log-${item.id}">
+          ${recentLog.map(e=>`<div class="inv-log-row"><span class="inv-log-type-${e.t}">${{in:'↑입고',use:'↓사용',loss:'✕로스',adj:'✎수정'}[e.t]||e.t}</span><span>${e.q}${item.unit}</span><span>${e.d}</span><span style="flex:1;text-align:right">${e.n}</span></div>`).join('')}
+        </div>`:''}
+      </div>`;
+    });
+    html+='</div></div>';
+  });
+  if(html==='')html='<div class="empty-state">아직 재고 데이터가 없어요.<br>발주 문자를 생성하면 자동으로 쌓여요!</div>';
+  document.getElementById('inv-status-content').innerHTML=html;
+}
+
+function toggleAdjust(id){const el=document.getElementById(id);el.classList.toggle('show');}
+function toggleLog(id){const el=document.getElementById(id);el.classList.toggle('show');}
+function doAdjust(id){
+  const qty=parseFloat(document.getElementById('adjval-'+id).value)||0;
+  const note=document.getElementById('adjnote-'+id).value;
+  adjustStock(id,qty,note);
+}
+
+// ===== 사용 입력 렌더링 =====
+function renderUsageInput(){
+  let html='';
+  VGROUPS.forEach(g=>{
+    const items=INV_ALL.filter(i=>i.vkey===g.key);
+    html+=`<div class="usage-group"><div class="usage-group-title">${g.label}</div>`;
+    html+=`<div style="display:flex;gap:8px;padding:6px 16px;border-bottom:1px solid var(--border);font-size:11px;color:var(--text3)"><span style="flex:1">품목</span><span style="min-width:56px;text-align:center">사용량</span><span style="min-width:56px;text-align:center">로스량</span></div>`;
+    items.forEach(item=>{
+      const state=getItemState(item.id);
+      html+=`<div class="usage-item-row">
+        <span class="usage-item-name">${item.name}<br><span style="font-size:10px;color:var(--text3)">현재 ${state.qty}${item.unit}</span></span>
+        <div class="usage-col"><span class="usage-col-label">사용</span><input class="usage-input" type="number" id="use-${item.id}" placeholder="0" min="0" step="0.5"></div>
+        <div class="usage-col"><span class="usage-col-label">로스</span><input class="usage-input" type="number" id="loss-${item.id}" placeholder="0" min="0" step="0.5"></div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  document.getElementById('inv-usage-content').innerHTML=html;
+}
+
+function saveUsage(){
+  let count=0;
+  INV_ALL.forEach(item=>{
+    const useEl=document.getElementById('use-'+item.id);
+    const lossEl=document.getElementById('loss-'+item.id);
+    const useQ=parseFloat(useEl?.value||0)||0;
+    const lossQ=parseFloat(lossEl?.value||0)||0;
+    if(useQ>0||lossQ>0){deductStock(item.id,useQ,lossQ);count++;}
+  });
+  if(count>0){showToast(`✅ ${count}개 품목 차감됐어요!`);renderUsageInput();updateStockBadges();}
+  else showToast('입력된 수량이 없어요');
+}
+
+// ===== 설정 렌더링 =====
+function renderConfig(){
+  const inv=loadInv();
+  let html='';
+  VGROUPS.forEach(g=>{
+    const items=INV_ALL.filter(i=>i.vkey===g.key);
+    html+=`<div class="cfg-group"><div class="cfg-group-title">${g.label}</div>`;
+    items.forEach(item=>{
+      const state=inv[item.id]||{qty:0,safety:0};
+      html+=`<div class="cfg-item-row">
+        <span class="cfg-item-name">${item.name}</span>
+        <div class="cfg-input-wrap"><input class="cfg-input" type="number" id="cfg-${item.id}" value="${state.safety}" min="0" step="0.5"><span class="cfg-unit">${item.unit}</span></div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  document.getElementById('inv-config-content').innerHTML=html;
+}
+
+function saveConfig(){
+  const inv=loadInv();
+  INV_ALL.forEach(item=>{
+    const el=document.getElementById('cfg-'+item.id);
+    if(!el)return;
+    if(!inv[item.id])inv[item.id]={qty:0,safety:0,log:[]};
+    inv[item.id].safety=parseFloat(el.value)||0;
+  });
+  saveInvData(inv);
+  updateStockBadges();
+  showToast('💾 안전재고 설정 저장됐어요!');
+}
+
+function showInvPane(pane){
+  document.querySelectorAll('.inv-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.inv-sub-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('invpane-'+pane).classList.add('active');
+  const idx={status:0,usage:1,config:2}[pane];
+  document.querySelectorAll('.inv-sub-tab')[idx].classList.add('active');
+  if(pane==='status')renderInvStatus();
+  if(pane==='usage')renderUsageInput();
+  if(pane==='config')renderConfig();
+}
+
+// 발주 탭 상단 추천 배너 & 벤더 뱃지 업데이트
+function updateStockBadges(){
+  const vkeyAlerts={};
+  INV_ALL.forEach(item=>{
+    const st=getStockStatus(item.id);
+    if(st==='critical'){if(!vkeyAlerts[item.vkey])vkeyAlerts[item.vkey]=[];vkeyAlerts[item.vkey].push(item);}
+  });
+  Object.keys(vendors).forEach(vk=>{
+    const badgeEl=document.getElementById('vbadge-'+vk);
+    if(!badgeEl)return;
+    if(vkeyAlerts[vk]&&vkeyAlerts[vk].length>0){
+      badgeEl.innerHTML=`<span class="stock-alert-badge">재고부족 ${vkeyAlerts[vk].length}</span>`;
+    }else badgeEl.innerHTML='';
+    // 추천 발주 배너
+    const recEl=document.getElementById('rec-'+vk);
+    if(!recEl)return;
+    const recItems=INV_ALL.filter(i=>i.vkey===vk&&getRecommended(i.id)>0);
+    if(recItems.length>0){
+      recEl.style.display='block';
+      recEl.innerHTML='<strong>💡 발주 추천</strong> ' + recItems.map(i=>`${i.name} ${getRecommended(i.id)}${i.unit}`).join(' · ');
+    }else recEl.style.display='none';
+  });
+  // 헤더 전체 알림
+  const totalAlert=INV_ALL.filter(i=>getStockStatus(i.id)==='critical').length;
+  const badge=document.getElementById('stockAlertBadge');
+  if(totalAlert>0){badge.textContent=`📦 재고부족 ${totalAlert}`;badge.style.display='inline';}
+  else badge.style.display='none';
+}
+
+// ===== 기존 발주 로직 =====
+const vendors={
+  bean:{name:'콩나물 공급업체',phone:'01083041260',days:[0,1,2,3,4,5,6],items:[{id:'beansprout',name:'콩나물',unit:'박스'}],buildMsg:(store,qtys,isSat)=>`${store} 콩나물 ${isSat?(qtys['beansprout']||0)*2:(qtys['beansprout']||0)}박스 부탁드립니다`},
+  egg:{name:'한결유통 (계란)',phone:'01062657887',days:[1,2,3,4,5,6],items:[{id:'egg1',name:'중란',unit:'판'}],buildMsg:(store,qtys)=>`${store} 중란 ${qtys['egg1']||0}판 부탁드립니다.`},
+  kayeon:{name:'가연유통',phone:'01042947302',days:[1,2,3,4,5,6],items:[{id:'k1',name:'맛김치',unit:'박스'},{id:'k2',name:'슬라이스 김치',unit:'박스'},{id:'k3',name:'포기김치',unit:'박스'},{id:'k12',name:'깍두기',unit:'박스'},{id:'k4',name:'쌀',unit:'포대'},{id:'k5',name:'거친고추가루',unit:'팩'},{id:'k6',name:'고운고추가루',unit:'팩'},{id:'k7',name:'맛기름',unit:'병'},{id:'k8',name:'참기름',unit:'병'},{id:'k9',name:'들향기름',unit:'병'},{id:'k10',name:'볶음참깨',unit:'팩'},{id:'k11',name:'통깨가루',unit:'팩'}],buildMsg:(store,qtys)=>{let l=[store];vendors.kayeon.items.forEach(i=>{if((qtys[i.id]||0)>0)l.push(`${i.name} ${qtys[i.id]}${i.unit}`)});l.push('부탁드립니다.');return l.join('\n')}},
+  liquor:{name:'대한유통',phone:'01076467206',days:[1,2,3,4,5],items:[{id:'l1',name:'참이슬 후레시',unit:'박스'},{id:'l2',name:'참이슬 오리지널',unit:'박스'},{id:'l3',name:'진로',unit:'박스'},{id:'l4',name:'처음처럼',unit:'박스'},{id:'l5',name:'청하',unit:'박스'},{id:'l6',name:'카스',unit:'박스'},{id:'l7',name:'테라',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];vendors.liquor.items.forEach(i=>{if((qtys[i.id]||0)>0)l.push(`${i.name} ${qtys[i.id]}`)});l.push('부탁드립니다.');return l.join('\n')}},
+  seafood:{name:'성화유통',phone:'01083050001',days:[1,2,3,4,5],items:[{id:'s1',name:'오징어다이스',unit:'박스'},{id:'s2',name:'선동오징어',unit:'박스'},{id:'s3',name:'냉동굴',unit:'박스'},{id:'s4',name:'새우',unit:'박스'},{id:'s5',name:'절단꽃게L',unit:'박스'},{id:'s6',name:'피바지락',unit:'박스'},{id:'s7',name:'자숙꼬막살',unit:'봉지'},{id:'s8',name:'황태채',unit:'kg'},{id:'s9',name:'절단쭈꾸미',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];vendors.seafood.items.forEach(i=>{if((qtys[i.id]||0)>0)l.push(`${i.name} ${qtys[i.id]}${i.unit}`)});l.push('부탁드립니다.');return l.join('\n')}},
+  meat:{name:'성원유통',phone:'01091093278',days:[1,2,3,4,5],items:[{id:'m1',name:'제육용 전지',unit:'kg'},{id:'m2',name:'김치찌개용 전지',unit:'kg'},{id:'m3',name:'민찌',unit:'kg'},{id:'m4',name:'우삼겹',unit:'kg'}],buildMsg:(store,qtys)=>{let l=[store];const q1=qtys['m1']||0,q2=qtys['m2']||0,q3=qtys['m3']||0,q4=qtys['m4']||0;if(q1>0)l.push(`제육용 전지 ${q1}키로 10키로씩 소분해주세요`);if(q2>0)l.push(`김치찌개용 전지 ${q2}키로 10키로씩 소분해주세요`);if(q3>0)l.push(`민찌 ${q3}키로`);if(q4>0)l.push(`우삼겹 ${q4}키로 1키로씩 소분해주세요`);l.push('부탁드립니다.');return l.join('\n')}},
+  anchovy:{name:'한려물산',phone:'01079080046',days:[1,2,3,4,5,6],delivery:'택배',items:[{id:'a1',name:'육수용 다시멸치',unit:'박스'}],buildMsg:(store,qtys)=>`${store} 육수용 다시멸치 ${qtys['a1']||0}박스 부탁드립니다`},
+  makgeolli:{name:'막걸리',phone:'01031223507',days:[1,2,3,4,5,6],items:[{id:'mg1',name:'막걸리',unit:'박스'},{id:'mg2',name:'모주 500mL',unit:'박스'},{id:'mg3',name:'모주 1.2L',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];if(qtys['mg1']>0)l.push(`막걸리 ${qtys['mg1']}박스`);if(qtys['mg2']>0)l.push(`모주 500mL ${qtys['mg2']}박스`);if(qtys['mg3']>0)l.push(`모주 1.2L ${qtys['mg3']}박스`);l.push('부탁드립니다.');return l.join('\n')}},
+  pyunyuk:{name:'가야식품',phone:'01038730808',days:[1,2,3,4,5,6],delivery:'택배',items:[{id:'py1',name:'편육',unit:'x5kg'}],buildMsg:(store,qtys)=>`${store} 편육 ${(qtys['py1']||0)*5}키로 부탁드립니다`},
+  jokong:{name:'좋은콩',phone:'01090696528',days:[1,2,3,4,5,6],items:[{id:'jk1',name:'콩국물',unit:'팩'},{id:'jk2',name:'냉면육수',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];const q1=qtys['jk1']||0,q2=qtys['jk2']||0;if(q1>0){const box=Math.floor(q1/40),rem=q1%40;if(box>0&&rem>0)l.push(`콩국물 ${box}박스 ${rem}팩`);else if(box>0)l.push(`콩국물 ${box}박스(${q1}팩)`);else l.push(`콩국물 ${q1}팩`);}if(q2>0)l.push(`냉면육수 ${q2}박스`);l.push('부탁드립니다.');return l.join('\n')}},
+  veggie:{name:'야채 카톡 발주',phone:'',days:[1,2,3,4,5,6],items:[{id:'v1',name:'대파',unit:'단'},{id:'v2',name:'양파',unit:'망'},{id:'v3',name:'육수용 무',unit:'박스'},{id:'v4',name:'주키니 호박 특',unit:'박스'},{id:'v5',name:'당근',unit:'개'},{id:'v11',name:'오이',unit:'개'},{id:'v6',name:'부추',unit:'단'},{id:'v7',name:'양배추',unit:'통'},{id:'v8',name:'고사리',unit:'박스'},{id:'v9',name:'청양고추',unit:'kg'},{id:'v10',name:'치커리',unit:'박스'}],buildMsg:(store,qtys)=>{let l=[store];vendors.veggie.items.forEach(item=>{const q=qtys[item.id]||0;if(item.id==='v2'){if(q===0.5)l.push('양파 반망');else if(q>=1)l.push(`양파 ${q}망`);}else if(q>0)l.push(`${item.name} ${q}${item.unit}`);});l.push('부탁드립니다.');return l.join('\n')}},
+};
+
+let orderHistory=JSON.parse(localStorage.getItem('orderHistory')||'[]');
 let alarms=JSON.parse(localStorage.getItem('alarms')||'{"bean":true,"general":true}');
+let dailyLogs=JSON.parse(localStorage.getItem('dailyLogs')||'[]');
+let staffAttendance=[true,true,true];
+
 function getStore(){return document.getElementById('storeSelect').value;}
 function getDay(){return new Date().getDay();}
-function updateDeliveryStatuses(){const day=getDay();Object.keys(vendors).forEach(key=>{const el=document.getElementById(key+'-status');if(!el)return;const v=vendors[key];let ok=key==='bean'?day!==0:vendors[key].days.includes((day+1)%7);if(v.delivery==='택배')ok=true;el.textContent=ok?(v.delivery==='택배'?'주문가능':'배송가능'):'오늘휴무';el.className='delivery-badge '+(ok?'badge-available':'badge-unavailable');});}
-function updateNotice(){const day=getDay();const box=document.getElementById('noticeBox');let msg='';if(day===6)msg='<strong>🗓 오늘은 토요일!</strong><br>콩나물은 2배로 발주하세요. 주류·수산물·육류는 오늘 발주 불가예요.';else if(day===0)msg='<strong>🗓 오늘은 일요일!</strong><br>발주 없는 날이에요.';else msg='<strong>⏰ 오후 4시 전에 발주하세요!</strong><br>전날 저녁까지 발주하면 다음날 직배송이 와요.';box.innerHTML=msg;box.style.display='block';}
+
+function updateDeliveryStatuses(){
+  const day=getDay();
+  Object.keys(vendors).forEach(key=>{
+    const el=document.getElementById(key+'-status');if(!el)return;
+    const v=vendors[key];
+    let ok=key==='bean'?day!==0:v.days.includes((day+1)%7);
+    if(v.delivery==='택배')ok=true;
+    el.textContent=ok?(v.delivery==='택배'?'주문가능':'배송가능'):'오늘휴무';
+    el.className='delivery-badge '+(ok?'badge-available':'badge-unavailable');
+  });
+}
+
+function updateNotice(){
+  const day=getDay();const box=document.getElementById('noticeBox');
+  let msg='';
+  if(day===6)msg='<strong>🗓 오늘은 토요일!</strong><br>콩나물은 2배로 발주하세요.';
+  else if(day===0)msg='<strong>🗓 오늘은 일요일!</strong><br>발주 없는 날이에요.';
+  else msg='<strong>⏰ 오후 4시 전에 발주하세요!</strong>';
+  box.innerHTML=msg;box.style.display='block';
+}
+
 function changeQtyJokong(d){const el=document.getElementById('qty-jokong-jk1');let val=parseInt(el.textContent)+d;if(val<0)val=0;el.textContent=val;const unitEl=document.getElementById('unit-jokong-jk1');if(val>0&&val%40===0)unitEl.textContent=`${val/40}박스`;else unitEl.textContent='팩';}
 function changeQty(v,i,d){const el=document.getElementById(`qty-${v}-${i}`);let val=parseInt(el.textContent)+d;if(val<0)val=0;el.textContent=val;}
 function changeQtyHalf(vendor,item){const disp=document.getElementById(`qty-${vendor}-${item}-display`);const cur=parseFloat(disp.dataset.val||'0');const next=cur===0.5?0:0.5;disp.dataset.val=next;disp.textContent=next===0.5?'½망':'0';}
 function changeQtyFull(vendor,item){const disp=document.getElementById(`qty-${vendor}-${item}-display`);const cur=parseFloat(disp.dataset.val||'0');const next=cur+1;disp.dataset.val=next;disp.textContent=next+'망';}
 function toggleVendor(key){document.getElementById('vendor-'+key).classList.toggle('open');}
-function generateMsg(vk){const v=vendors[vk];const store=getStore();const isSat=getDay()===6;const qtys={};v.items.forEach(item=>{if(item.id==='v2'){const disp=document.getElementById('qty-veggie-v2-display');qtys[item.id]=parseFloat(disp?(disp.dataset.val||'0'):'0');}else{const el=document.getElementById(`qty-${vk}-${item.id}`);qtys[item.id]=parseInt(el?el.textContent:'0')||0;}});const msg=v.buildMsg(store,qtys,isSat);document.getElementById('msgtext-'+vk).textContent=msg;document.getElementById('preview-'+vk).classList.add('show');saveHistory(v.name,msg);}
+
+function generateMsg(vk){
+  const v=vendors[vk];const store=getStore();const isSat=getDay()===6;
+  const qtys={};
+  v.items.forEach(item=>{
+    if(item.id==='v2'){const disp=document.getElementById('qty-veggie-v2-display');qtys[item.id]=parseFloat(disp?(disp.dataset.val||'0'):'0');}
+    else{const el=document.getElementById(`qty-${vk}-${item.id}`);qtys[item.id]=parseInt(el?el.textContent:'0')||0;}
+  });
+  // 콩나물 토요일 2배 반영
+  if(vk==='bean'&&isSat){const q=qtys['beansprout']||0;qtys['beansprout_actual']=q*2;}
+  const msg=v.buildMsg(store,qtys,isSat);
+  document.getElementById('msgtext-'+vk).textContent=msg;
+  document.getElementById('preview-'+vk).classList.add('show');
+  saveOrderHistory(v.name,msg);
+  // ★ 재고 자동 적립
+  const invQtys={...qtys};
+  if(vk==='bean'&&isSat)invQtys['beansprout']=(qtys['beansprout']||0)*2;
+  addStockFromOrder(vk,invQtys);
+}
+
 function copyMsg(vk){const text=document.getElementById('msgtext-'+vk).textContent;navigator.clipboard.writeText(text).then(()=>showToast('✅ 복사됐어요!')).catch(()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('✅ 복사됐어요!');});}
 function sendSMS(phone,vk){const text=document.getElementById('msgtext-'+vk).textContent;window.location.href=`sms:${phone}?body=${encodeURIComponent(text)}`;}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
-function saveHistory(vn,msg){const now=new Date();const d=`${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;history.unshift({vendor:vn,msg,date:d});if(history.length>100)history=history.slice(0,100);localStorage.setItem('orderHistory',JSON.stringify(history));renderHistory();}
-function renderHistory(){const el=document.getElementById('historyList');if(history.length===0){el.innerHTML='<div class="empty-state">아직 발주 내역이 없어요</div>';return;}el.innerHTML=history.map(h=>`<div class="history-item"><div class="history-top"><div class="history-vendor">${h.vendor}</div><div class="history-date">${h.date}</div></div><div class="history-content">${h.msg}</div></div>`).join('');}
-function saveInventory(){showToast('💾 재고가 저장됐어요!');}
+function saveOrderHistory(vn,msg){const now=new Date();const d=`${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;orderHistory.unshift({vendor:vn,msg,date:d});if(orderHistory.length>100)orderHistory=orderHistory.slice(0,100);localStorage.setItem('orderHistory',JSON.stringify(orderHistory));}
+function renderHistory(){const el=document.getElementById('historyList');if(orderHistory.length===0){el.innerHTML='<div class="empty-state">아직 발주 내역이 없어요</div>';return;}el.innerHTML=orderHistory.map(h=>`<div class="history-item"><div class="history-top"><div class="history-vendor">${h.vendor}</div><div class="history-date">${h.date}</div></div><div class="history-content">${h.msg}</div></div>`).join('');}
 function toggleAlarm(key){alarms[key]=!alarms[key];document.getElementById('toggle-'+key).classList.toggle('on',alarms[key]);localStorage.setItem('alarms',JSON.stringify(alarms));}
-function showPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('page-'+page).classList.add('active');['order','inventory','history','settings'].forEach((p,i)=>{if(p===page)document.querySelectorAll('.nav-tab')[i].classList.add('active');});if(page==='history')renderHistory();}
-function init(){const now=new Date();const days=['일','월','화','수','목','금','토'];document.getElementById('todayDate').textContent=`${now.getMonth()+1}/${now.getDate()} (${days[now.getDay()]}) · 오늘`;updateDeliveryStatuses();updateNotice();renderHistory();Object.keys(alarms).forEach(k=>{const el=document.getElementById('toggle-'+k);if(el)el.classList.toggle('on',alarms[k]);});setInterval(()=>{const n=new Date();if(n.getHours()===16&&n.getMinutes()===0)document.getElementById('alarmBadge').style.display='inline';},60000);document.getElementById('storeSelect').addEventListener('change',e=>{document.getElementById('settingStore').textContent=e.target.value;});}
+
+// ===== 업무일지 =====
+function switchLogMode(mode){
+  ['write','view'].forEach(m=>{document.getElementById('tab-'+m).classList.toggle('active',m===mode);document.getElementById('logpane-'+m).classList.toggle('active',m===mode);});
+  if(mode==='view')renderLogList('all');
+}
+function calcBalance(){const prev=parseInt(document.getElementById('lf-prev').value)||0,inp=parseInt(document.getElementById('lf-in').value)||0,out=parseInt(document.getElementById('lf-out').value)||0,bal=prev+inp-out;const el=document.getElementById('lf-balance');el.textContent=bal.toLocaleString()+' 원';el.style.color=bal>=0?'var(--green)':'var(--red)';}
+function getStaffNames(){return JSON.parse(localStorage.getItem('staffNames')||'["직원 1","직원 2","직원 3"]');}
+function loadStaffUI(){
+  const names=getStaffNames();staffAttendance=[true,true,true];
+  document.getElementById('staff-list').innerHTML=names.map((n,i)=>`<div class="staff-row"><span style="font-size:13px">${n}</span><div class="toggle-small on" id="staff-toggle-${i}" onclick="staffAttendance[${i}]=!staffAttendance[${i}];this.classList.toggle('on',staffAttendance[${i}])"></div></div>`).join('');
+}
+function renderStaffSettings(){
+  const names=getStaffNames();
+  document.getElementById('staff-name-settings').innerHTML=names.map((n,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:12px;color:var(--text3);width:50px">직원 ${i+1}</span><input type="text" style="flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Noto Sans KR',sans-serif;font-size:13px;padding:7px 10px;border-radius:8px;outline:none" id="sn-${i}" value="${n}"></div>`).join('');
+}
+function saveStaffNames(){const names=[0,1,2].map(i=>document.getElementById('sn-'+i)?.value||`직원 ${i+1}`);localStorage.setItem('staffNames',JSON.stringify(names));loadStaffUI();showToast('💾 저장됐어요!');}
+
+async function submitLog(){
+  const manager=document.getElementById('lf-manager').value.trim();
+  if(!manager){const e=document.getElementById('log-error');e.textContent='매니저 이름을 입력해주세요.';e.style.display='block';return;}
+  document.getElementById('log-error').style.display='none';
+  const names=getStaffNames();
+  const chulgiUsed=document.querySelector('input[name="chulgi"]:checked').value==='Y';
+  const log={id:Date.now().toString(),store_name:getStore(),log_date:document.getElementById('lf-date').value,shift:document.getElementById('lf-shift').value,manager_name:manager,cash_prev:parseInt(document.getElementById('lf-prev').value)||0,cash_in:parseInt(document.getElementById('lf-in').value)||0,cash_out:parseInt(document.getElementById('lf-out').value)||0,chulgi_used:chulgiUsed,chulgi_reason:chulgiUsed?document.getElementById('lf-chulgi-reason').value:'',staff_total:3,staff_attended:staffAttendance.filter(Boolean).length,staff_detail:JSON.stringify(names.map((n,i)=>({name:n,attended:staffAttendance[i]}))),staff_memo:document.getElementById('lf-staff-memo').value,issue_claim:document.getElementById('lf-claim').value,issue_logistics:document.getElementById('lf-logistics').value,issue_equipment:document.getElementById('lf-equipment').value,issue_hygiene:document.getElementById('lf-hygiene').value,memo:document.getElementById('lf-memo').value,is_confirmed:false,created_at:new Date().toISOString()};
+  if(supabase){const {error}=await supabase.from('daily_logs').insert(log);if(error){document.getElementById('log-error').textContent='저장 오류: '+error.message;document.getElementById('log-error').style.display='block';return;}}
+  dailyLogs.unshift(log);if(dailyLogs.length>200)dailyLogs=dailyLogs.slice(0,200);localStorage.setItem('dailyLogs',JSON.stringify(dailyLogs));
+  updateUnreadBadge();
+  document.getElementById('log-form-wrap').style.display='none';document.getElementById('log-success').style.display='block';document.getElementById('log-success-sub').textContent=`${log.store_name} · ${log.log_date} · ${log.shift}조`;
+}
+function resetLogForm(){document.getElementById('log-form-wrap').style.display='block';document.getElementById('log-success').style.display='none';['lf-manager','lf-prev','lf-in','lf-out','lf-staff-memo','lf-claim','lf-logistics','lf-equipment','lf-hygiene','lf-memo','lf-chulgi-reason'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('lf-balance').textContent='0 원';document.querySelector('input[name="chulgi"][value="N"]').checked=true;document.getElementById('chulgi-rw').style.display='none';loadStaffUI();}
+
+let currentFilter='all';
+function filterLogs(filter,btn){currentFilter=filter;document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));btn.classList.add('active');renderLogList(filter);}
+async function renderLogList(filter){
+  let logs=[...dailyLogs];
+  if(supabase){const {data}=await supabase.from('daily_logs').select('*').order('log_date',{ascending:false}).limit(60);if(data)logs=data;}
+  if(filter==='unread')logs=logs.filter(l=>!l.is_confirmed);
+  if(filter==='issue')logs=logs.filter(l=>l.issue_claim||l.issue_logistics||l.issue_equipment||l.issue_hygiene);
+  const unread=logs.filter(l=>!l.is_confirmed).length;
+  document.getElementById('view-unread-count').textContent=unread>0?`미확인 ${unread}건`:'';
+  const el=document.getElementById('log-list');
+  if(logs.length===0){el.innerHTML='<div class="empty-state">일지가 없어요</div>';return;}
+  el.innerHTML=logs.map(log=>{
+    const balance=(log.cash_prev||0)+(log.cash_in||0)-(log.cash_out||0);
+    const staffMiss=(log.staff_total||0)-(log.staff_attended||0);
+    const issues=[];
+    if(log.issue_claim)issues.push({label:'클레임',type:'warn'});
+    if(log.issue_logistics)issues.push({label:'물류이상',type:'warn'});
+    if(log.issue_equipment)issues.push({label:'기물손상',type:'warn'});
+    if(log.issue_hygiene)issues.push({label:'위생이슈',type:'warn'});
+    if(staffMiss>0)issues.push({label:`결근/지각 ${staffMiss}명`,type:'err'});
+    if(log.chulgi_used)issues.push({label:'파출기사용',type:'info'});
+    if(issues.length===0)issues.push({label:'전체 정상',type:'ok'});
+    const tags=issues.map(i=>`<span class="tag tag-${i.type}">${i.label}</span>`).join('');
+    const details=[];
+    if(log.issue_claim)details.push(['클레임',log.issue_claim]);
+    if(log.issue_logistics)details.push(['물류이상',log.issue_logistics]);
+    if(log.issue_equipment)details.push(['기물손상',log.issue_equipment]);
+    if(log.issue_hygiene)details.push(['위생',log.issue_hygiene]);
+    if(log.staff_memo)details.push(['직원메모',log.staff_memo]);
+    if(log.chulgi_used&&log.chulgi_reason)details.push(['파출기',log.chulgi_reason]);
+    if(log.memo)details.push(['📝메모',log.memo]);
+    return `<div class="log-card" style="${log.is_confirmed?'opacity:0.55':''}">
+      <div class="log-card-top"><div><div class="log-card-title">${log.log_date} ${log.shift}조 <span style="font-size:12px;font-weight:400;color:var(--text3)">— ${log.store_name}</span></div><div class="log-card-meta">매니저 ${log.manager_name}</div></div>
+      <div style="display:flex;align-items:center;gap:8px">${!log.is_confirmed?'<div class="unread-dot"></div>':''}<button class="confirm-btn ${log.is_confirmed?'done':''}" onclick="confirmLog('${log.id}')">${log.is_confirmed?'✓ 확인완료':'확인'}</button></div></div>
+      <div class="log-stats-row"><div class="log-stat"><div class="log-stat-label">마감 시재</div><div class="log-stat-val">${balance.toLocaleString()}원</div></div><div class="log-stat"><div class="log-stat-label">파출기</div><div class="log-stat-val ${log.chulgi_used?'warn':''}">${log.chulgi_used?'사용':'미사용'}</div></div><div class="log-stat"><div class="log-stat-label">출근</div><div class="log-stat-val ${staffMiss>0?'warn':''}">${log.staff_attended||0}/${log.staff_total||0}명</div></div></div>
+      <div class="tag-row">${tags}</div>
+      ${details.length>0?`<div class="log-detail" id="ld-${log.id}" style="display:none">${details.map(([l,v])=>`<div class="log-detail-row"><span class="log-detail-label">${l}</span><span class="log-detail-val">${v}</span></div>`).join('')}</div><button class="expand-btn" onclick="const d=document.getElementById('ld-${log.id}');const show=d.style.display==='none';d.style.display=show?'block':'none';this.textContent=show?'▲ 접기':'▼ 상세 보기'">▼ 상세 보기</button>`:''}
+    </div>`;
+  }).join('');
+}
+
+async function confirmLog(id){
+  if(supabase)await supabase.from('daily_logs').update({is_confirmed:true,confirmed_at:new Date().toISOString()}).eq('id',id);
+  const idx=dailyLogs.findIndex(l=>l.id===id);
+  if(idx>=0){dailyLogs[idx].is_confirmed=true;localStorage.setItem('dailyLogs',JSON.stringify(dailyLogs));}
+  renderLogList(currentFilter);updateUnreadBadge();
+}
+
+function updateUnreadBadge(){
+  const count=dailyLogs.filter(l=>!l.is_confirmed).length;
+  const badge=document.getElementById('unreadBadge');
+  if(count>0){badge.textContent=`📝 미확인 ${count}`;badge.style.display='inline';}else badge.style.display='none';
+}
+
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  ['order','inventory','history','log','settings'].forEach((p,i)=>{if(p===page)document.querySelectorAll('.nav-tab')[i].classList.add('active');});
+  if(page==='history')renderHistory();
+  if(page==='settings')renderStaffSettings();
+  if(page==='inventory')showInvPane('status');
+}
+
+function init(){
+  const now=new Date();const days=['일','월','화','수','목','금','토'];
+  document.getElementById('todayDate').textContent=`${now.getMonth()+1}/${now.getDate()} (${days[now.getDay()]})`;
+  document.getElementById('lf-date').value=now.toISOString().split('T')[0];
+  updateDeliveryStatuses();updateNotice();renderHistory();loadStaffUI();updateUnreadBadge();updateStockBadges();
+  Object.keys(alarms).forEach(k=>{const el=document.getElementById('toggle-'+k);if(el)el.classList.toggle('on',alarms[k]);});
+  document.getElementById('storeSelect').addEventListener('change',e=>document.getElementById('settingStore').textContent=e.target.value);
+  setInterval(()=>{const n=new Date();if(n.getHours()===16&&n.getMinutes()===0)document.getElementById('alarmBadge').style.display='inline';},60000);
+  initSupabase();
+}
 init();
 </script></body></html>
